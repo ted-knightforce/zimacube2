@@ -1,2 +1,2 @@
 # zimacube2
-**Building the ultimate AI-powered NAS** — documenting the full journey from foundation to gaming machine.
+**Building and pushing the limit of an AI-powered NAS** — documenting the full journey from foundation to gaming machine.
