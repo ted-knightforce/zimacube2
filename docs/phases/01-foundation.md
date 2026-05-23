@@ -102,9 +102,8 @@ Installed a **PCIe x4 → SFF-8612 OCuLink adapter** in Slot 1. All 4 drives det
 ### Downstream Impact
 
 With Slot 1 occupied:
-- ~~ZimaSpace 800W OCuLink dock~~ → ruled out
 - ~~Minisforum DEG1~~ (OCuLink-only) → ruled out
-- Both TB4 ports are now free → evaluating **Minisforum DEG2** (TB5 + OCuLink) or a TB4 eGPU enclosure for Phase 4b
+- Both TB4 ports are now free → evaluating **Minisforum DEG2** (TB5 + OCuLink) or a Aoostar TB4/TB5 eGPU dock for Phase 4b
 
 **Community takeaway:** If connecting an Aoostar TB4S-OC to a ZimaCube 2, use OCuLink. TB4 has known issues with the ASM2462PDX chip on ZimaOS.
 
