@@ -41,7 +41,7 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 
 ### Key Hardware Decisions & Changes from Original Plan
 
-> **⚠️ TB4 → OCuLink pivot:** The Aoostar TB4S-OC was originally planned to connect via Thunderbolt 4. After extensive troubleshooting, TB4 connection failed due to ZimaOS kernel configuration (`thunderbolt.host_reset=false`) and ASMedia ASM2462PDX firmware incompatibility. OCuLink via Slot 1 PCIe adapter resolved this immediately. See [Phase 1](docs/01-foundation.md) for full details.
+> **⚠️ TB4 → OCuLink pivot:** The Aoostar TB4S-OC was originally planned to connect via Thunderbolt 4. After extensive troubleshooting, TB4 connection failed due to ZimaOS kernel configuration (`thunderbolt.host_reset=false`) and ASMedia ASM2462PDX firmware incompatibility. OCuLink via Slot 1 PCIe adapter resolved this immediately. See [Phase 1](docs/phases/01-foundation.md) for full details.
 
 > **Slot 1 consequence:** With PCIe Slot 1 occupied by the OCuLink adapter, both TB4 ports are now free. The original plan to use a Minisforum DEG1 for Phase 4b GPU is no longer viable. Evaluating **Minisforum DEG2** (TB5 + OCuLink) or AooStar AG02/AG03 TB4/TB5 eGPU/OCulink dock instead.
 
@@ -103,7 +103,7 @@ ZimaCube 2 Standard — Storage Tiers
 
 ## 📊 Day 1–3 Benchmark Summary
 
-Full benchmark details: [Phase 1 — Foundation](docs/01-foundation.md)
+Full benchmark details: [Phase 1 — Foundation](docs/phases/01-foundation.md)
 
 | Test | Glacier ZFS RAIDZ1 | Arctic btrfs PCIe 5.0 | Winner |
 |---|---|---|---|
@@ -119,12 +119,12 @@ Full benchmark details: [Phase 1 — Foundation](docs/01-foundation.md)
 
 | File | Contents |
 |---|---|
-| [01-foundation.md](docs/01-foundation.md) | Phase 1 — ZFS setup, TB4 issue, OCuLink, benchmarks, Immich migration |
-| [02-media.md](docs/02-media.md) | Phase 2 — Media stack (on hold — SATA drives arriving) |
-| [03-data.md](docs/03-data.md) | Phase 3 — Backup, Nextcloud, data management |
-| [04a-cpu-ai.md](docs/04a-cpu-ai.md) | Phase 4a — CPU-only Ollama baseline |
-| [04b-gpu-ai.md](docs/04b-gpu-ai.md) | Phase 4b — RTX 4090 GPU inference |
-| [scripts/](scripts/) | Benchmark shell scripts |
+| [01-foundation.md](docs/phases/01-foundation.md) | Phase 1 — ZFS setup, TB4 issue, OCuLink, benchmarks, Immich migration |
+| [02-media.md](docs/phases/02-media.md) | Phase 2 — Media stack (on hold — SATA drives arriving) |
+| [03-data.md](docs/phases/03-data.md) | Phase 3 — Backup, Nextcloud, data management |
+| [04a-cpu-ai.md](docs/phases/04a-cpu-ai.md) | Phase 4a — CPU-only Ollama baseline |
+| [04b-gpu-ai.md](docs/phases/04b-gpu-ai.md) | Phase 4b — RTX 4090 GPU inference |
+| [scripts/](docs/resources/scripts/) | Benchmark shell scripts |
 
 ---
 
