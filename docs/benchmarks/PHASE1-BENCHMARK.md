@@ -1,4 +1,4 @@
-# ZimaCube 2 Pioneer Build — Phase 1: Storage Benchmark
+# ZimaCube 2 — Phase 1: Storage Benchmark
 
 **Author:** ted-knight  
 **Date:** May 23, 2026  
@@ -110,7 +110,64 @@ ln -s /media/glacier/media     /DATA/glacier-Media
 ## Benchmark Methodology
 
 ### Tool
-`fio 3.38` — natively available on ZimaOS Buildroot
+`fio 3.38` — natively available on ZimaOS Buildroot. No installation required; confirmed with `fio --version` in the ZimaOS terminal.
+
+### Terminal Access
+
+ZimaOS does not expose SSH by default. The web-based terminal was accessed via:
+
+1. Open ZimaOS **Settings**
+2. Navigate to **General → Developer Mode**
+3. Click **View** to open the Developer panel
+4. Launch the **Web-based terminal**
+
+All commands were run as root inside this session:
+
+```bash
+sudo -i
+```
+
+### Script Deployment via WinSCP
+
+The benchmark scripts (maintained in this repo under [`docs/resources/scripts/`](../resources/scripts/)) were uploaded to the ZimaCube using **WinSCP** from the Windows host:
+
+| | Path |
+|---|---|
+| **Local (repo)** | `docs/resources/scripts/` |
+| **Remote (ZimaCube)** | `/DATA/Documents/nvme-benchmark/` |
+
+WinSCP connection details:
+- **Host:** `192.168.50.206`
+- **Protocol:** SFTP
+- **Port:** 22
+
+Files uploaded:
+- [`benchmark-glacier.sh`](../resources/scripts/benchmark-glacier.sh)
+- [`benchmark-arctic.sh`](../resources/scripts/benchmark-arctic.sh)
+- [`benchmark-compare.sh`](../resources/scripts/benchmark-compare.sh)
+
+### Execution
+
+Scripts were run individually from the `/DATA/Documents/nvme-benchmark/` folder in the ZimaOS web terminal:
+
+```bash
+sudo -i
+cd /DATA/Documents/nvme-benchmark
+
+chmod +x benchmark-glacier.sh benchmark-arctic.sh benchmark-compare.sh
+
+# Run each benchmark individually
+./benchmark-glacier.sh
+./benchmark-arctic.sh
+```
+
+Each script runs 4 sequential fio tests (seq write → seq read → rand 4K write → rand 4K read), captures filesystem-specific stats, cleans up its temp file, and saves results automatically:
+
+| Script | Results saved to |
+|---|---|
+| `benchmark-glacier.sh` | `/media/glacier/benchmark-results-glacier.txt` |
+| `benchmark-arctic.sh` | `/media/Arctic-Storage/benchmark-results-arctic.txt` |
+| `benchmark-compare.sh` | `/root/benchmark-comparison-summary.txt` |
 
 ### Test Parameters
 
@@ -246,18 +303,33 @@ Moving the Crucial P510 from the 7th Bay to the additional onboard M.2 slot on t
 
 ## Benchmark Scripts
 
-Available in the `scripts/` folder:
+Scripts are maintained in [`docs/resources/scripts/`](../resources/scripts/). Upload to the ZimaCube via WinSCP (see [Benchmark Methodology → Script Deployment](#script-deployment-via-winscp) above), then run from the ZimaOS web terminal.
 
-- `benchmark-glacier.sh` — Glacier ZFS RAIDZ1 full benchmark suite
-- `benchmark-arctic.sh` — Arctic-Storage btrfs full benchmark suite
-- `benchmark-compare.sh` — Combined comparison with summary output
+| Script | Description |
+|---|---|
+| [`benchmark-glacier.sh`](../resources/scripts/benchmark-glacier.sh) | Runs all 4 fio tests against the Glacier ZFS RAIDZ1 pool (`/media/glacier`). Appends `zpool status`, compression ratios, and pool list to results. Saves output to `/media/glacier/benchmark-results-glacier.txt`. |
+| [`benchmark-arctic.sh`](../resources/scripts/benchmark-arctic.sh) | Runs all 4 fio tests against Arctic-Storage btrfs (`/media/Arctic-Storage`). Appends `btrfs filesystem` info and NVMe SMART log. Saves output to `/media/Arctic-Storage/benchmark-results-arctic.txt`. |
+| [`benchmark-compare.sh`](../resources/scripts/benchmark-compare.sh) | Runs all 8 tests back-to-back (Glacier then Arctic) and writes a side-by-side comparison summary to `/root/benchmark-comparison-summary.txt`. |
+
+### Running the scripts
+
+From the ZimaOS web terminal (as root, in the upload folder):
 
 ```bash
-chmod +x scripts/*.sh
 sudo -i
-./scripts/benchmark-glacier.sh
-./scripts/benchmark-arctic.sh
+cd /DATA/Documents/nvme-benchmark
+
+chmod +x benchmark-glacier.sh benchmark-arctic.sh benchmark-compare.sh
+
+# Run individually (recommended — lets you monitor each in Netdata)
+./benchmark-glacier.sh
+./benchmark-arctic.sh
+
+# Or run the full comparison in one pass
+./benchmark-compare.sh
 ```
+
+> **Note:** Scripts require `sudo -i` (full root environment), not just `sudo`. The `benchmark-arctic.sh` script also calls `nvme smart-log` — if `nvme-cli` is unavailable on your ZimaOS build, the SMART section will be skipped gracefully without affecting fio results.
 
 ---
 
