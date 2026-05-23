@@ -103,7 +103,7 @@ ZimaCube 2 Standard — Storage Tiers
 
 ## 📊 Day 1–3 Benchmark Summary
 
-Full benchmark details: [Phase 1 — Foundation](docs/phases/01-foundation.md)
+Full benchmark details: [Phase 1 — Storage Benchmark](docs/benchmarks/Phase1-BENCHMARK.md)
 
 | Test | Glacier ZFS RAIDZ1 | Arctic btrfs PCIe 5.0 | Winner |
 |---|---|---|---|
@@ -138,7 +138,7 @@ Full benchmark details: [Phase 1 — Foundation](docs/phases/01-foundation.md)
 | 6 | 2 | "*arr Stack on ZimaOS — App Store First, Compose Where Needed" | r/selfhosted |
 | 8 | 4a | "Local AI on a $799 NAS Before the GPU — Honest CPU-Only Benchmarks" | r/LocalLLaMA |
 | 11 | 4b | "Adding an RTX 4090 to ZimaCube 2 — What 24GB VRAM Actually Buys You" | r/LocalLLaMA + r/eGPU |
-| 13 | 5 | "Semantic Search on ZimaCube 2: ZimaOS Native vs Khoj vs DIY" | r/selfhosted |
+| 13 | 5 | "Semantic Search on ZimaCube 2: Current offerings vs DIY" | r/selfhosted |
 
 ---
 
