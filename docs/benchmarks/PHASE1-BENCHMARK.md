@@ -187,6 +187,8 @@ Real-time metrics captured via Netdata running as a Docker container. Dashboard 
 
 ## Results
 
+![Storage Benchmarks](../benchmarks/images/day02-zimacube2-benchmarking-storage.jpg)
+
 ### Glacier — ZFS RAIDZ1 (OCuLink)
 
 | Test | Bandwidth | IOPS | Latency (avg) |
