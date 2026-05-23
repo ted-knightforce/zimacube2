@@ -1,4 +1,4 @@
-# 🧊 ZimaCube 2 Pioneer Build: AI-Powered NAS & Self-Hosting Powerhouse
+# 🧊 ZimaCube 2 Pioneer Build: Modest AI-Powered NAS & Self-Hosting Cloud Platform
 
 Personal documentation for building a tiered-storage, AI-capable self-hosting server on a **ZimaCube 2 Standard** — from unboxing to a fully configured NAS with local LLMs, media streaming, and own-device privacy.
 
