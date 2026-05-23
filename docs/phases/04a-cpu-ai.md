@@ -16,9 +16,9 @@ Establish a CPU-only inference baseline on the i3-1215U before the GPU arrives. 
 | Component | Specification |
 |---|---|
 | CPU | Intel Core i3-1215U (6-core, 12th Gen) |
-| RAM | 32GB DDR5 4800MHz (Corsair Vengeance 2× 16GB) |
+| RAM | 32GB DDR5 4800MHz (Corsair Vengeance 2× 16GB; board supports up to 64GB) |
 | Model storage | Arctic-Storage (`/media/Arctic-Storage/AppData/ollama`) |
-| ZFS ARC | ~8–10GB available for cache at 32GB RAM |
+| ZFS ARC | ~20–24GB available for cache at 32GB RAM |
 
 > **Why Arctic-Storage for models?** Random 4K read at 0.6ms latency vs glacier's 8.7ms. Faster model loading = better time-to-first-token.
 

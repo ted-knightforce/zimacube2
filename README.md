@@ -35,7 +35,7 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 | **OS drive** | Kingston 256GB PCIe Gen4 NVMe | nvme5n1 — ZimaOS boot only |
 | **Fast NVMe tier** | Crucial P510 2TB PCIe Gen5 | nvme0n1 — Arctic-Storage (btrfs) — App Data, Docker |
 | **NVMe RAID pool** | 4× 2TB PCIe Gen4 NVMe via Aoostar TB4S-OC | nvme1–4n1 — glacier (ZFS RAIDZ1) ~5.5TB |
-| **Connection** | OCuLink via PCIe x4 adapter (Slot 1) | ⚠️ TB4 abandoned — see Phase 1 notes |
+| **Connection** | OCuLink via PCIe 4.0 x4 adapter (Slot 1, physical x16) | ⚠️ TB4 abandoned — see Phase 1 notes |
 | **USB storage (temp)** | Transcend ESD310C 1TB + SanDisk 1TB | Temporary until SATA drives arrive |
 | **Network** | 2× Intel i226 2.5GbE | TP-Link TL-SG108E managed switch |
 
@@ -43,7 +43,7 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 
 > **⚠️ TB4 → OCuLink pivot:** The Aoostar TB4S-OC was originally planned to connect via Thunderbolt 4. After extensive troubleshooting, TB4 connection failed due to ZimaOS kernel configuration (`thunderbolt.host_reset=false`) and ASMedia ASM2462PDX firmware incompatibility. OCuLink via Slot 1 PCIe adapter resolved this immediately. See [Phase 1](docs/phases/01-foundation.md) for full details.
 
-> **Slot 1 consequence:** With PCIe Slot 1 occupied by the OCuLink adapter, both TB4 ports are now free. The original plan to use a Minisforum DEG1 for Phase 4b GPU is no longer viable. Evaluating **Minisforum DEG2** (TB5 + OCuLink) or AooStar AG02/AG03 TB4/TB5 eGPU/OCulink dock instead.
+> **Slot 1 consequence:** With PCIe Slot 1 occupied by the OCuLink adapter, both TB4 ports are now free. The original plan to use a Minisforum DEG1 for Phase 4b GPU is no longer viable. Evaluating **Minisforum DEG2** (TB5 + OCuLink) or AooStar AG02/AG03 TB4/TB5 eGPU/OCuLink dock instead. The free TB4 ports also open up **IP over Thunderbolt** — direct Mac/PC connection that bypasses the 2.5GbE ceiling (~312 MB/s) and can expose the full sequential bandwidth of glacier (2,591 MB/s) and Arctic-Storage to a directly-connected client.
 
 ### Incoming Hardware
 

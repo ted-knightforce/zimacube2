@@ -27,7 +27,7 @@ The benchmarks compare:
 | RAM | 16GB DDR5 |
 | OS Drive | Kingston OM8PGP4 256GB NVMe (nvme5n1) |
 | OS | ZimaOS (Buildroot-based, immutable) |
-| PCIe Slot 1 | OCuLink SFF-8612 adapter card |
+| PCIe Slot 1 | Physical x16 slot · PCIe 4.0 x4 lanes → OCuLink SFF-8612 adapter card |
 | 7th Bay Slot 1 | Crucial P510 2TB PCIe 5.0 NVMe |
 
 ### Glacier Pool — External Enclosure
@@ -35,7 +35,7 @@ The benchmarks compare:
 | Component | Specification |
 |---|---|
 | Enclosure | Aoostar TB4S-OC |
-| Connection | OCuLink via PCIe 4.0 x4 (Slot 1) |
+| Connection | OCuLink via PCIe 4.0 x4 lanes · Slot 1 (physical x16 slot) |
 | Chip | ASM2462PDX |
 | Bandwidth per slot | 800 MB/s (PCIe 3.0 x1 per slot) |
 | Total bandwidth | ~3,200 MB/s (4 slots combined, theoretical max) |
