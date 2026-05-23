@@ -137,7 +137,7 @@ The benchmark scripts (maintained in this repo under [`docs/resources/scripts/`]
 | **Remote (ZimaCube)** | `/DATA/Documents/nvme-benchmark/` |
 
 WinSCP connection details:
-- **Host:** `192.168.50.206`
+- **Host:** `192.168.xxx.xxx`
 - **Protocol:** SFTP
 - **Port:** 22
 
@@ -263,18 +263,89 @@ A healthy NAS ARC hit rate is typically **90–95%+** after a day or two of norm
 
 ## Recommended Workload Split
 
-Based on these results, the optimal storage architecture for the ZimaCube 2 Pioneer build is:
+Based on benchmark results and the full Phase 1–6 build plan, the optimal storage architecture across all three tiers is:
 
-| Workload | Storage | Reason |
+> **Storage tiers:**
+> - 🧊 **Glacier** — ZFS RAIDZ1, 4× 2TB PCIe 4.0 NVMe via OCuLink (~5.5TB usable) — sequential throughput + redundancy
+> - 🌨️ **Arctic-Storage** — Crucial P510 2TB PCIe 5.0 btrfs (7th Bay) — random IOPS, sub-ms latency
+> - 💿 **sata-hdd** — 3× Seagate IronWolf 4TB ZFS RAIDZ1 (~8TB usable, arriving) — bulk cold storage, cost-per-TB
+> - ⚙️ **nvme5n1** — Kingston 256GB OS drive — ZimaOS system only
+
+### Phase 1 — Foundation (current)
+
+| Workload | Pool | Reason |
 |---|---|---|
-| Immich photo library (87K photos) | Glacier | Large sequential reads, redundancy, 5.5TB capacity |
-| Jellyfin/media library | Glacier | Sequential streaming, bulk capacity |
-| VM disk images | Glacier | Large sequential, RAIDZ1 redundancy |
-| Bulk backup target | Glacier | Capacity, ZFS data integrity |
-| Docker AppData | Arctic-Storage | Low latency random I/O, native ZimaOS UI |
-| Ollama model cache (Phase 4a) | Arctic-Storage | Low latency random reads for inference |
-| Active databases (Postgres/Redis) | Arctic-Storage | High IOPS, sub-ms latency |
-| ZimaOS system | Kingston nvme5n1 | Boot stability, OS independence |
+| ZimaOS system + boot | `nvme5n1` | OS isolation; survives pool wipes |
+| Docker AppData (all containers) | `Arctic-Storage` | 205K IOPS, 0.6ms latency — config DBs, container state |
+| Immich photo library (87K photos) | `glacier` | Sequential reads, 5.5TB capacity, ZFS checksums, RAIDZ1 redundancy |
+| Immich PostgreSQL + pgvecto.rs DB | `Arctic-Storage` | Random I/O critical for thumbnail queries, face search, CLIP search |
+| Immich ML model cache | `Arctic-Storage` | Low latency random reads for face/scene detection inference |
+| VM disk images | `glacier` | Sequential I/O, RAIDZ1 redundancy, ZFS snapshot rollback |
+| Personal documents | `glacier` | Checksums + snapshots for irreplaceable data |
+| ZimaOS system | `nvme5n1` | Boot stability, OS independence |
+
+> **Note on Immich split:** The photo library (large sequential files) lives on `glacier` for capacity and redundancy. The PostgreSQL database lives on `Arctic-Storage` for IOPS. At 32GB RAM, ZFS ARC (~20–24GB) will partially warm Glacier's random I/O for hot DB pages, but the cold-cache penalty (8.7ms vs 0.6ms) is real for initial loads and fresh restarts.
+
+### Phase 2 — Media Stack (SATA HDDs arriving)
+
+| Workload | Pool | Reason |
+|---|---|---|
+| Jellyfin media library (movies, TV, music) | `sata-hdd` | Sequential streaming only; HDD speed (150–200 MB/s) comfortably covers 4K playback; saves NVMe for hot data |
+| qBittorrent downloads (transient) | `sata-hdd` | Bulk writes, transient; **must be same pool as media** for hardlinks (zero-copy imports) |
+| Bulk photo archive (Immich external library, read-only) | `sata-hdd` | Cold sequential reads; Immich indexes without moving files |
+| Jellyfin AppData / metadata DB | `Arctic-Storage` | Random I/O for library scans, watch-state DB, playback resume |
+| Jellyfin transcode cache (temp) | `Arctic-Storage` | High random I/O during Intel QuickSync transcode; ephemeral |
+| Sonarr / Radarr / Prowlarr / Bazarr AppData | `Arctic-Storage` | SQLite config DBs — frequent small random writes on episode grabs |
+| Jellyseerr AppData | `Arctic-Storage` | Request history DB |
+
+### Phase 3 — Data Management + Backup
+
+| Workload | Pool | Reason |
+|---|---|---|
+| Nextcloud data directory | `glacier` | User files; sequential reads/writes; RAIDZ1 redundancy important |
+| Nextcloud database (MariaDB) | `Arctic-Storage` | Random I/O for file metadata, sharing, CalDAV/CardDAV queries |
+| Time Machine backup target | `glacier` | Sequential writes, capacity, redundancy — backup integrity via ZFS checksums |
+| Client machine backups (Kopia local, copy 2 of 3-2-1) | `glacier` | Redundancy + ZFS data integrity for backup destination |
+| Kopia AppData (dedup index, config, cache) | `Arctic-Storage` | Random index lookups during backup runs |
+| Syncthing AppData | `Arctic-Storage` | Config + index DB |
+| ZFS snapshots | same pool as data | Copy-on-write — zero overhead until data diverges; auto-managed by sanoid |
+| Offsite backup (Backblaze B2) | cloud | Kopia → B2 for irreplaceable datasets only (documents, gallery, vault, projects) |
+
+### Phase 4a / 4b — Local AI (CPU then GPU)
+
+| Workload | Pool | Reason |
+|---|---|---|
+| Ollama model files | `Arctic-Storage` | 0.6ms random reads — lower time-to-first-token vs 8.7ms on Glacier |
+| Open WebUI AppData (chat history, config) | `Arctic-Storage` | Config DB, conversation history |
+| GPU VRAM (Phase 4b, RTX 4090 24GB) | VRAM | Models loaded from Arctic-Storage into VRAM at session start; in-memory during inference |
+| NVIDIA drivers / CUDA libs (Phase 4b) | `nvme5n1` | System-level install; stays on OS volume |
+
+### Phase 5 — Semantic Search
+
+| Workload | Pool | Reason |
+|---|---|---|
+| Khoj pgvector database | `Arctic-Storage` | Vector similarity search is extremely IOPS-sensitive; warm ARC won't overcome cold-cache gap at query time |
+| Qdrant vector store (optional Path C) | `Arctic-Storage` | Same — embedding queries are random read-heavy by nature |
+| nomic-embed-text model files | `Arctic-Storage` | Loaded like Ollama models; low latency reduces indexing time |
+| Khoj / Qdrant AppData (config) | `Arctic-Storage` | Docker AppData |
+| Semantic search source documents | `glacier` | Files live on Glacier; Khoj/Qdrant read them as input; files not duplicated |
+
+### Phase 6 — Steam Machine
+
+| Workload | Pool | Reason |
+|---|---|---|
+| Steam game library (installed games) | `sata-hdd` | Large sequential installs; HDD load times adequate for most titles via Proton |
+| Steam Proton prefix / shader cache | `Arctic-Storage` | Random I/O during game runtime; sub-ms latency reduces shader stutter |
+| Game save files | `glacier` | Small, irreplaceable — ZFS snapshot protection + RAIDZ1 redundancy |
+
+### Quick-reference summary
+
+| Pool | Workload pattern | What lives here |
+|---|---|---|
+| 🧊 `glacier` | Sequential I/O, redundancy, capacity | Photo library, documents, media library (pre-SATA), VM images, backups, Nextcloud files, game saves |
+| 🌨️ `Arctic-Storage` | Random IOPS, sub-ms latency | All Docker AppData + DBs, Ollama models, vector DBs, transcode cache, Proton prefix |
+| 💿 `sata-hdd` | Bulk cold storage, cost-per-TB | Movies, TV, music, qBittorrent downloads, bulk photo archive, Steam games |
+| ⚙️ `nvme5n1` | OS only | ZimaOS boot, NVIDIA drivers (Phase 4b) |
 
 ---
 
@@ -289,7 +360,7 @@ Originally planned to connect the Aoostar TB4S-OC via Thunderbolt 4. After exten
 
 Switching to OCuLink via a PCIe slot adapter resolved all issues immediately — drives detected on first boot, no configuration required.
 
-**Community takeaway:** For Aoostar TB4S-OC + ZimaCube 2 — use OCuLink, not Thunderbolt 4.
+**Troubleshooting takeaway:** For Aoostar TB4S-OC + ZimaCube 2 — use OCuLink, not Thunderbolt 4 (TBC).
 
 ### PCIe 5.0 Capped by 7th Bay Bridge
 
