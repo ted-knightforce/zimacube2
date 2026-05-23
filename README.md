@@ -103,7 +103,7 @@ ZimaCube 2 Standard — Storage Tiers
 
 ## 📊 Day 1–3 Benchmark Summary
 
-Full benchmark details: [Phase 1 — Storage Benchmark](docs/benchmarks/Phase1-BENCHMARK.md)
+Full benchmark details: [Phase 1 — Storage Benchmark](docs/benchmarks/PHASE1-BENCHMARK.md)
 
 | Test | Glacier ZFS RAIDZ1 | Arctic btrfs PCIe 5.0 | Winner |
 |---|---|---|---|
