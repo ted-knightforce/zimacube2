@@ -203,11 +203,10 @@ Installed a **PCIe x4 → SFF-8612 OCuLink adapter** in Slot 1. All 4 drives det
 ### Downstream Impact on Phase 4b eGPU
 
 With PCIe Slot 1 occupied by the OCuLink adapter:
-- ~~ZimaSpace 800W OCuLink dock~~ → ruled out (Slot 1 occupied)
-- ~~Minisforum DEG1~~ (OCuLink-only) → ruled out (same conflict)
-- Both TB4 ports now free → **Minisforum DEG2** (TB5 + OCuLink) or a generic TB4 eGPU enclosure are the viable paths
+- ~~Minisforum DEG1~~ (OCuLink-only) → ruled out (Slot 1 occupied)
+- Both TB4 ports now free → **Minisforum DEG2** (TB5 + OCuLink) or a AooStar AG02/AG03 TB4/TB5 + OCulink eGPU dock are the viable paths
 
-### Community Takeaway
+### Troubleshooting Takeaway
 
 If connecting an Aoostar TB4S-OC (or any ASM2462PDX-based NVMe enclosure) to a ZimaCube 2 — **use OCuLink, not Thunderbolt 4**. Direct PCIe via OCuLink means no tunneling protocol, no authorization requirements, no firmware handshake. It also delivers lower latency than TB4 tunneling.
 
