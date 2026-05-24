@@ -16,7 +16,7 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 | **Phase 1** | Foundation — Storage, ZFS, Core Services | 🟡 In Progress |
 | **Phase 1.5** | P510 Onboard M.2 Migration + Re-benchmark | ⏳ Planned |
 | **Phase 2** | Media Stack — Jellyfin, *arr, SATA pool | ⏸️ On Hold (drives arriving) |
-| **Phase 2.5** | Immich Setup on Glacier NVMe Pool | 🟡 In Progress |
+| **Phase 2.5** | Immich Migration — 14,505 photos + 925 videos (134 GiB) from DIY ZimaOS to ZimaCube 2 | ✅ Complete |
 | **Phase 3** | Data Management — Backup, Nextcloud | ⏳ Planned |
 | **Phase 4a** | CPU-Only Local AI Baseline (Ollama) | ⏳ Planned |
 | **Phase 4b** | GPU Integration — RTX 4090 + eGPU dock | ⏳ Planned |
@@ -88,7 +88,7 @@ ZimaCube 2 Standard — Storage Tiers
 
 | What | Pool | Path |
 |---|---|---|
-| Immich photo library | `glacier` | `/media/glacier/gallery` |
+| Immich photo library | `Arctic-Storage` | `/DATA/Gallery/immich` |
 | Media files | `glacier` | `/media/glacier/media` |
 | Documents | `glacier` | `/media/glacier/documents` |
 | VM disk images | `glacier` | `/media/glacier/VM` |
@@ -119,7 +119,8 @@ Full benchmark details: [Phase 1 — Storage Benchmark](docs/benchmarks/PHASE1-B
 
 | File | Contents |
 |---|---|
-| [01-foundation.md](docs/phases/01-foundation.md) | Phase 1 — ZFS setup, TB4 issue, OCuLink, benchmarks, Immich migration |
+| [01-foundation.md](docs/phases/01-foundation.md) | Phase 1 — ZFS setup, TB4 issue, OCuLink, benchmarks |
+| [02.5-immich.md](docs/phases/02.5-immich.md) | Phase 2.5 — Immich migration from DIY ZimaOS to ZimaCube 2 (complete) |
 | [02-media.md](docs/phases/02-media.md) | Phase 2 — Media stack (on hold — SATA drives arriving) |
 | [03-data.md](docs/phases/03-data.md) | Phase 3 — Backup, Nextcloud, data management |
 | [04a-cpu-ai.md](docs/phases/04a-cpu-ai.md) | Phase 4a — CPU-only Ollama baseline |
@@ -134,7 +135,7 @@ Full benchmark details: [Phase 1 — Storage Benchmark](docs/benchmarks/PHASE1-B
 |---|---|---|---|
 | 2 | 1 | "ZimaCube 2 Pioneer — Day 1: ZFS RAIDZ1 via OCuLink, Tiered Storage & a TB4 Rabbit Hole" | r/ZimaCube + r/homelab |
 | 1.5 | 1.5 | "PCIe 5.0 NVMe in the 7th Bay vs Onboard Slot — Does It Matter?" | r/ZimaCube |
-| 4 | 2.5 | "Setting Up Immich on ZimaCube 2 — Migrating 87K Photos to ZFS RAIDZ1" | r/selfhosted |
+| 4 | 2.5 | "Setting Up Immich on ZimaCube 2 — Migrating 14,505 Photos from DIY ZimaOS (Zero Data Loss)" | r/selfhosted |
 | 6 | 2 | "*arr Stack on ZimaOS — App Store First, Compose Where Needed" | r/selfhosted |
 | 8 | 4a | "Local AI on a $799 NAS Before the GPU — Honest CPU-Only Benchmarks" | r/LocalLLaMA |
 | 11 | 4b | "Adding an RTX 4090 to ZimaCube 2 — What 24GB VRAM Actually Buys You" | r/LocalLLaMA + r/eGPU |

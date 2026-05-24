@@ -56,13 +56,11 @@ Build a stable, tiered storage foundation with redundancy, snapshots, and core s
 - [x] Autotrim enabled on glacier pool
 - [x] Netdata deployed (Docker) for real-time NVMe/ZFS monitoring
 - [x] Full storage benchmarks completed (glacier vs Arctic-Storage)
-- [x] Immich migrated from previous instance — 87,458 photos in glacier/gallery
+- [x] Immich migrated from DIY ZimaOS — 14,505 photos + 925 videos (134 GiB), all memories/metadata intact (see [Phase 2.5](02.5-immich.md))
 
 ### ⏳ Pending
 
 - [ ] Nginx Proxy Manager — install and configure
-- [ ] AdGuard Home — install and configure
-- [ ] Beszel — install and configure
 - [ ] RAM → 32GB DDR5 (2× Corsair Vengeance 16GB DDR5 4800MHz CL40 SODIMM)
 - [ ] Move Crucial P510 to onboard M.2 slot → Phase 1.5 re-benchmark
 - [ ] TB4 direct networking test — connect Mac/PC via TB4 cable, configure IP over Thunderbolt, benchmark vs 2.5GbE
@@ -205,7 +203,7 @@ ZimaCube 2 Standard — Storage Tiers
 
 ### What Happened
 
-The Aoostar TB4S-OC was originally intended to connect via Thunderbolt 4. After extensive troubleshooting across multiple sessions — two certified TB4 cables, both ports tested, external power confirmed — the connection failed consistently with the following kernel errors:
+The Aoostar TB4S-OC was originally intended to connect via Thunderbolt 4. After extensive troubleshooting across multiple sessions — two 40GBps 240W USB-C cables, both ports tested, external power confirmed — the connection failed consistently with the following kernel errors:
 
 ```
 thunderbolt: tb_path_activate+0x100/0x350 [thunderbolt]
@@ -518,7 +516,7 @@ The fio numbers use `--direct=1`, bypassing the OS cache entirely. In real workl
 | 16GB (current) | ~8–10GB | Hot Docker databases and small working sets |
 | 32GB (planned) | ~20–24GB | Immich thumbnails + databases + Ollama model pages simultaneously |
 
-Upgrading to 32GB DDR5 doubles the ARC headroom — meaningfully improving glacier's real-world random read performance for Immich photo browsing, Docker app databases, and Ollama inference without changing any storage hardware. The benchmark numbers won't change (fio bypasses ARC intentionally) but day-to-day workload performance will.
+Upgrading to 32GB DDR5 doubles the ARC headroom — meaningfully improving glacier's real-world random read performance for VM disk images, documents, and bulk media workloads, while also benefiting Docker app databases and Ollama inference on Arctic-Storage. The benchmark numbers won't change (fio bypasses ARC intentionally) but day-to-day workload performance will.
 
 ### The 14× IOPS Gap — Architectural, Not a Flaw
 
@@ -536,7 +534,7 @@ ZFS RAIDZ1 trades random I/O efficiency for sequential throughput, redundancy, a
 |---|---|---|
 | ZimaOS system | `nvme5n1` (Kingston) | Boot stability, OS independence |
 | Docker AppData (all containers) | Arctic-Storage | 205K IOPS, 0.6ms — random I/O dominant |
-| Immich photo library files | Glacier | Sequential access, 5.5TB capacity, RAIDZ1 redundancy |
+| Immich photo library files | Arctic-Storage | `/DATA/Gallery/immich` — standard ZimaOS path on P510 NVMe |
 | Immich PostgreSQL database | Arctic-Storage | High random IOPS; ZFS ARC partially compensates but sub-ms beats 8.7ms |
 | Immich ML model cache | Arctic-Storage | Low latency random reads for inference |
 | VM disk images | Glacier | Large sequential I/O, RAIDZ1 redundancy |
@@ -545,27 +543,28 @@ ZFS RAIDZ1 trades random I/O efficiency for sequential throughput, redundancy, a
 
 ---
 
-## Immich Migration
+## Immich Migration ✅
 
-Phase 2 (media stack with SATA drives) is on hold pending hardware arrival. In the meantime, Immich has been set up on ZimaCube 2 with the photo library migrated from the previous instance.
+Immich has been fully migrated from the DIY ZimaOS instance to ZimaCube 2. Full migration details and troubleshooting notes are in [Phase 2.5 — Immich](02.5-immich.md).
 
 ### Migration Status
 
-- **Source:** Previous ZimaOS instance at 192.168.50.102
-- **Volume:** 87,458 photos + videos, ~169GB
-- **Current path:** `/media/Arctic-Storage/Gallery/immich` → symlinked as `/DATA/Gallery`
-- Database restore from source instance in progress
+- **Source:** DIY ZimaOS instance at 192.168.50.102
+- **Destination:** ZimaCube 2 at 192.168.50.103
+- **Volume:** 14,505 photos + 925 videos, 134 GiB — **zero data loss**
+- **Method:** ZimaOS Files app LAN Storage copy of `/DATA/AppData/immich` + `/DATA/Gallery/immich`
+- **Status:** ✅ Complete — all albums, faces, people, memories, and metadata intact
 
 ### Immich Architecture on ZimaCube 2
 
 | Container | Version | Data Path |
 |---|---|---|
-| immich-server | v2.1.0 | `/DATA/Gallery/immich` → `/media/Arctic-Storage/Gallery/immich` |
+| immich-server | v2.7.2 | `/DATA/Gallery/immich` |
 | immich-postgres | 14-vectorchord0.4.3 | `/DATA/AppData/immich/pgdata` |
-| immich-machine-learning | v2.1.0 | `/DATA/AppData/immich/model-cache` |
-| immich-redis (valkey) | 9 | In-memory only |
+| immich-machine-learning | v2.7.2 | `/DATA/AppData/immich/model-cache` |
+| immich-redis (valkey) | 8 | In-memory only |
 
-> **Note:** Database restore from source instance is the correct approach to recover albums, face tags, and metadata. A fresh install + external library scan only recovers photos — not Immich-specific metadata.
+> **Verified:** Database confirmed healthy via `ANALYZE` + `SELECT COUNT(*) FROM asset;` → 15,471 assets (14,505 photos + 925 videos + 41 motion photo components). `person`: 462, `album`: 7, `album_asset`: 1,652.
 
 ---
 
@@ -588,7 +587,7 @@ ZimaOS is **Buildroot-based** with an immutable read-only OS. Key implications f
 
 - **TB4 failure** — biggest surprise. ZimaOS TB4 kernel config + ASMedia ASM2462PDX incompatibility = hours of troubleshooting. OCuLink was the right answer all along; skip straight to it on this hardware combination.
 - **ZFS invisible to ZimaOS UI** — expected, but still a rough edge. The symlink workaround is functional but not elegant. Open feature request on ZimaOS GitHub.
-- **Immich database empty after file migration** — moving files doesn't move the database. A full `pg_dump`/restore from the source instance is required to recover albums and face tags.
+- **Immich database empty after file migration** — moving photo files without moving the database gives you photos but no albums, faces, or metadata. The fix: copy the entire `/DATA/AppData/immich` folder (including `pgdata`) alongside the photo library. Stop Immich on the source first. See [Phase 2.5](02.5-immich.md) for the full method.
 - **ZimaOS package manager missing** — `apt install fio` doesn't work. Discovering fio was already natively available saved the day; anything else requires Docker.
 - **`hostname -I` not supported** — Buildroot's hostname binary doesn't support the `-I` flag. Use `ip addr` instead in scripts.
 
@@ -616,7 +615,7 @@ ZimaOS is **Buildroot-based** with an immutable read-only OS. Key implications f
 | Phase | Description |
 |---|---|
 | **Phase 2** | Jellyfin media server — Intel QuickSync transcoding, `sata-hdd` media library (on hold — SATA drives arriving) |
-| **Phase 2.5** | Immich setup and database restore — glacier/gallery, 87K photos (in progress) |
+| **Phase 2.5** | Immich migration — 14,505 photos + 925 videos (134 GiB) from DIY ZimaOS to ZimaCube 2 via Arctic-Storage (`/DATA/Gallery/immich`) — ✅ complete |
 | **Phase 3** | Personal cloud, Nextcloud, 3-2-1 backup strategy |
 | **Phase 4a** | Ollama CPU-only AI baseline — i3-1215U inference benchmarks |
 | **Phase 4b** | GPU-accelerated inference — RTX 4090 via TB4 eGPU or Minisforum DEG2 |

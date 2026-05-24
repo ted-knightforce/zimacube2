@@ -60,7 +60,7 @@ zfs snapshot -r glacier@pre-p510-move      # Before moving P510 to onboard slot
 
 **Include:**
 - `glacier/documents` — personal documents
-- `glacier/gallery` — Immich photo library (irreplaceable)
+- `/DATA/Gallery/immich` (`Arctic-Storage`) — Immich photo library (irreplaceable)
 - `glacier/backup` — already a backup destination, but also back up metadata
 - `Arctic-Storage/AppData` — Docker app configs and databases
 

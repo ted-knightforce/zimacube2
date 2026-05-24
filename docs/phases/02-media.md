@@ -15,7 +15,7 @@ Build a complete media server with hardware-accelerated transcoding, automated l
 
 The original Phase 2 plan requires the **3× Seagate IronWolf 4TB SATA drives** to create the cold storage pool for bulk media (movies, TV shows, music). These drives are in transit.
 
-While waiting, **Phase 2.5 (Immich)** is being executed instead — using the existing `glacier` NVMe RAIDZ1 pool as the photo library. Immich setup is documented in [Phase 1 — Foundation](01-foundation.md).
+While waiting, **Phase 2.5 (Immich)** is being executed instead — migrating the existing photo library to ZimaCube 2 using `Arctic-Storage` (P510 NVMe) at the standard ZimaOS paths `/DATA/AppData/immich` and `/DATA/Gallery/immich`. Immich setup is documented in [Phase 2.5 — Immich](02.5-immich.md).
 
 > **Note:** The README originally listed "BTRFS RAID5" for SATA drives. This has been corrected to **ZFS RAIDZ1** — consistent with the rest of the build. btrfs RAID5/6 has known reliability issues and is not recommended for production data.
 
@@ -91,7 +91,7 @@ ln -s /media/sata-hdd/photos  /DATA/sata-Photos
 | Music | `sata-hdd` | `/media/sata-hdd/media/music` |
 | Downloads (transient) | `sata-hdd` | `/media/sata-hdd/downloads` |
 | Photos archive (bulk) | `sata-hdd` | `/media/sata-hdd/photos` |
-| Immich photo library | `glacier` | `/media/glacier/gallery` |
+| Immich photo library | `Arctic-Storage` | `/DATA/Gallery/immich` |
 | Jellyfin appdata | `Arctic-Storage` | `/media/Arctic-Storage/AppData/jellyfin` |
 
 ---

@@ -252,7 +252,7 @@ The glacier random IOPS numbers represent **cold cache performance** — fio's `
 | 16GB (current) | ~8–10GB | Hot Docker databases, small working sets stay in RAM |
 | 32GB (planned) | ~20–24GB | Immich thumbnails + databases + Ollama model pages cached simultaneously |
 
-Upgrading from 16GB to 32GB DDR5 doubles the ARC headroom — meaningfully improving glacier's day-to-day random read performance for Immich photo browsing, Docker app databases, and Ollama inference. The fio benchmark numbers won't change (they bypass ARC by design) but real workload performance will improve noticeably.
+Upgrading from 16GB to 32GB DDR5 doubles the ARC headroom — meaningfully improving glacier's day-to-day random read performance for VM disk images, documents, and bulk media, while also benefiting Docker app databases and Ollama inference on Arctic-Storage. The fio benchmark numbers won't change (they bypass ARC by design) but real workload performance will improve noticeably.
 
 Monitor ARC effectiveness with:
 ```bash
@@ -279,14 +279,14 @@ Based on benchmark results and the full Phase 1–6 build plan, the optimal stor
 |---|---|---|
 | ZimaOS system + boot | `nvme5n1` | OS isolation; survives pool wipes |
 | Docker AppData (all containers) | `Arctic-Storage` | 205K IOPS, 0.6ms latency — config DBs, container state |
-| Immich photo library (87K photos) | `glacier` | Sequential reads, 5.5TB capacity, ZFS checksums, RAIDZ1 redundancy |
+| Immich photo library (14,505 photos + 925 videos) | `Arctic-Storage` | Standard ZimaOS paths `/DATA/Gallery/immich` — on P510 NVMe alongside AppData |
 | Immich PostgreSQL + pgvecto.rs DB | `Arctic-Storage` | Random I/O critical for thumbnail queries, face search, CLIP search |
 | Immich ML model cache | `Arctic-Storage` | Low latency random reads for face/scene detection inference |
 | VM disk images | `glacier` | Sequential I/O, RAIDZ1 redundancy, ZFS snapshot rollback |
 | Personal documents | `glacier` | Checksums + snapshots for irreplaceable data |
 | ZimaOS system | `nvme5n1` | Boot stability, OS independence |
 
-> **Note on Immich split:** The photo library (large sequential files) lives on `glacier` for capacity and redundancy. The PostgreSQL database lives on `Arctic-Storage` for IOPS. At 32GB RAM, ZFS ARC (~20–24GB) will partially warm Glacier's random I/O for hot DB pages, but the cold-cache penalty (8.7ms vs 0.6ms) is real for initial loads and fresh restarts.
+> **Note on Immich storage:** Both the photo library (`/DATA/Gallery/immich`) and the PostgreSQL database (`/DATA/AppData/immich/pgdata`) live on `Arctic-Storage` via the standard ZimaOS `/DATA` paths. This gives the entire Immich stack the benefit of Arctic-Storage's 205K IOPS and 0.6ms latency — thumbnail queries, face search, and photo browsing all benefit. The trade-off is capacity: at 134 GiB today, the P510 (2TB) has headroom, but large library growth may warrant moving the photo files to `glacier` in future.
 
 ### Phase 2 — Media Stack (SATA HDDs arriving)
 
@@ -410,7 +410,7 @@ chmod +x benchmark-glacier.sh benchmark-arctic.sh benchmark-compare.sh
 
 - **Phase 1.5** — Move P510 to onboard M.2 slot → re-benchmark → publish
 - **Phase 2** — Media server (Jellyfin) — on hold pending Seagate IronWolf drives
-- **Phase 2.5** — Immich database restore from source instance — in progress
+- **Phase 2.5** — Immich migration ✅ complete — 14,505 photos + 925 videos (134 GiB), zero data loss. DB verified: 15,471 assets, 7 albums, 462 people. Running on Arctic-Storage at `/DATA/Gallery/immich` + `/DATA/AppData/immich`
 - **Phase 4a** — Ollama CPU-only AI inference baseline on i3-1215U (after RAM → 32GB)
 - **Phase 4b** — RTX 4090 via TB4 eGPU or Minisforum DEG2 dock
 
