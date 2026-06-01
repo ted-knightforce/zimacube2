@@ -49,7 +49,7 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 
 | Item | Purpose | ETA |
 |---|---|---|
-| 3× Seagate IronWolf 4TB (SATA, CMR) | Cold storage RAID for bulk media | Arriving soon |
+| 4× Seagate IronWolf 4TB (SATA, CMR) | Cold storage RAID for bulk media (`ironwolf` pool) | 1 in hand · 3 in transit |
 | 2× Corsair Vengeance 16GB DDR5 4800MHz CL40 | RAM upgrade 16GB → 32GB | Day 7+ |
 | RTX 4090 (used) | GPU inference + Phase 6 gaming | Phase 4b |
 | eGPU dock (TBD) | Minisforum DEG2 or TB4 enclosure | Phase 4b |
@@ -81,7 +81,7 @@ ZimaCube 2 Standard — Storage Tiers
 │   └── sda/sdb  Transcend + SanDisk 1TB      Overflow until SATA arrives
 │
 └── TIER 4 — Cold Storage (arriving)
-    └── 3× Seagate IronWolf 4TB SATA          Bulk media — movies, TV, music archive
+    └── 4× Seagate IronWolf 4TB SATA           ironwolf (btrfs RAID5, ~12TB usable)
 ```
 
 ### Pool & Path Quick Reference
@@ -95,9 +95,9 @@ ZimaCube 2 Standard — Storage Tiers
 | Backup destination | `glacier` | `/media/glacier/backup` |
 | App Data (Docker) | `Arctic-Storage` | `/media/Arctic-Storage/AppData` |
 | Ollama AI models | `Arctic-Storage` | `/media/Arctic-Storage/AppData/ollama` |
-| Movies (arriving) | `sata-hdd` | `/media/sata-hdd/media/movies` |
-| TV shows (arriving) | `sata-hdd` | `/media/sata-hdd/media/tv` |
-| Music (arriving) | `sata-hdd` | `/media/sata-hdd/media/music` |
+| Movies (arriving) | `ironwolf` | `/media/ironwolf/media/movies` |
+| TV shows (arriving) | `ironwolf` | `/media/ironwolf/media/tv` |
+| Music (arriving) | `ironwolf` | `/media/ironwolf/media/music` |
 
 ---
 

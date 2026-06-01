@@ -26,7 +26,7 @@ Unified data protection with a proper 3-2-1 backup strategy: local ZFS snapshots
 ```
 3 copies of data
   ├── Copy 1: glacier ZFS RAIDZ1 (primary)
-  ├── Copy 2: On-site backup → external USB drive or sata-hdd
+  ├── Copy 2: On-site backup → external USB drive or ironwolf
   └── Copy 3: Offsite → Backblaze B2 (~AU$2–5/month for 200–500GB)
 
 2 different storage media
@@ -66,8 +66,8 @@ zfs snapshot -r glacier@pre-p510-move      # Before moving P510 to onboard slot
 
 **Exclude:**
 - `glacier/media` — re-downloadable media
-- `sata-hdd/media` — re-downloadable
-- `sata-hdd/downloads` — transient
+- `ironwolf/media` — re-downloadable
+- `ironwolf/downloads` — transient
 - `Arctic-Storage/AppData/ollama` — AI models are re-downloadable
 
 ---

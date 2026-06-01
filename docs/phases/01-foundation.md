@@ -101,7 +101,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 - **Transcend ESD310C 1TB** — USB 10Gbps, dual Type-C/Type-A (`sda`)
 - **SanDisk Portable SSD SDSSDE30 1TB** — USB 3.2 Gen 2, up to 800 MB/s (`sdb`)
 
-**Coming soon:** 3× Seagate IronWolf 4TB 3.5" SATA NAS drives (5,400 RPM, CMR, 256MB cache) for cold storage RAID in the 6 SATA bays — bulk media files, movies, TV shows, photos archive.
+**Coming soon:** 4× Seagate IronWolf 4TB 3.5" SATA NAS drives (5,400 RPM, CMR, 256MB cache) for the `ironwolf` btrfs RAID5 pool (~12TB usable) in the 6 SATA bays — bulk media files, movies, TV shows, photos archive. 1 drive received; 3 in transit.
 
 ---
 
@@ -194,7 +194,7 @@ ZimaCube 2 Standard — Storage Tiers
 │   └── sdb      SanDisk Portable SSD 1TB     Temporary
 │
 └── TIER 4 — Cold Storage (Arriving soon)
-    └── 3× Seagate IronWolf 4TB 3.5" SATA     Bulk media — ZFS RAIDZ1 (sata-hdd)
+    └── 4× Seagate IronWolf 4TB 3.5" SATA     ironwolf (btrfs RAID5, ~12TB usable)
 ```
 
 ---
@@ -267,6 +267,7 @@ For workloads like pulling raw photos from Immich, streaming high-bitrate media,
 | Snapshots | Copy-on-write snapshots are instant — essential before Phase 4 experiments |
 | Compression | lz4 is near-zero CPU cost on i3-1215U with real savings on documents and logs |
 | btrfs for Arctic-Storage | Single drive — ZimaOS native UI recognition matters more than ZFS on a single drive |
+| btrfs RAID5 for ironwolf | SATA HDDs managed via ZimaOS Storage Manager — native UI integration, same approach as Arctic-Storage |
 
 ### Pool Creation
 
@@ -539,7 +540,7 @@ ZFS RAIDZ1 trades random I/O efficiency for sequential throughput, redundancy, a
 | Immich ML model cache | Arctic-Storage | Low latency random reads for inference |
 | VM disk images | Glacier | Large sequential I/O, RAIDZ1 redundancy |
 | Documents | Glacier | ZFS checksums + snapshots for integrity |
-| Cold media (arriving) | `sata-hdd` | Capacity and cost-per-TB; sequential access only |
+| Cold media (arriving) | `ironwolf` | Capacity and cost-per-TB; sequential access only |
 
 ---
 
@@ -601,7 +602,7 @@ ZimaOS is **Buildroot-based** with an immutable read-only OS. Key implications f
 |---|---|---|
 | RAM → 32GB DDR5 | 2× Corsair Vengeance 16GB DDR5 4800MHz CL40 | Doubles ZFS ARC headroom; better VM and AI performance |
 | P510 → onboard M.2 | Move Crucial P510 from 7th Bay to onboard slot | Unlock native PCIe Gen5 speeds — re-benchmark planned |
-| 3× Seagate IronWolf 4TB | SATA bays — cold storage | Bulk media archive tier; unblocks Phase 2 |
+| 4× Seagate IronWolf 4TB | SATA bays — `ironwolf` pool (~12TB btrfs RAID5) | Bulk media archive tier; unblocks Phase 2 · 1 received, 3 in transit |
 | eGPU dock (TBD) | Minisforum DEG2 (TB5+OCuLink) or TB4 eGPU enclosure | Phase 4b GPU inference — both TB4 ports now free |
 
 ### Planned Experiments
@@ -614,7 +615,7 @@ ZimaOS is **Buildroot-based** with an immutable read-only OS. Key implications f
 
 | Phase | Description |
 |---|---|
-| **Phase 2** | Jellyfin media server — Intel QuickSync transcoding, `sata-hdd` media library (on hold — SATA drives arriving) |
+| **Phase 2** | Jellyfin media server — Intel QuickSync transcoding, `ironwolf` media library (on hold — SATA drives arriving) |
 | **Phase 2.5** | Immich migration — 14,505 photos + 925 videos (134 GiB) from DIY ZimaOS to ZimaCube 2 via Arctic-Storage (`/DATA/Gallery/immich`) — ✅ complete |
 | **Phase 3** | Personal cloud, Nextcloud, 3-2-1 backup strategy |
 | **Phase 4a** | Ollama CPU-only AI baseline — i3-1215U inference benchmarks |

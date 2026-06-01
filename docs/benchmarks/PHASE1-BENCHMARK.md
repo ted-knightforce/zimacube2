@@ -270,7 +270,7 @@ Based on benchmark results and the full Phase 1–6 build plan, the optimal stor
 > **Storage tiers:**
 > - 🧊 **Glacier** — ZFS RAIDZ1, 4× 2TB PCIe 4.0 NVMe via OCuLink (~5.5TB usable) — sequential throughput + redundancy
 > - 🌨️ **Arctic-Storage** — Crucial P510 2TB PCIe 5.0 btrfs (7th Bay) — random IOPS, sub-ms latency
-> - 💿 **sata-hdd** — 3× Seagate IronWolf 4TB ZFS RAIDZ1 (~8TB usable, arriving) — bulk cold storage, cost-per-TB
+> - 💿 **ironwolf** — 4× Seagate IronWolf 4TB btrfs RAID5 (~12TB usable, arriving) — bulk cold storage, cost-per-TB · 1 drive in hand, 3 in transit
 > - ⚙️ **nvme5n1** — Kingston 256GB OS drive — ZimaOS system only
 
 ### Phase 1 — Foundation (current)
@@ -292,9 +292,9 @@ Based on benchmark results and the full Phase 1–6 build plan, the optimal stor
 
 | Workload | Pool | Reason |
 |---|---|---|
-| Jellyfin media library (movies, TV, music) | `sata-hdd` | Sequential streaming only; HDD speed (150–200 MB/s) comfortably covers 4K playback; saves NVMe for hot data |
-| qBittorrent downloads (transient) | `sata-hdd` | Bulk writes, transient; **must be same pool as media** for hardlinks (zero-copy imports) |
-| Bulk photo archive (Immich external library, read-only) | `sata-hdd` | Cold sequential reads; Immich indexes without moving files |
+| Jellyfin media library (movies, TV, music) | `ironwolf` | Sequential streaming only; HDD speed (150–200 MB/s) comfortably covers 4K playback; saves NVMe for hot data |
+| qBittorrent downloads (transient) | `ironwolf` | Bulk writes, transient; **must be same pool as media** for hardlinks (zero-copy imports) |
+| Bulk photo archive (Immich external library, read-only) | `ironwolf` | Cold sequential reads; Immich indexes without moving files |
 | Jellyfin AppData / metadata DB | `Arctic-Storage` | Random I/O for library scans, watch-state DB, playback resume |
 | Jellyfin transcode cache (temp) | `Arctic-Storage` | High random I/O during Intel QuickSync transcode; ephemeral |
 | Sonarr / Radarr / Prowlarr / Bazarr AppData | `Arctic-Storage` | SQLite config DBs — frequent small random writes on episode grabs |
@@ -336,7 +336,7 @@ Based on benchmark results and the full Phase 1–6 build plan, the optimal stor
 
 | Workload | Pool | Reason |
 |---|---|---|
-| Steam game library (installed games) | `sata-hdd` | Large sequential installs; HDD load times adequate for most titles via Proton |
+| Steam game library (installed games) | `ironwolf` | Large sequential installs; HDD load times adequate for most titles via Proton |
 | Steam Proton prefix / shader cache | `Arctic-Storage` | Random I/O during game runtime; sub-ms latency reduces shader stutter |
 | Game save files | `glacier` | Small, irreplaceable — ZFS snapshot protection + RAIDZ1 redundancy |
 
@@ -346,7 +346,7 @@ Based on benchmark results and the full Phase 1–6 build plan, the optimal stor
 |---|---|---|
 | 🧊 `glacier` | Sequential I/O, redundancy, capacity | Photo library, documents, media library (pre-SATA), VM images, backups, Nextcloud files, game saves |
 | 🌨️ `Arctic-Storage` | Random IOPS, sub-ms latency | All Docker AppData + DBs, Ollama models, vector DBs, transcode cache, Proton prefix |
-| 💿 `sata-hdd` | Bulk cold storage, cost-per-TB | Movies, TV, music, qBittorrent downloads, bulk photo archive, Steam games |
+| 💿 `ironwolf` | Bulk cold storage, cost-per-TB | Movies, TV, music, qBittorrent downloads, bulk photo archive, Steam games |
 | ⚙️ `nvme5n1` | OS only | ZimaOS boot, NVIDIA drivers (Phase 4b) |
 
 ---
