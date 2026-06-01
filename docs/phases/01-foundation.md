@@ -133,17 +133,17 @@ The choice of ZimaOS was deliberate — after years with Synology, the simplicit
 **1. RAM Upgrade**  
 Replaced the stock 8GB DDR5 with a **Crucial 16GB DDR5 5600MHz CL46 SODIMM**. Planning to upgrade further with **2× Corsair Vengeance 16GB DDR5 4800MHz CL40 SODIMM** for a total of **32GB DDR5**.
 
-Removing the original 1x Samsung 8GB SODIMM DDR5 4800 MT/s stick.
+*Removing the original 1x Samsung 8GB SODIMM DDR5 4800 MT/s stick.*
 ![ZimaCube 2 Interior - Removing Original RAM](../images/phase1.5/day02-ram-upgrade-removing-old-01.jpg)
 
-Installing the new 1x Crucial 16GB SODIMM DDR5 4800 MT/s stick.
+*Installing the new 1x Crucial 16GB SODIMM DDR5 4800 MT/s stick.*
 ![ZimaCube 2 Interior - Removing Original RAM](../images/phase1.5/day02-ram-upgrade-installing-new-01.jpg)
 > **Note:** The ZimaCube 2 Standard supports up to **64GB DDR5** (2× 32GB SODIMM). The planned 2× 16GB Corsair Vengeance upgrade brings it to 32GB — a second upgrade to 2× 32GB SODIMM is possible if more RAM is ever needed in future direction of ZimaCube 2. Right now, 16GB DDR5 is the sweet spot.
 
 **2. Internal NVMe — Crucial P510 2TB PCIe 5.0 (7th Bay)**  
-Installed a **Crucial P510 2TB Gen5 NVMe M.2 2280** into the ZimaCube 2's internal 7th Bay NVMe enclosure. Formatted as native ZimaOS btrfs, named **Arctic-Storage** (`nvme0n1`). ZimaOS App Data and User Database migrated here from the Kingston OS drive (`nvme5n1`) via the built-in migration tool.
+Installed a Crucial P510 2TB Gen5 NVMe M.2 2280 into the ZimaCube 2's internal 7th Bay NVMe enclosure. Formatted as native ZimaOS btrfs, named **Arctic-Storage** (`nvme0n1`). ZimaOS App Data and User Database migrated here from the Kingston OS drive (`nvme5n1`) via the built-in migration tool.
 
-Installing the Crucial P510 2TB PCIe Gen5 installed in 7th Bay NVME1 → configured as Arctic-Storage (btrfs)
+*Installing the Crucial P510 2TB PCIe Gen5 installed in 7th Bay NVME1 → configured as Arctic-Storage (btrfs)*
 ![ZimaCube 2 Interior - Inserting new NVMe SSD](../images/phase1.5/day02-nvme-ssd-install-inserting-01.jpg)
 ![ZimaCube 2 Interior - Installed new NVMe SSD](../images/phase1.5/day02-nvme-ssd-install-complete-01.jpg)
 ![ZimaCube 2 Interior - Seated new NVMe SSD](../images/phase1.5/day02-nvme-ssd-install-seated-01.jpg)
@@ -154,15 +154,15 @@ Installing the Crucial P510 2TB PCIe Gen5 installed in 7th Bay NVME1 → configu
 **3. PCIe OCuLink Adapter**  
 Installed a **PCIe x4 to SFF-8612 adapter** into Slot 1 of ZimaCube 2. Slot 1 is a physical x16 slot wired at PCIe 4.0 x4 lanes (~8 GB/s) — the card fits a full-length x16 form factor but only uses four lanes electrically.
 
-Install PCIe OCuLink Adapter
+*Install PCIe OCuLink Adapter*
 ![ZimaCube 2 Interior - Install PCIe OCuLink Adapter 01](../images/phase1.5/day02-pcie-card-install-02.jpg)
 ![ZimaCube 2 Interior - Install PCIe OCuLink Adapter 02](../images/phase1.5/day02-pcie-card-install-03.jpg)
-> 💡 **Side effect:** With Slot 1 occupied by the OCuLink adapter, both Thunderbolt 4 ports on the ZimaCube 2 are now free — available for a **TB4 eGPU** (Phase 4b) or **TB4 direct networking** to a Mac/PC for high-speed file transfer beyond the 2.5GbE ceiling.
+> 💡 **Implication:** With Slot 1 occupied by the OCuLink adapter, both Thunderbolt 4 ports on the ZimaCube 2 are now free — available for a **TB4 eGPU** (Phase 4b) or **TB4 direct networking** to a Mac/PC for high-speed file transfer beyond the 2.5GbE ceiling.
 
 **4. Aoostar TB4S-OC NVMe Enclosure (OCuLink)**  
 Connected the **Aoostar TB4S-OC** (USB4/Thunderbolt 4 + OCuLink NVMe DAS) via OCuLink after Thunderbolt 4 failed (see [Thunderbolt 4 Issue](#thunderbolt-4-issue--oculink-resolution)). The enclosure holds **4× 2TB PCIe Gen4 NVMe M.2 SSDs** (`nvme1n1`–`nvme4n1`), formatted as **ZFS RAIDZ1** named **glacier**.
 
-Aoostar TB4S-OC NVMe Enclosure (OCuLink) seated on top of ZimaCube 2
+*Aoostar TB4S-OC NVMe Enclosure (OCuLink) seated on top of ZimaCube 2*
 ![ZimaCube 2 - Aoostar TB4S-OC NVMe Enclosure 01](../images/phase1.5/day02-zimadock-setup-top-01.jpg)
 ![ZimaCube 2 - Aoostar TB4S-OC NVMe Enclosure 02](../images/phase1.5/day02-zimadock-powered-on-01.jpg)
 ![ZimaCube 2 - Aoostar TB4S-OC NVMe Enclosure 03](../images/phase1.5/day02-rear-cables-connected-01.jpg)
