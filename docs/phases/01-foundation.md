@@ -37,12 +37,12 @@
 
 Build a stable NAS; tiered storage foundation with redundancy, snapshots, and core services running on ZimaOS. Document the real journey — including what went wrong — as a baseline for Phase 2 through Phase 6. The choice of NAS is the [ZimaCube 2 NAS](https://shop.zimaspace.com/products/zimacube-2-personal-cloud-nas).
 
-[ZimaCube 2 Box](../images/phase1.5/day02-zimacube2-box-01.jpg)
-[ZimaCube 2 Upgrades](../images/phase1.5/day02-upgrades-components-spread-01.jpg)
-[ZimaCube 2 Front](../images/phase1.5/day02-zimacube2-front-panel-01.jpg)
-[ZimaCube 2 Side](../images/phase1.5/day02-zimacube2-exterior-side-01.jpg)
-[ZimaCube 2 Rear](../images/phase1.5/day02-zimacube2-rear-panel-01.jpg)
-[ZimaCube 2 Rear Ports](../images/phase1.5/day02-zimacube2-rear-panel-02.jpg)
+![ZimaCube 2 Box](../images/phase1.5/day02-zimacube2-box-01.jpg)
+![ZimaCube 2 Upgrades](../images/phase1.5/day02-upgrades-components-spread-01.jpg)
+![ZimaCube 2 Front](../images/phase1.5/day02-zimacube2-front-panel-01.jpg)
+![ZimaCube 2 Side](../images/phase1.5/day02-zimacube2-exterior-side-01.jpg)
+![ZimaCube 2 Rear](../images/phase1.5/day02-zimacube2-rear-panel-01.jpg)
+![ZimaCube 2 Rear Ports](../images/phase1.5/day02-zimacube2-rear-panel-02.jpg)
 ---
 ## Completed & Pending
 
