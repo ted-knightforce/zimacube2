@@ -36,9 +36,9 @@
 ## Goal
 
 Build a stable and power efficient NAS; tiered storage foundation with redundancy, snapshots, and core services running on ZimaOS. Document the real journey — including what went wrong — as a baseline for Phase 2 through Phase 6. The choice of NAS is the [ZimaCube 2 Standard NAS](https://shop.zimaspace.com/products/zimacube-2-personal-cloud-nas).
+---
 
 ### ZimaCube 2 Standard NAS
-
 It came in a nice huge black box with an orange accent.
 ![ZimaCube 2 Box](../images/phase1.5/day02-zimacube2-box-01.jpg)
 
