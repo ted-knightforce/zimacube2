@@ -35,17 +35,43 @@
 
 ## Goal
 
-Build a stable NAS; tiered storage foundation with redundancy, snapshots, and core services running on ZimaOS. Document the real journey — including what went wrong — as a baseline for Phase 2 through Phase 6. The choice of NAS is the [ZimaCube 2 NAS](https://shop.zimaspace.com/products/zimacube-2-personal-cloud-nas).
+Build a stable and power efficient NAS; tiered storage foundation with redundancy, snapshots, and core services running on ZimaOS. Document the real journey — including what went wrong — as a baseline for Phase 2 through Phase 6.
 
+The choice of NAS is the [ZimaCube 2 Standard NAS](https://shop.zimaspace.com/products/zimacube-2-personal-cloud-nas).
+---
+
+### ZimaCube 2 Standard NAS
 ![ZimaCube 2 Box](../images/phase1.5/day02-zimacube2-box-01.jpg)
-![ZimaCube 2 Upgrades](../images/phase1.5/day02-upgrades-components-spread-01.jpg)
 ![ZimaCube 2 Front](../images/phase1.5/day02-zimacube2-front-panel-01.jpg)
+![ZimaCube 2 Front Bays 01](../images/phase1.5/day02-drive-bays-loaded-01.jpg)
+![ZimaCube 2 Front Bays 02](../images/phase1.5/day02-drive-bays-loaded-02.jpg)
+![ZimaCube 2 Front Bay Tray](../images/phase1.5/day02-drive-bay-tray-closeup-01.jpg)
 ![ZimaCube 2 Side](../images/phase1.5/day02-zimacube2-exterior-side-01.jpg)
 ![ZimaCube 2 Rear](../images/phase1.5/day02-zimacube2-rear-panel-01.jpg)
 ![ZimaCube 2 Rear Ports](../images/phase1.5/day02-zimacube2-rear-panel-02.jpg)
+> **For the keen eyes:** The IO shield of the ZimaCube 2 Standard came slightly displaced at the upper left. I have to open the upper shell to access the internal of ZimaCube 2 to readjust the IO shield. Could be due to shipping, it got moved.
 ---
-## Completed & Pending
 
+### ZimaCube 2 Standard NAS (Internal)
+![ZimaCube 2 Unscrew 01](../images/phase1.5/day02-case-opening-screw-removal-01.jpg)
+![ZimaCube 2 Unscrew 02](../images/phase1.5/day02-case-opening-screw-removal-02.jpg)
+![ZimaCube 2 Interior Top](../images/phase1.5/day02-interior-overview-01.jpg)
+![ZimaCube 2 Interior Original RAM](../images/phase1.5/day02-interior-original-ram-01.jpg)
+![ZimaCube 2 Interior Original NVMe M2 SSD](../images/phase1.5/day02-interior-original-m2-ssd-01.jpg)
+![ZimaCube 2 Interior Original PCIe Slots](../images/phase1.5/day02-pcie-card-install-01.jpg)
+![ZimaCube 2 Interior Original 7th Bay Tray 01](../images/phase1.5/day02-nvme-adapter-card-top-01.jpg)
+![ZimaCube 2 Interior Original 7th Bay Tray 02](../images/phase1.5/day02-nvme-adapter-card-slots-01.jpg)
+---
+
+### Components used for Upgrade journey
+![ZimaCube 2 Upgrades](../images/phase1.5/day02-upgrades-components-spread-01.jpg)
+![Crucial P510 2TB PCIe5 NVMe 2280 M.2 SSD Box](../images/phase1.5/day02-crucial-p510-nvme-box-01.jpg)
+![Crucial P510 2TB PCIe5 NVMe 2280 M.2 SSD Stick](../images/phase1.5/day02-crucial-p510-nvme-unboxed-01.jpg)
+![OCuLink PCIe x4 to SFF-8612 adapter](../images/phase1.5/day02-oculink-pcie-card-01.jpg)
+![Aoostar TB4S-0C USB4 OCuLink NVMe enclosure](../images/phase1.5/aoostar-tb4s-oc-nvme-enclosure.png)
+---
+
+## Completed & Pending
 ### ✅ Completed
 
 - [x] ZimaCube 2 Standard received and powered on
