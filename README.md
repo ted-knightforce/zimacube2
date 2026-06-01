@@ -37,7 +37,7 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 | **NVMe RAID pool** | 4× 2TB PCIe Gen4 NVMe via Aoostar TB4S-OC | nvme1–4n1 — glacier (ZFS RAIDZ1) ~5.5TB |
 | **Connection** | OCuLink via PCIe 4.0 x4 adapter (Slot 1, physical x16) | ⚠️ TB4 abandoned — see Phase 1 notes |
 | **USB storage (temp)** | Transcend ESD310C 1TB + SanDisk 1TB | Temporary until SATA drives arrive |
-| **Network** | 2× Intel i226 2.5GbE | TP-Link TL-SG108E managed switch |
+| **Network** | 2× Intel i226 2.5GbE | 1 port connected to Ubiquiti Flex Mini 2.5G 5-Port Managed Switch · 2nd port unused (future use) |
 
 ### Key Hardware Decisions & Changes from Original Plan
 

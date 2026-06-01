@@ -116,7 +116,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 | RAM | 16GB DDR5 — Crucial 5600MHz CL46 SODIMM |
 | RAM (planned) | 2× 16GB Corsair Vengeance DDR5 4800MHz CL40 SODIMM = **32GB DDR5** (max supported: 64GB via 2× 32GB SODIMM) |
 | OS | ZimaOS (Buildroot-based, immutable, RAUC A/B OTA) |
-| Network | 2× Intel i226 2.5GbE |
+| Network | 2× Intel i226 2.5GbE | 1 port active → Ubiquiti Flex Mini 2.5G 5-Port Managed Switch · 2nd port unused (no current use case — to explore in future) |
 | Thunderbolt | 2× Thunderbolt 4 ports (both free — eGPU or direct networking use) |
 | PCIe Slot 1 | Physical x16 slot · PCIe 4.0 x4 lanes → OCuLink SFF-8612 adapter |
 | PCIe Slot 2 | Physical x8 slot · PCIe 3.0 x2 lanes → available |
@@ -452,7 +452,7 @@ All tests: `--direct=1` (bypasses OS page cache) · `--ioengine=libaio`
 
 ### Monitoring
 
-Real-time metrics captured via **Netdata** running as a Docker container with host filesystem mounted read-only. Dashboard at `http://192.168.50.206:19999`.
+Real-time metrics captured via **Netdata** running as a Docker container with host filesystem mounted read-only. Dashboard at `http://192.168.x.x:19999`.
 
 ---
 
@@ -550,8 +550,8 @@ Immich has been fully migrated from the DIY ZimaOS instance to ZimaCube 2. Full 
 
 ### Migration Status
 
-- **Source:** DIY ZimaOS instance at 192.168.50.102
-- **Destination:** ZimaCube 2 at 192.168.50.103
+- **Source:** DIY ZimaOS instance (LAN)
+- **Destination:** ZimaCube 2 (LAN)
 - **Volume:** 14,505 photos + 925 videos, 134 GiB — **zero data loss**
 - **Method:** ZimaOS Files app LAN Storage copy of `/DATA/AppData/immich` + `/DATA/Gallery/immich`
 - **Status:** ✅ Complete — all albums, faces, people, memories, and metadata intact

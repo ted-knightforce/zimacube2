@@ -112,7 +112,7 @@ ZimaCube 2 Standard's i3-1215U includes Intel QuickSync. Jellyfin config needed:
 devices:
   - /dev/dri:/dev/dri
 environment:
-  - JELLYFIN_PublishedServerUrl=http://192.168.50.206
+  - JELLYFIN_PublishedServerUrl=http://192.168.x.x
 ```
 
 Enable hardware acceleration in Jellyfin UI: Dashboard → Playback → Hardware Acceleration → Intel QuickSync Video.

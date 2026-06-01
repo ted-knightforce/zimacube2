@@ -181,7 +181,7 @@ Each script runs 4 sequential fio tests (seq write → seq read → rand 4K writ
 All tests used `--direct=1` (bypasses OS page cache) and `--ioengine=libaio`.
 
 ### Monitoring
-Real-time metrics captured via Netdata running as a Docker container. Dashboard at `http://192.168.50.206:19999`.
+Real-time metrics captured via Netdata running as a Docker container. Dashboard at `http://192.168.x.x:19999`.
 
 ---
 
