@@ -80,7 +80,7 @@
 *The PCIe Expansion for ZimaCube 2. Regardless whether it is the Standard or Pro version, both came with 1x PCIe4 x4 lanes (physical x16 slot) and 1x PCIe3 x2 lanes (physical x8 slot) for maximum compatibility with most add-on cards. Although they have to be low profile to fit the dimension and heights of ZimaCube 2.*
 ![ZimaCube 2 Interior Original PCIe Slots](../images/phase1.5/day02-pcie-card-install-01.jpg)
 
-*The 7th bay of ZimaCube 2. Here, you can use your ZimaCube 2 as an all-flash NVMe NAS if you desire. Although total throughput is limited to approx. 800MB/s on the Standard version and approx. 3200MB/s on the Pro version.*
+*The 7th bay of ZimaCube 2. Here, you can use your ZimaCube 2 as an all-flash NVMe NAS if you desire.*
 ![ZimaCube 2 Interior Original 7th Bay Tray 01](../images/phase1.5/day02-nvme-adapter-card-top-01.jpg)
 ![ZimaCube 2 Interior Original 7th Bay Tray 02](../images/phase1.5/day02-nvme-adapter-card-slots-01.jpg)
 ---
@@ -97,7 +97,7 @@
 *The hardware fallback storage integration to my Tier 2 - NVMe ZRAID1. Overcoming limitation of ZimaCube 2 Standard's 7th tray (800MB/s total throughput). Initially, wanted to utilise ZimaCube 2's Thunderbolt 4 connection to my Aoostar TB4S-OC NVMe DAS but encountered connection issues.*
 ![OCuLink PCIe x4 to SFF-8612 adapter](../images/phase1.5/day02-oculink-pcie-card-01.jpg)
 
-*This Thunderbolt4/OCuLink DAS is my answer to overcome the limitation of the 7th bay NVMe SSD tray in ZimaCube 2. Refer to NASCompares.com website for the review [NASCompares_TB4S-OC Review](https://nascompares.com/2024/10/09/aoostar-tb4s-oc-review/)*
+*This Thunderbolt4 and OCuLink DAS is my answer to overcome the limitation of the 7th bay NVMe SSD tray in ZimaCube 2. Refer to NASCompares.com website for the review [NASCompares_TB4S-OC Review](https://nascompares.com/2024/10/09/aoostar-tb4s-oc-review/)*
 ![Aoostar TB4S-0C USB4 OCuLink NVMe enclosure](../images/phase1.5/aoostar-tb4s-oc-nvme-enclosure.png)
 ---
 
