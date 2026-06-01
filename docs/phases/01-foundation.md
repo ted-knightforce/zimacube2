@@ -3,7 +3,7 @@
 **Author:** ted-knight  
 **Status:** 🟡 In Progress  
 **Started:** May 21, 2026  
-**Updated:** May 23, 2026  
+**Updated:** June 01, 2026  
 **Program:** ZimaCube 2 Pioneer Program  
 
 ---
@@ -34,15 +34,15 @@
 ---
 
 ## Goal
+*Build a stable and power efficient NAS; tiered storage foundation with redundancy, snapshots, and core services running on ZimaOS. Document the journey — including new discovery and what went wrong — from Phase 1 through Phase 6. After much deliberation, the choice of consumer NAS is the [ZimaCube 2 Standard NAS](https://shop.zimaspace.com/products/zimacube-2-personal-cloud-nas).*
 
-*Build a stable and power efficient NAS; tiered storage foundation with redundancy, snapshots, and core services running on ZimaOS. Document the real journey — including what went wrong — as a baseline for Phase 2 through Phase 6. The choice of NAS is the [ZimaCube 2 Standard NAS](https://shop.zimaspace.com/products/zimacube-2-personal-cloud-nas).*
 ---
 
 ### ZimaCube 2 Standard NAS
 *It came in a nice huge black box with an orange accent.*
 ![ZimaCube 2 Box](../images/phase1.5/day02-zimacube2-box-01.jpg)
 
-*Silver chasis. Front panel of ZimaCube 2 standard with 2x USB-A 3.0, 1x USB-C 3.0, 1x 3.5mm Audio Jack and a small Power Button.*
+*Front panel of ZimaCube 2 standard with 2x USB-A 3.0, 1x USB-C 3.0, 1x 3.5mm Audio Jack and a small Power Button.*
 ![ZimaCube 2 Front](../images/phase1.5/day02-zimacube2-front-panel-01.jpg)
 
 *Front Bay of ZimaCube 2 supporting 6x SATA3 3.5"/2.5" HDD trays + 7th tray supporting 4x M.2 NVMe SDDs.*
@@ -52,10 +52,10 @@
 *Front HDD Tray with LED status/activity lights.*
 ![ZimaCube 2 Front Bay Tray](../images/phase1.5/day02-drive-bay-tray-closeup-01.jpg)
 
-*Silver chasis. Very sharp angular design of ZimaCube 2. Undemanding presence meant to be put at the corner of your room.*
+*ZimaCube 2 — featuring a sleek silver chassis with sharp angular lines. Its understated design ensures it blends seamlessly into any space without drawing attention.*
 ![ZimaCube 2 Side](../images/phase1.5/day02-zimacube2-exterior-side-01.jpg)
 
-*Minimalist rear design of ZimaCube 2 with panel to hide the 2x rear exhaust fans.*
+*ZimaCube 2's minimalist back panel neatly hides its dual exhaust system, keeping the focus on sleek aesthetics rather than hardware clutter.*
 ![ZimaCube 2 Rear](../images/phase1.5/day02-zimacube2-rear-panel-01.jpg)
 
 *Pin-hole reset, 19V DC Power input, 2x Thunderbolt 4 or USB4-capable USB-C connections (direct attached network for compatible devices), 2x 2.5GbE network ports, 2x USB-A 3.0, 1x Display Port 1.4 and 1x HDMI 2.0*
@@ -74,13 +74,13 @@
 *The original 1x Samsung 8GB SODIMM DDR5 4800 MT/s stick.*
 ![ZimaCube 2 Interior Original RAM](../images/phase1.5/day02-interior-original-ram-01.jpg)
 
-*The original 1x Kingston 256GB PCIe4 NVMe SDD used bootdrive and home to ZimaOS Plus.*
+*The original 1x Kingston 256GB PCIe4 NVMe SDD used as bootdrive and home to ZimaOS Plus.*
 ![ZimaCube 2 Interior Original NVMe M2 SSD](../images/phase1.5/day02-interior-original-m2-ssd-01.jpg)
 
-*The PCIe Expansion for ZimaCube 2. Regardless whether it is the Standard or Pro version, both came with 1x PCIe4 x4 lanes (physical x16 slot) and 1x PCIe3 x2 lanes (physical x8 slot) for maximum compatibility with most add-on cards. Although they have to be low profile to fit the dimension and heights of ZimaCube 2.*
+*Both Standard and Pro versions of the ZimaCube 2 feature versatile expansion options with one PCIe4 x4 lane (physical x16 slot) and one PCIe3 x2 lane (physical x8 slot). This configuration ensures broad compatibility with most add-on cards, provided they are low-profile to fit within the chassis dimensions.*
 ![ZimaCube 2 Interior Original PCIe Slots](../images/phase1.5/day02-pcie-card-install-01.jpg)
 
-*The 7th bay of ZimaCube 2. Here, you can use your ZimaCube 2 as an all-flash NVMe NAS if you desire.*
+*The illuminated 7th bay of the ZimaCube 2 offers versatility—transform your system into an all-flash NVMe NAS with ease.*
 ![ZimaCube 2 Interior Original 7th Bay Tray 01](../images/phase1.5/day02-nvme-adapter-card-top-01.jpg)
 ![ZimaCube 2 Interior Original 7th Bay Tray 02](../images/phase1.5/day02-nvme-adapter-card-slots-01.jpg)
 ---
@@ -88,16 +88,16 @@
 ### Components used for Upgrade journey
 ![ZimaCube 2 Upgrades](../images/phase1.5/day02-upgrades-components-spread-01.jpg)
 
-*Intention to expand Tier 1 - Fast NVMe storage of my ZimaCube 2 from the original 256GB to additional 2TB to house folders such as AppData, Docker images, User DBs and other active workloads.*
+*Expand Tier 1 - Fast NVMe storage of my ZimaCube 2 from the original 256GB to additional 2TB to house folders such as AppData, Docker images, User DBs and other active workloads.*
 ![Crucial P510 2TB PCIe5 NVMe 2280 M.2 SSD Box](../images/phase1.5/day02-crucial-p510-nvme-box-01.jpg)
 
-*Unnecessary PCIe5 NVMe but it is the most affordable I could find based on the current market sentiment.*
+*While a PCIe5 NVMe is overkill, it happened to be the best-priced option available given current market conditions.*
 ![Crucial P510 2TB PCIe5 NVMe 2280 M.2 SSD Stick](../images/phase1.5/day02-crucial-p510-nvme-unboxed-01.jpg)
 
-*The hardware fallback storage integration to my Tier 2 - NVMe ZRAID1. Overcoming limitation of ZimaCube 2 Standard's 7th tray (800MB/s total throughput). Initially, wanted to utilise ZimaCube 2's Thunderbolt 4 connection to my Aoostar TB4S-OC NVMe DAS but encountered connection issues.*
+*To solve the bandwidth bottleneck on my ZimaCube 2's 7th tray (capped at 800MB/s), I added hardware fallback storage to my Tier 2 NVMe ZRAID1. I originally tried connecting via Thunderbolt 4 to the Aoostar TB4S-OC DAS, but connection problems made that approach impractical.*
 ![OCuLink PCIe x4 to SFF-8612 adapter](../images/phase1.5/day02-oculink-pcie-card-01.jpg)
 
-*This Thunderbolt4 and OCuLink DAS is my answer to overcome the limitation of the 7th bay NVMe SSD tray in ZimaCube 2. Refer to NASCompares.com website for the review [NASCompares_TB4S-OC Review](https://nascompares.com/2024/10/09/aoostar-tb4s-oc-review/)*
+*Solving the ZimaCube 2's 7th tray limitation with a Thunderbolt4 + OCuLink DAS solution. Read the full review of this unit at NASCompares.com. [NASCompares_TB4S-OC Review](https://nascompares.com/2024/10/09/aoostar-tb4s-oc-review/)*
 ![Aoostar TB4S-0C USB4 OCuLink NVMe enclosure](../images/phase1.5/aoostar-tb4s-oc-nvme-enclosure.png)
 ---
 
