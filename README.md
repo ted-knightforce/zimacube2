@@ -125,13 +125,13 @@ Full documentation with navigation, search, and dark mode is available at the do
 
 | Phase | Doc |
 |---|---|
-| Phase 1 — Foundation | [ZFS setup, TB4 issue, OCuLink, benchmarks](https://ted-knightforce.github.io/zimacube2/phases/01-foundation/) |
-| Phase 2 — Media Stack | [Jellyfin, *arr, IronWolf pool (on hold)](https://ted-knightforce.github.io/zimacube2/phases/02-media/) |
-| Phase 2.5 — Immich Migration | [14,505 photos migrated, zero data loss](https://ted-knightforce.github.io/zimacube2/phases/02.5-immich/) |
-| Phase 3 — Data Management | [Backup, Nextcloud](https://ted-knightforce.github.io/zimacube2/phases/03-data/) |
-| Phase 4a — CPU AI | [Ollama CPU-only baseline](https://ted-knightforce.github.io/zimacube2/phases/04a-cpu-ai/) |
-| Phase 4b — GPU AI | [RTX 4090 GPU inference](https://ted-knightforce.github.io/zimacube2/phases/04b-gpu-ai/) |
-| Benchmarks | [Phase 1 storage benchmark results](https://ted-knightforce.github.io/zimacube2/benchmarks/PHASE1-BENCHMARK/) |
+| **Phase 1** | [ZimaCube 2 Pioneer Build — Phase 1: Foundation, Storage & Benchmarks](https://ted-knightforce.github.io/zimacube2/phases/01-foundation/) |
+| **Phase 2** | [Phase 2 — Media Stack: Jellyfin, *arr, IronWolf Pool](https://ted-knightforce.github.io/zimacube2/phases/02-media/) |
+| **Phase 2.5** | [Phase 2.5 — Immich: ZimaOS-to-ZimaCube 2 Migration](https://ted-knightforce.github.io/zimacube2/phases/02.5-immich/) |
+| **Phase 3** | [Phase 3 — Data Management: Backup, Nextcloud & 3-2-1 Strategy](https://ted-knightforce.github.io/zimacube2/phases/03-data/) |
+| **Phase 4a** | [Phase 4a — CPU-Only Local AI Baseline](https://ted-knightforce.github.io/zimacube2/phases/04a-cpu-ai/) |
+| **Phase 4b** | [Phase 4b — GPU Integration: RTX 4090 + eGPU Dock](https://ted-knightforce.github.io/zimacube2/phases/04b-gpu-ai/) |
+| **Benchmarks** | [ZimaCube 2 — Phase 1: Storage Benchmark](https://ted-knightforce.github.io/zimacube2/benchmarks/PHASE1-BENCHMARK/) |
 
 ---
 
