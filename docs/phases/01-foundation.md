@@ -3,7 +3,7 @@
 **Author:** ted-knight  
 **Status:** 🟡 In Progress  
 **Started:** May 21, 2026  
-**Updated:** June 01, 2026  
+**Updated:** June 03, 2026  
 **Program:** ZimaCube 2 Pioneer Program  
 
 ---
@@ -22,14 +22,15 @@
 10. [Benchmark Methodology](#benchmark-methodology)
 11. [Benchmark Results](#benchmark-results)
 12. [Analysis](#analysis)
-13. [Recommended Workload Split](#recommended-workload-split)
-14. [Immich Migration](#immich-migration)
-15. [ZimaOS Observations](#zimaos-observations)
-16. [Honest Friction Log](#honest-friction-log)
-17. [What's Coming Next](#whats-coming-next)
-18. [Benchmark Scripts](#benchmark-scripts)
-19. [System Information](#system-information)
-20. [Resources](#resources)
+13. [ZFS ARC Tuning](#zfs-arc-tuning)
+14. [Recommended Workload Split](#recommended-workload-split)
+15. [Immich Migration](#immich-migration)
+16. [ZimaOS Observations](#zimaos-observations)
+17. [Honest Friction Log](#honest-friction-log)
+18. [What's Coming Next](#whats-coming-next)
+19. [Benchmark Scripts](#benchmark-scripts)
+20. [System Information](#system-information)
+21. [Resources](#resources)
 
 ---
 
@@ -118,10 +119,12 @@
 - [x] Netdata deployed (Docker) for real-time NVMe/ZFS monitoring
 - [x] Full storage benchmarks completed (glacier vs Arctic-Storage)
 - [x] Immich migrated from DIY ZimaOS — 14,505 photos + 925 videos (134 GiB), all memories/metadata intact (see [Phase 2.5](02.5-immich.md))
+- [x] ZFS ARC behaviour verified: **93.7% hit rate**, c_max auto-set to 14.37 GiB (total RAM − 1 GB default)
 
 ### ⏳ Pending
 
-- [ ] RAM → 32GB DDR5 (2× Corsair Vengeance 16GB DDR5 4800MHz CL40 SODIMM)
+- [ ] Cap ZFS ARC at 8 GiB — prevent ARC balloon competing with Phase 2 Jellyfin workloads
+- [ ] RAM → 32GB DDR5 (2× Corsair Vengeance 16GB DDR5 4800MHz CL40 SODIMM) → raise ARC cap to 16 GiB after upgrade
 - [ ] Move Crucial P510 to onboard M.2 slot → Phase 1.5 re-benchmark
 - [ ] TB4 direct networking test — connect Mac/PC via TB4 cable, configure IP over Thunderbolt, benchmark vs 2.5GbE
 - [ ] Phase 1 Reddit post
@@ -586,20 +589,93 @@ Arctic-Storage delivers **205,588 IOPS** random 4K read at **0.6ms average laten
 
 Glacier's 14,781 IOPS reflects ZFS RAIDZ1 copy-on-write overhead, parity calculation latency, and OCuLink tunnel baseline latency. These are **cold-cache numbers** — in practice, ZFS ARC (Adaptive Replacement Cache) will cache frequently accessed data in RAM, improving random read performance for real workloads over time.
 
-### ZFS ARC — Impact of RAM Upgrade
+### ZFS ARC — Measured Behaviour (June 3, 2026)
 
-The fio numbers use `--direct=1`, bypassing the OS cache entirely. In real workloads, ZFS ARC uses available RAM as a transparent read cache:
+The fio benchmarks use `--direct=1` — bypassing the OS cache entirely. Real workloads go through ZFS ARC, which is the difference between the fio cold numbers and daily-use performance.
 
-| RAM | ARC Available | What This Means |
+After 11 days of uptime, the measured ARC stats from `/proc/spl/kstat/zfs/arcstats`:
+
+| Metric | Raw value | Human-readable |
 |---|---|---|
-| 16GB (current) | ~8–10GB | Hot Docker databases and small working sets |
-| 32GB (planned) | ~20–24GB | Immich thumbnails + databases + Ollama model pages simultaneously |
+| `size` (current ARC) | 10,004,018,376 | **9.32 GiB** |
+| `c_max` (ARC ceiling) | 15,431,536,640 | **14.37 GiB** |
+| `c_min` (ARC floor) | 515,789,952 | **492 MiB** |
+| `hits` | 22,642,971 | reads served from RAM |
+| `misses` | 1,529,588 | reads that went to NVMe |
 
-Upgrading to 32GB DDR5 doubles the ARC headroom — meaningfully improving glacier's real-world random read performance for VM disk images, documents, and bulk media workloads, while also benefiting Docker app databases and Ollama inference on Arctic-Storage. The benchmark numbers won't change (fio bypasses ARC intentionally) but day-to-day workload performance will.
+**Hit rate: 93.7%** — 19 out of 20 glacier reads served directly from RAM, never touching NVMe.
+
+`c_max` of 14.37 GiB is ZFS's default: **total RAM − 1 GB**. On a 15.3 GiB system that means ZFS can claim almost all of memory for cache. The ZimaOS dashboard widget reports 78% RAM used — alarming, but it counts ARC as "used." btop tells the real picture:
+
+| btop metric | Value | Meaning |
+|---|---|---|
+| Used | 3.97 GiB | Actual application RAM |
+| Cached | 11.4 GiB | ZFS ARC + Linux page cache |
+| Available | 11.3 GiB | RAM available to apps on demand |
+
+ARC is evicted immediately when applications need RAM — the system is not RAM-starved.
+
+| RAM config | Practical ARC headroom | Impact |
+|---|---|---|
+| 16 GB (current) | ~8–10 GB | Hot Docker databases and small working sets |
+| 32 GB (planned) | ~20–24 GB | Immich thumbnails + databases + Ollama model pages simultaneously |
 
 ### The 14× IOPS Gap — Architectural, Not a Flaw
 
 ZFS RAIDZ1 trades random I/O efficiency for sequential throughput, redundancy, and data integrity. The correct response is tiered workload routing — not trying to close the gap.
+
+---
+
+## ZFS ARC Tuning
+
+### Why cap c_max now?
+
+At 16 GB RAM, c_max defaulting to 14.37 GiB leaves only ~1 GB guaranteed for the OS + apps. ZFS is smart enough to evict ARC under memory pressure, but ZFS ARC eviction is slower than Linux page cache eviction. When Phase 2 lands and Jellyfin starts transcoding, ARC competing with a 831 MB+ process creates unnecessary pressure. Capping at 8 GiB gives glacier a generous read cache while guaranteeing ~7 GB headroom for all other workloads.
+
+### How to check current ARC stats
+
+```bash
+cat /proc/spl/kstat/zfs/arcstats | grep -E "^(size|c_max|c_min|hits|misses) "
+```
+
+Calculate hit rate manually:
+```
+hit rate = hits / (hits + misses) × 100
+```
+
+### Cap ARC at 8 GiB (current 16 GB system)
+
+```bash
+# Create or update the ZFS module config
+echo "options zfs zfs_arc_max=8589934592" | sudo tee /etc/modprobe.d/zfs.conf
+
+# Apply immediately — no reboot needed
+echo 8589934592 | sudo tee /sys/module/zfs/parameters/zfs_arc_max
+
+# Verify
+cat /sys/module/zfs/parameters/zfs_arc_max
+# Expected: 8589934592
+```
+
+The `/etc/modprobe.d/zfs.conf` entry ensures the cap survives reboots. The `/sys/module/...` write applies it live to the running kernel.
+
+### After the 32 GB RAM upgrade
+
+With 32 GB installed, raise the cap to 16 GiB — gives glacier a large cache while still leaving 14+ GB for Jellyfin, Immich, *arr, and future Ollama workloads:
+
+```bash
+# 16 GiB cap for 32 GB system (16 × 1024³ = 17179869184)
+echo "options zfs zfs_arc_max=17179869184" | sudo tee /etc/modprobe.d/zfs.conf
+echo 17179869184 | sudo tee /sys/module/zfs/parameters/zfs_arc_max
+```
+
+### ARC sizing reference
+
+| RAM | Recommended c_max | Reasoning |
+|---|---|---|
+| 16 GB (current) | **8 GiB** | Half of RAM; leaves ~7 GB free for apps |
+| 32 GB (planned) | **16 GiB** | Half of RAM; comfortable for Phase 4a Ollama inference |
+| 32 GB + GPU workloads | **12 GiB** | Tighter if Ollama model loading competes for RAM |
 
 ---
 
@@ -659,6 +735,7 @@ ZimaOS is **Buildroot-based** with an immutable read-only OS. Key implications f
 | `thunderbolt.host_reset=false` in kernel boot | TB devices don't re-enumerate on plug-in — affects all TB connections |
 | RAUC A/B OTA updates | Kernel updates are safe, but verify ZFS DKMS survives each update |
 | AppData migration tool in Settings → Storage → Apps | Moves AppData/Docker images to any ZimaOS-recognised drive — symlinks created automatically |
+| RAM widget shows 78% "used" with 16 GB | ZimaOS counts ZFS ARC cache as used RAM — misleading. Use btop or arcstats for the real picture. Available RAM was 11.3 GiB with 9.32 GiB absorbed by ARC |
 
 ---
 
@@ -669,6 +746,7 @@ ZimaOS is **Buildroot-based** with an immutable read-only OS. Key implications f
 - **Immich database empty after file migration** — moving photo files without moving the database gives you photos but no albums, faces, or metadata. The fix: copy the entire `/DATA/AppData/immich` folder (including `pgdata`) alongside the photo library. Stop Immich on the source first. See [Phase 2.5](02.5-immich.md) for the full method.
 - **ZimaOS package manager missing** — `apt install fio` doesn't work. Discovering fio was already natively available saved the day; anything else requires Docker.
 - **`hostname -I` not supported** — Buildroot's hostname binary doesn't support the `-I` flag. Use `ip addr` instead in scripts.
+- **ZimaOS RAM widget shows 78% used** — alarming but misleading. ZimaOS counts ZFS ARC cache as "used" RAM. btop breaks it down correctly: 3.97 GiB actual app usage, 11.4 GiB ZFS ARC, 11.3 GiB available. ZFS will evict ARC immediately if applications need the memory. The fix is capping `c_max` to prevent ARC from ever growing past a sensible ceiling — see [ZFS ARC Tuning](#zfs-arc-tuning).
 
 ---
 
