@@ -5,7 +5,9 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 **Author:** ted-knight  
 **Program:** ZimaCube 2 Pioneer Program  
 **Started:** May 21, 2026  
-**Last updated:** May 23, 2026
+**Last updated:** June 3, 2026
+
+📖 **[Full documentation site →](https://ted-knightforce.github.io/zimacube2)**
 
 ---
 
@@ -15,7 +17,7 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 |---|---|---|
 | **Phase 1** | Foundation — Storage, ZFS, Core Services | 🟡 In Progress |
 | **Phase 1.5** | P510 Onboard M.2 Migration + Re-benchmark | ⏳ Planned |
-| **Phase 2** | Media Stack — Jellyfin, *arr, SATA pool | ⏸️ On Hold (drives arriving) |
+| **Phase 2** | Media Stack — Jellyfin, *arr, IronWolf pool | ⏸️ On Hold (drives arriving) |
 | **Phase 2.5** | Immich Migration — 14,505 photos + 925 videos (134 GiB) from DIY ZimaOS to ZimaCube 2 | ✅ Complete |
 | **Phase 3** | Data Management — Backup, Nextcloud | ⏳ Planned |
 | **Phase 4a** | CPU-Only Local AI Baseline (Ollama) | ⏳ Planned |
@@ -27,7 +29,7 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 
 ## 📦 Hardware Foundation
 
-### Current Configuration (May 23, 2026)
+### Current Configuration (June 3, 2026)
 
 | Component | Choice | Detail |
 |---|---|---|
@@ -41,7 +43,7 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 
 ### Key Hardware Decisions & Changes from Original Plan
 
-> **⚠️ TB4 → OCuLink pivot:** The Aoostar TB4S-OC was originally planned to connect via Thunderbolt 4. After extensive troubleshooting, TB4 connection failed due to ZimaOS kernel configuration (`thunderbolt.host_reset=false`) and ASMedia ASM2462PDX firmware incompatibility. OCuLink via Slot 1 PCIe adapter resolved this immediately. See [Phase 1](docs/phases/01-foundation.md) for full details.
+> **⚠️ TB4 → OCuLink pivot:** The Aoostar TB4S-OC was originally planned to connect via Thunderbolt 4. After extensive troubleshooting, TB4 connection failed due to ZimaOS kernel configuration (`thunderbolt.host_reset=false`) and ASMedia ASM2462PDX firmware incompatibility. OCuLink via Slot 1 PCIe adapter resolved this immediately. See [Phase 1](https://ted-knightforce.github.io/zimacube2/phases/01-foundation/) for full details.
 
 > **Slot 1 consequence:** With PCIe Slot 1 occupied by the OCuLink adapter, both TB4 ports are now free. The original plan to use a Minisforum DEG1 for Phase 4b GPU is no longer viable. Evaluating **Minisforum DEG2** (TB5 + OCuLink) or AooStar AG02/AG03 TB4/TB5 eGPU/OCuLink dock instead. The free TB4 ports also open up **IP over Thunderbolt** — direct Mac/PC connection that bypasses the 2.5GbE ceiling (~312 MB/s) and can expose the full sequential bandwidth of glacier (2,591 MB/s) and Arctic-Storage to a directly-connected client.
 
@@ -74,7 +76,7 @@ ZimaCube 2 Standard — Storage Tiers
 │
 ├── TIER 2 — NVMe RAID (bulk NVMe)
 │   └── nvme1–4n1  4× 2TB PCIe Gen4           glacier (ZFS RAIDZ1, ~5.5TB)
-│                  └── Immich photos, media, documents, VM, backup
+│                  └── Media, documents, VM, backup
 │                  └── Via OCuLink (Aoostar TB4S-OC, Slot 1)
 │
 ├── TIER 3 — USB Portable (temporary)
@@ -103,7 +105,7 @@ ZimaCube 2 Standard — Storage Tiers
 
 ## 📊 Day 1–3 Benchmark Summary
 
-Full benchmark details: [Phase 1 — Storage Benchmark](docs/benchmarks/PHASE1-BENCHMARK.md)
+Full benchmark details: [Phase 1 — Storage Benchmark](https://ted-knightforce.github.io/zimacube2/benchmarks/PHASE1-BENCHMARK/)
 
 | Test | Glacier ZFS RAIDZ1 | Arctic btrfs PCIe 5.0 | Winner |
 |---|---|---|---|
@@ -117,15 +119,19 @@ Full benchmark details: [Phase 1 — Storage Benchmark](docs/benchmarks/PHASE1-B
 
 ## 📂 Documentation
 
-| File | Contents |
+Full documentation with navigation, search, and dark mode is available at the docs site:
+
+📖 **[ted-knightforce.github.io/zimacube2](https://ted-knightforce.github.io/zimacube2)**
+
+| Phase | Doc |
 |---|---|
-| [01-foundation.md](docs/phases/01-foundation.md) | Phase 1 — ZFS setup, TB4 issue, OCuLink, benchmarks |
-| [02.5-immich.md](docs/phases/02.5-immich.md) | Phase 2.5 — Immich migration from DIY ZimaOS to ZimaCube 2 (complete) |
-| [02-media.md](docs/phases/02-media.md) | Phase 2 — Media stack (on hold — SATA drives arriving) |
-| [03-data.md](docs/phases/03-data.md) | Phase 3 — Backup, Nextcloud, data management |
-| [04a-cpu-ai.md](docs/phases/04a-cpu-ai.md) | Phase 4a — CPU-only Ollama baseline |
-| [04b-gpu-ai.md](docs/phases/04b-gpu-ai.md) | Phase 4b — RTX 4090 GPU inference |
-| [scripts/](docs/resources/scripts/) | Benchmark shell scripts |
+| Phase 1 — Foundation | [ZFS setup, TB4 issue, OCuLink, benchmarks](https://ted-knightforce.github.io/zimacube2/phases/01-foundation/) |
+| Phase 2 — Media Stack | [Jellyfin, *arr, IronWolf pool (on hold)](https://ted-knightforce.github.io/zimacube2/phases/02-media/) |
+| Phase 2.5 — Immich Migration | [14,505 photos migrated, zero data loss](https://ted-knightforce.github.io/zimacube2/phases/02.5-immich/) |
+| Phase 3 — Data Management | [Backup, Nextcloud](https://ted-knightforce.github.io/zimacube2/phases/03-data/) |
+| Phase 4a — CPU AI | [Ollama CPU-only baseline](https://ted-knightforce.github.io/zimacube2/phases/04a-cpu-ai/) |
+| Phase 4b — GPU AI | [RTX 4090 GPU inference](https://ted-knightforce.github.io/zimacube2/phases/04b-gpu-ai/) |
+| Benchmarks | [Phase 1 storage benchmark results](https://ted-knightforce.github.io/zimacube2/benchmarks/PHASE1-BENCHMARK/) |
 
 ---
 
