@@ -635,12 +635,17 @@ At 16 GB RAM, c_max defaulting to 14.37 GiB leaves only ~1 GB guaranteed for the
 ### How to check current ARC stats
 
 ```bash
+# Raw stats — size, ceiling, floor, hits, misses
 cat /proc/spl/kstat/zfs/arcstats | grep -E "^(size|c_max|c_min|hits|misses) "
+
+# Hit rate in one line
+awk '/^hits/{h=$3} /^misses/{m=$3} END{printf "ARC hit rate: %.1f%%\n", h/(h+m)*100}' \
+    /proc/spl/kstat/zfs/arcstats
 ```
 
-Calculate hit rate manually:
+Measured output on Day 11 (June 3, 2026):
 ```
-hit rate = hits / (hits + misses) × 100
+ARC hit rate: 93.7%
 ```
 
 ### Cap ARC at 8 GiB (current 16 GB system)
