@@ -284,7 +284,6 @@ Based on benchmark results and the full Phase 1–6 build plan, the optimal stor
 | Immich ML model cache | `Arctic-Storage` | Low latency random reads for face/scene detection inference |
 | VM disk images | `glacier` | Sequential I/O, RAIDZ1 redundancy, ZFS snapshot rollback |
 | Personal documents | `glacier` | Checksums + snapshots for irreplaceable data |
-| ZimaOS system | `nvme5n1` | Boot stability, OS independence |
 
 > **Note on Immich storage:** Both the photo library (`/DATA/Gallery/immich`) and the PostgreSQL database (`/DATA/AppData/immich/pgdata`) live on `Arctic-Storage` via the standard ZimaOS `/DATA` paths. This gives the entire Immich stack the benefit of Arctic-Storage's 205K IOPS and 0.6ms latency — thumbnail queries, face search, and photo browsing all benefit. The trade-off is capacity: at 134 GiB today, the P510 (2TB) has headroom, but large library growth may warrant moving the photo files to `glacier` in future.
 
