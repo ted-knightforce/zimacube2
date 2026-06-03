@@ -431,7 +431,7 @@ glacier  7.44T   346G  7.10T    0%    4%  1.00x  ONLINE
 
 ### Why CLI-Created ZFS Pools Don't Appear in the UI
 
-ZimaOS uses an internal SQLite database (`local-storage.db`) to track storage. Only pools created through the ZimaOS RAID wizard are registered there. CLI-created ZFS pools are invisible to the storage dashboard and the Apps migration tool. This is a known limitation — open feature request on ZimaOS GitHub.
+ZimaOS only recognises storage pools and drives that were created or configured through its own Storage Manager UI. ZFS pools created via CLI — like `glacier` — are invisible to the storage dashboard and the AppData migration tool. This is a known limitation with multiple open feature requests on ZimaOS GitHub: [#423 — ZFS RAIDZ Support](https://github.com/IceWhaleTech/ZimaOS/issues/423), [#216 — ZFS Web GUI configuration](https://github.com/IceWhaleTech/ZimaOS/issues/216), [#298 — Local mountpoints in Storage Management](https://github.com/IceWhaleTech/ZimaOS/issues/298).
 
 ### Solution — Symlinks in /DATA
 
