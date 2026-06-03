@@ -1,0 +1,3903 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documenting the full journey of building a tiered-storage, AI-capable self-hosting server on a ZimaCube 2 Standard — from unboxing to local LLMs, media streaming, and own-device privacy.">
+      
+      
+        <meta name="author" content="ted-knight">
+      
+      
+        <link rel="canonical" href="https://ted-knightforce.github.io/zimacube2/phases/01-foundation/">
+      
+      
+        <link rel="prev" href="../..">
+      
+      
+        <link rel="next" href="../02-media/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Phase 1: Foundation, Storage & Benchmarks - ZimaCube 2 Build</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="cyan" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#zimacube-2-build-phase-1-foundation-storage-benchmarks" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="ZimaCube 2 Build" class="md-header__button md-logo" aria-label="ZimaCube 2 Build" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ZimaCube 2 Build
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Phase 1: Foundation, Storage & Benchmarks
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ted-knightforce/zimacube2" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ted-knightforce/zimacube2
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  Build Phases
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../benchmarks/PHASE1-BENCHMARK/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Phase 1 Storage Benchmark
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="ZimaCube 2 Build" class="md-nav__button md-logo" aria-label="ZimaCube 2 Build" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ZimaCube 2 Build
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ted-knightforce/zimacube2" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ted-knightforce/zimacube2
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build Phases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Build Phases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 1: Foundation, Storage & Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 1: Foundation, Storage & Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#goal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Goal
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Goal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#zimacube-2-standard-nas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZimaCube 2 Standard NAS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zimacube-2-standard-nas-internal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZimaCube 2 Standard NAS (Internal)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#components-used-for-upgrade-journey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Components used for Upgrade journey
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#completed-and-pending" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Completed and Pending
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Completed and Pending">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#completed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Completed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pending" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⏳ Pending
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-journey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build Journey
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Build Journey">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#upgrades-made-this-weekend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrades Made This Weekend
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-hardware-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Final Hardware Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Final Hardware Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#zimacube-2-standard-complete-spec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZimaCube 2 Standard — Complete Spec
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nvme-drive-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NVMe Drive Inventory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#full-nvme-list-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full nvme list Output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usb-storage-temporary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        USB Storage (Temporary)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#incoming-hardware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Incoming Hardware
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storage-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Storage Architecture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Storage Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#current-storage-tiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current Storage Tiers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#thunderbolt-4-issue-and-oculink-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thunderbolt 4 Issue and OCuLink Resolution
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Thunderbolt 4 Issue and OCuLink Resolution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-happened" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Happened
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#possible-root-causes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Possible Root Causes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#downstream-impact-on-phase-4b-egpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Downstream Impact on Phase 4b eGPU
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#troubleshooting-takeaway-to-be-verified-with-other-enclosures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting Takeaway (To be verified with other enclosures)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb4-peer-to-peer-networking-planned-experiment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TB4 Peer-to-Peer Networking — Planned Experiment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zfs-pool-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZFS Pool Setup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ZFS Pool Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-zfs-raidz1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why ZFS RAIDZ1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-btrfs-for-arctic-storage-and-ironwolf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why btrfs for Arctic-Storage and ironwolf
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pool-creation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pool Creation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Datasets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pool-health" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pool Health
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zimaos-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZimaOS Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ZimaOS Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-cli-created-zfs-pools-dont-appear-in-the-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why CLI-Created ZFS Pools Don't Appear in the UI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solution-symlinks-in-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solution — Symlinks in /DATA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#appdata-migration-to-arctic-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AppData Migration to Arctic-Storage
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arctic-storage-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arctic-Storage Setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benchmark-methodology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmark Methodology
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Benchmark Methodology">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terminal-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terminal Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#script-deployment-via-winscp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Script Deployment via WinSCP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Execution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Monitoring
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benchmark-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmark Results
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Benchmark Results">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#glacier-zfs-raidz1-oculink-may-23-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Glacier — ZFS RAIDZ1 (OCuLink) — May 23, 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arctic-storage-btrfs-pcie-50-7th-bay-800-mbs-cap-may-23-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arctic-Storage — btrfs PCIe 5.0 (7th Bay, 800 MB/s cap) — May 23, 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#head-to-head-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Head-to-Head Comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sequential-performance-glacier-dominates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sequential Performance — Glacier Dominates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#random-iops-arctic-dominates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Random IOPS — Arctic Dominates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zfs-arc-measured-behaviour-june-3-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZFS ARC — Measured Behaviour (June 3, 2026)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-14-iops-gap-architectural-not-a-flaw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The 14× IOPS Gap — Architectural, Not a Flaw
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zfs-arc-tuning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZFS ARC Tuning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ZFS ARC Tuning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-cap-c_max-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why cap c_max now?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-check-current-arc-stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to check current ARC stats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cap-arc-at-8-gib-current-16-gb-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cap ARC at 8 GiB (current 16 GB system)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#after-the-32-gb-ram-upgrade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        After the 32 GB RAM upgrade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arc-sizing-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ARC sizing reference
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benchmarking-arc-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmarking ARC performance
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-workload-split" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Workload Split
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recommended Workload Split">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-1-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1 Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#immich-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Immich Migration ✅
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Immich Migration ✅">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#migration-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration Status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#immich-architecture-on-zimacube-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Immich Architecture on ZimaCube 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zimaos-observations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZimaOS Observations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#honest-friction-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Honest Friction Log
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-coming-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Coming Next
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What&#39;s Coming Next">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#planned-hardware-upgrades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Planned Hardware Upgrades
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#planned-experiments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Planned Experiments
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#software-phases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Software Phases
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benchmark-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmark Scripts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#system-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Information
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resources
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-media/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 2: Jellyfin, *arr, IronWolf Pool
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02.5-immich/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 2.5: Immich ZimaOS-to-ZimaCube 2 Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 3: Backup, Nextcloud & 3-2-1 Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04a-cpu-ai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 4a: CPU-Only Local AI Baseline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04b-gpu-ai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 4b: RTX 4090 + eGPU Dock
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../benchmarks/PHASE1-BENCHMARK/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 1 Storage Benchmark
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#goal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Goal
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Goal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#zimacube-2-standard-nas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZimaCube 2 Standard NAS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zimacube-2-standard-nas-internal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZimaCube 2 Standard NAS (Internal)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#components-used-for-upgrade-journey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Components used for Upgrade journey
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#completed-and-pending" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Completed and Pending
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Completed and Pending">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#completed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Completed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pending" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⏳ Pending
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-journey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build Journey
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Build Journey">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#upgrades-made-this-weekend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrades Made This Weekend
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-hardware-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Final Hardware Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Final Hardware Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#zimacube-2-standard-complete-spec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZimaCube 2 Standard — Complete Spec
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nvme-drive-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NVMe Drive Inventory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#full-nvme-list-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full nvme list Output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usb-storage-temporary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        USB Storage (Temporary)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#incoming-hardware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Incoming Hardware
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storage-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Storage Architecture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Storage Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#current-storage-tiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current Storage Tiers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#thunderbolt-4-issue-and-oculink-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thunderbolt 4 Issue and OCuLink Resolution
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Thunderbolt 4 Issue and OCuLink Resolution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-happened" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Happened
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#possible-root-causes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Possible Root Causes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#downstream-impact-on-phase-4b-egpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Downstream Impact on Phase 4b eGPU
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#troubleshooting-takeaway-to-be-verified-with-other-enclosures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting Takeaway (To be verified with other enclosures)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb4-peer-to-peer-networking-planned-experiment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TB4 Peer-to-Peer Networking — Planned Experiment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zfs-pool-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZFS Pool Setup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ZFS Pool Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-zfs-raidz1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why ZFS RAIDZ1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-btrfs-for-arctic-storage-and-ironwolf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why btrfs for Arctic-Storage and ironwolf
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pool-creation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pool Creation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Datasets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pool-health" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pool Health
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zimaos-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZimaOS Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ZimaOS Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-cli-created-zfs-pools-dont-appear-in-the-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why CLI-Created ZFS Pools Don't Appear in the UI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solution-symlinks-in-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solution — Symlinks in /DATA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#appdata-migration-to-arctic-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AppData Migration to Arctic-Storage
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arctic-storage-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arctic-Storage Setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benchmark-methodology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmark Methodology
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Benchmark Methodology">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terminal-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terminal Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#script-deployment-via-winscp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Script Deployment via WinSCP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Execution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Monitoring
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benchmark-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmark Results
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Benchmark Results">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#glacier-zfs-raidz1-oculink-may-23-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Glacier — ZFS RAIDZ1 (OCuLink) — May 23, 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arctic-storage-btrfs-pcie-50-7th-bay-800-mbs-cap-may-23-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arctic-Storage — btrfs PCIe 5.0 (7th Bay, 800 MB/s cap) — May 23, 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#head-to-head-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Head-to-Head Comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sequential-performance-glacier-dominates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sequential Performance — Glacier Dominates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#random-iops-arctic-dominates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Random IOPS — Arctic Dominates
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zfs-arc-measured-behaviour-june-3-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZFS ARC — Measured Behaviour (June 3, 2026)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-14-iops-gap-architectural-not-a-flaw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The 14× IOPS Gap — Architectural, Not a Flaw
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zfs-arc-tuning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZFS ARC Tuning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ZFS ARC Tuning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-cap-c_max-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why cap c_max now?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-check-current-arc-stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to check current ARC stats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cap-arc-at-8-gib-current-16-gb-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cap ARC at 8 GiB (current 16 GB system)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#after-the-32-gb-ram-upgrade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        After the 32 GB RAM upgrade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arc-sizing-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ARC sizing reference
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benchmarking-arc-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmarking ARC performance
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-workload-split" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Workload Split
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recommended Workload Split">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-1-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1 Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#immich-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Immich Migration ✅
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Immich Migration ✅">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#migration-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration Status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#immich-architecture-on-zimacube-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Immich Architecture on ZimaCube 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zimaos-observations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZimaOS Observations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#honest-friction-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Honest Friction Log
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-coming-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Coming Next
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What&#39;s Coming Next">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#planned-hardware-upgrades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Planned Hardware Upgrades
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#planned-experiments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Planned Experiments
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#software-phases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Software Phases
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benchmark-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmark Scripts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#system-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Information
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resources
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="zimacube-2-build-phase-1-foundation-storage-benchmarks">ZimaCube 2 Build — Phase 1: Foundation, Storage &amp; Benchmarks<a class="headerlink" href="#zimacube-2-build-phase-1-foundation-storage-benchmarks" title="Permanent link">&para;</a></h1>
+<p><strong>Author:</strong> ted-knight<br />
+<strong>Status:</strong> 🟡 In Progress<br />
+<strong>Started:</strong> May 21, 2026<br />
+<strong>Updated:</strong> June 03, 2026<br />
+<strong>Program:</strong> ZimaCube 2 Pioneer Program  </p>
+<hr />
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#goal">Goal</a></li>
+<li><a href="#completed-and-pending">Completed and Pending</a></li>
+<li><a href="#build-journey">Build Journey</a></li>
+<li><a href="#final-hardware-configuration">Final Hardware Configuration</a></li>
+<li><a href="#storage-architecture">Storage Architecture</a></li>
+<li><a href="#thunderbolt-4-issue-and-oculink-resolution">Thunderbolt 4 Issue and OCuLink Resolution</a></li>
+<li><a href="#zfs-pool-setup">ZFS Pool Setup</a></li>
+<li><a href="#zimaos-integration">ZimaOS Integration</a></li>
+<li><a href="#arctic-storage-setup">Arctic-Storage Setup</a></li>
+<li><a href="#benchmark-methodology">Benchmark Methodology</a></li>
+<li><a href="#benchmark-results">Benchmark Results</a></li>
+<li><a href="#analysis">Analysis</a></li>
+<li><a href="#zfs-arc-tuning">ZFS ARC Tuning</a></li>
+<li><a href="#recommended-workload-split">Recommended Workload Split</a></li>
+<li><a href="#immich-migration">Immich Migration</a></li>
+<li><a href="#zimaos-observations">ZimaOS Observations</a></li>
+<li><a href="#honest-friction-log">Honest Friction Log</a></li>
+<li><a href="#whats-coming-next">What's Coming Next</a></li>
+<li><a href="#benchmark-scripts">Benchmark Scripts</a></li>
+<li><a href="#system-information">System Information</a></li>
+<li><a href="#resources">Resources</a></li>
+</ol>
+<hr />
+<h2 id="goal">Goal<a class="headerlink" href="#goal" title="Permanent link">&para;</a></h2>
+<p><em>Build a stable and power efficient NAS; tiered storage foundation with redundancy, snapshots, and core services running on ZimaOS. Document the journey — including new discovery and what went wrong — from Phase 1 through Phase 6. After much deliberation, the choice of consumer NAS is the <a href="https://shop.zimaspace.com/products/zimacube-2-personal-cloud-nas">ZimaCube 2 Standard NAS</a>.</em></p>
+<hr />
+<h3 id="zimacube-2-standard-nas">ZimaCube 2 Standard NAS<a class="headerlink" href="#zimacube-2-standard-nas" title="Permanent link">&para;</a></h3>
+<p><em>It came in a nice huge black box with an orange accent.</em>
+<img alt="ZimaCube 2 Box" src="../../images/phase1.5/day02-zimacube2-box-01.jpg" /></p>
+<p><em>Front panel of ZimaCube 2 standard with 2x USB-A 3.0, 1x USB-C 3.0, 1x 3.5mm Audio Jack and a small Power Button.</em>
+<img alt="ZimaCube 2 Front" src="../../images/phase1.5/day02-zimacube2-front-panel-01.jpg" /></p>
+<p><em>Front Bay of ZimaCube 2 supporting 6x SATA3 3.5"/2.5" HDD trays + 7th tray supporting 4x M.2 NVMe SDDs.</em>
+<img alt="ZimaCube 2 Front Bays 01" src="../../images/phase1.5/day02-drive-bays-loaded-01.jpg" />
+<img alt="ZimaCube 2 Front Bays 02" src="../../images/phase1.5/day02-drive-bays-loaded-02.jpg" /></p>
+<p><em>Front HDD Tray with LED status/activity lights.</em>
+<img alt="ZimaCube 2 Front Bay Tray" src="../../images/phase1.5/day02-drive-bay-tray-closeup-01.jpg" /></p>
+<p><em>ZimaCube 2 — featuring a sleek silver chassis with sharp angular lines. Its understated design ensures it blends seamlessly into any space without drawing attention.</em>
+<img alt="ZimaCube 2 Side" src="../../images/phase1.5/day02-zimacube2-exterior-side-01.jpg" /></p>
+<p><em>ZimaCube 2's minimalist back panel neatly hides its dual exhaust system, keeping the focus on sleek aesthetics rather than hardware clutter.</em>
+<img alt="ZimaCube 2 Rear" src="../../images/phase1.5/day02-zimacube2-rear-panel-01.jpg" /></p>
+<p><em>Pin-hole reset, 19V DC Power input, 2x Thunderbolt 4 or USB4-capable USB-C connections (direct attached network for compatible devices), 2x 2.5GbE network ports, 2x USB-A 3.0, 1x Display Port 1.4 and 1x HDMI 2.0</em>
+<img alt="ZimaCube 2 Rear Ports" src="../../images/phase1.5/day02-zimacube2-rear-panel-02.jpg" /></p>
+<blockquote>
+<p><strong>For the keen eyes:</strong> The IO shield of the ZimaCube 2 Standard came slightly displaced at the upper left. I have to open the upper shell to access the internal of ZimaCube 2 to readjust the IO shield. Could be due to shipping, it got moved.</p>
+</blockquote>
+<hr />
+<h3 id="zimacube-2-standard-nas-internal">ZimaCube 2 Standard NAS (Internal)<a class="headerlink" href="#zimacube-2-standard-nas-internal" title="Permanent link">&para;</a></h3>
+<p><em>Unscrewing the ZimaCube 2 with the provided screwdriver to access the top panel.</em>
+<img alt="ZimaCube 2 Unscrew 01" src="../../images/phase1.5/day02-case-opening-screw-removal-01.jpg" />
+<img alt="ZimaCube 2 Unscrew 02" src="../../images/phase1.5/day02-case-opening-screw-removal-02.jpg" /></p>
+<p><em>Top overview of ZimaCube 2. First thing I have noticed is the huge CPU cooler for mobile Intel Core i3-1215U. That should ensure a cool quiet operation.</em>
+<img alt="ZimaCube 2 Interior Top" src="../../images/phase1.5/day02-interior-overview-01.jpg" /></p>
+<p><em>The original 1x Samsung 8GB SODIMM DDR5 4800 MT/s stick.</em>
+<img alt="ZimaCube 2 Interior Original RAM" src="../../images/phase1.5/day02-interior-original-ram-01.jpg" /></p>
+<p><em>The original 1x Kingston 256GB PCIe4 NVMe SDD used as bootdrive and home to ZimaOS Plus.</em>
+<img alt="ZimaCube 2 Interior Original NVMe M2 SSD" src="../../images/phase1.5/day02-interior-original-m2-ssd-01.jpg" /></p>
+<p><em>Both Standard and Pro versions of the ZimaCube 2 feature versatile expansion options with one PCIe4 x4 lane (physical x16 slot) and one PCIe3 x2 lane (physical x8 slot). This configuration ensures broad compatibility with most add-on cards, provided they are low-profile to fit within the chassis dimensions.</em>
+<img alt="ZimaCube 2 Interior Original PCIe Slots" src="../../images/phase1.5/day02-pcie-card-install-01.jpg" /></p>
+<p><em>The illuminated 7th bay of the ZimaCube 2 offers versatility—transform your system into an all-flash NVMe NAS with ease.</em>
+<img alt="ZimaCube 2 Interior Original 7th Bay Tray 01" src="../../images/phase1.5/day02-nvme-adapter-card-top-01.jpg" />
+<img alt="ZimaCube 2 Interior Original 7th Bay Tray 02" src="../../images/phase1.5/day02-nvme-adapter-card-slots-01.jpg" /></p>
+<hr />
+<h3 id="components-used-for-upgrade-journey">Components used for Upgrade journey<a class="headerlink" href="#components-used-for-upgrade-journey" title="Permanent link">&para;</a></h3>
+<p><img alt="ZimaCube 2 Upgrades" src="../../images/phase1.5/day02-upgrades-components-spread-01.jpg" /></p>
+<p><em>Expand Tier 1 - Fast NVMe storage of my ZimaCube 2 from the original 256GB to additional 2TB to house folders such as AppData, Docker images, User DBs and other active workloads.</em>
+<img alt="Crucial P510 2TB PCIe5 NVMe 2280 M.2 SSD Box" src="../../images/phase1.5/day02-crucial-p510-nvme-box-01.jpg" /></p>
+<p><em>While a PCIe5 NVMe is overkill, it happened to be the best-priced option available given current market conditions.</em>
+<img alt="Crucial P510 2TB PCIe5 NVMe 2280 M.2 SSD Stick" src="../../images/phase1.5/day02-crucial-p510-nvme-unboxed-01.jpg" /></p>
+<p><em>The PCIe x4 to OCuLink SFF-8612 adapter — the solution after Thunderbolt 4 failed to establish a stable connection with the Aoostar TB4S-OC. Installed in Slot 1, this card provides a direct PCIe link to the 4× NVMe enclosure with no tunnelling protocol or firmware handshake required, forming the backbone of the glacier ZFS RAIDZ1 Tier 2 pool.</em>
+<img alt="OCuLink PCIe x4 to SFF-8612 adapter" src="../../images/phase1.5/day02-oculink-pcie-card-01.jpg" /></p>
+<p><em>Solving the ZimaCube 2's 7th tray limitation with a Thunderbolt4 + OCuLink DAS solution. Read the full review of this unit at NASCompares.com. <a href="https://nascompares.com/2024/10/09/aoostar-tb4s-oc-review/">NASCompares_TB4S-OC Review</a></em>
+<img alt="Aoostar TB4S-0C USB4 OCuLink NVMe enclosure" src="../../images/phase1.5/aoostar-tb4s-oc-nvme-enclosure.png" /></p>
+<hr />
+<h2 id="completed-and-pending">Completed and Pending<a class="headerlink" href="#completed-and-pending" title="Permanent link">&para;</a></h2>
+<h3 id="completed">✅ Completed<a class="headerlink" href="#completed" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[x] ZimaCube 2 Standard received and powered on</li>
+<li>[x] RAM upgraded: 8GB → 16GB DDR5 (Crucial 5600MHz CL46 SODIMM)</li>
+<li>[x] Crucial P510 2TB PCIe Gen5 installed in 7th Bay → Arctic-Storage (btrfs)</li>
+<li>[x] AppData + User Database migrated from ZimaOS-HD to Arctic-Storage via ZimaOS GUI migration tool</li>
+<li>[x] PCIe x4 → SFF-8612 OCuLink adapter installed in Slot 1</li>
+<li>[x] Aoostar TB4S-OC connected via OCuLink (TB4 abandoned — see <a href="#thunderbolt-4-issue-and-oculink-resolution">Thunderbolt 4 Issue</a>)</li>
+<li>[x] All 4× 2TB NVMe drives detected (nvme1n1–nvme4n1)</li>
+<li>[x] Glacier ZFS RAIDZ1 pool created at <code>/media/glacier</code></li>
+<li>[x] 7 ZFS datasets created (VM, appdata, backup, documents, downloads, gallery, media)</li>
+<li>[x] ZimaOS symlinks created: <code>/DATA/glacier-*</code> → <code>/media/glacier/*</code></li>
+<li>[x] Autotrim enabled on glacier pool</li>
+<li>[x] Full storage benchmarks completed (glacier vs Arctic-Storage)</li>
+<li>[x] Immich migrated from DIY ZimaOS — 14,505 photos + 925 videos (134 GiB), all memories/metadata intact (see <a href="../02.5-immich/">Phase 2.5</a>)</li>
+<li>[x] ZFS ARC behaviour verified: <strong>93.7% hit rate</strong>, c_max auto-set to 14.37 GiB</li>
+</ul>
+<h3 id="pending">⏳ Pending<a class="headerlink" href="#pending" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] <strong>[Planned]</strong> ZimaOS dashboard currently shows ~78% RAM used — this reflects ZFS ARC holding up to its 14.37 GiB c_max ceiling, not actual application memory pressure. Observing whether ARC naturally yields memory as Phase 2 Jellyfin workloads ramp up. Will cap ZFS ARC at 8 GiB if memory contention becomes an issue.</li>
+<li>[ ] RAM → 32GB DDR5 (2× Corsair Vengeance 16GB DDR5 4800MHz CL40 SODIMM) → raise ARC cap to 16 GiB after upgrade</li>
+<li>[ ] Move Crucial P510 to onboard M.2 slot → Phase 1.5 re-benchmark</li>
+<li>[ ] <strong>[TBD]</strong> TB4 direct networking test — connect Mac/PC via TB4 cable, configure IP over Thunderbolt, benchmark vs 2.5GbE</li>
+<li>[ ] Phase 1 Reddit post</li>
+</ul>
+<hr />
+<h2 id="build-journey">Build Journey<a class="headerlink" href="#build-journey" title="Permanent link">&para;</a></h2>
+<p>This build started as a <strong>standard ZimaCube 2 with 8GB RAM</strong> — the base configuration fresh out of the box. Over a single weekend, it was upgraded significantly into a proper modest homelab NAS machine.</p>
+<p>The choice of ZimaOS was deliberate — after years with Synology, the simplicity of ZimaOS combined with its Docker-focused app deployment model made it the natural replacement. Everything runs as a container, the UI stays clean, and the OS stays out of the way. I have been a longtime fan of CasaOS (straight forward simplicity) and when ZimaOS came out, it was a no brainer for me to hopped on the bandwagon.</p>
+<h3 id="upgrades-made-this-weekend">Upgrades Made This Weekend<a class="headerlink" href="#upgrades-made-this-weekend" title="Permanent link">&para;</a></h3>
+<p><strong>1. RAM Upgrade</strong><br />
+Replaced the stock 8GB DDR5 with a <strong>Crucial 16GB DDR5 5600MHz CL46 SODIMM</strong>. Planning to upgrade further with <strong>2× Corsair Vengeance 16GB DDR5 4800MHz CL40 SODIMM</strong> for a total of <strong>32GB DDR5</strong>.</p>
+<p><em>Removing the original 1x Samsung 8GB SODIMM DDR5 4800 MT/s stick.</em>
+<img alt="ZimaCube 2 Interior - Removing Original RAM" src="../../images/phase1.5/day02-ram-upgrade-removing-old-01.jpg" /></p>
+<p><em>Installing the new 1x Crucial 16GB SODIMM DDR5 4800 MT/s stick.</em>
+<img alt="ZimaCube 2 Interior - Removing Original RAM" src="../../images/phase1.5/day02-ram-upgrade-installing-new-01.jpg" /></p>
+<blockquote>
+<p><strong>Note:</strong> The ZimaCube 2 Standard supports up to <strong>64GB DDR5</strong> (2× 32GB SODIMM). The planned 2× 16GB Corsair Vengeance upgrade brings it to 32GB — a second upgrade to 2× 32GB SODIMM is possible if more RAM is ever needed in future direction of ZimaCube 2. Right now, 16GB DDR5 is the sweet spot.</p>
+</blockquote>
+<p><strong>2. Internal NVMe — Crucial P510 2TB PCIe 5.0 (7th Bay)</strong><br />
+Installed a Crucial P510 2TB Gen5 NVMe M.2 2280 into the ZimaCube 2's internal 7th Bay NVMe enclosure. Formatted as native ZimaOS btrfs, named <strong>Arctic-Storage</strong> (<code>nvme0n1</code>). ZimaOS App Data and User Database migrated here from the Kingston OS drive (<code>nvme5n1</code>) via the built-in migration tool.</p>
+<p><em>Installing the Crucial P510 2TB PCIe Gen5 installed in 7th Bay NVME1 → configured as Arctic-Storage (btrfs)</em>
+<img alt="ZimaCube 2 Interior - Inserting new NVMe SSD" src="../../images/phase1.5/day02-nvme-ssd-install-inserting-01.jpg" />
+<img alt="ZimaCube 2 Interior - Installed new NVMe SSD" src="../../images/phase1.5/day02-nvme-ssd-install-complete-01.jpg" />
+<img alt="ZimaCube 2 Interior - Seated new NVMe SSD" src="../../images/phase1.5/day02-nvme-ssd-install-seated-01.jpg" /></p>
+<blockquote>
+<p>⚠️ <strong>Note:</strong> The 7th Bay on the ZimaCube 2 Standard is capped at 800 MB/s total by the ASMedia bridge — the PCIe 5.0 speed of the Crucial P510 drive is completely wasted here sequentially. A cheaper PCIe 3.0 or 4.0 drive delivers identical sequential performance in this slot. However, random IOPS are unaffected by the bridge cap, making the 205K IOPS and 0.6ms latency of the P510 genuinely useful for Docker app workloads.</p>
+<p>🔬 <strong>Planned experiment — Phase 1.5:</strong> I'm moving the Cruial P510 from the ZimaCube 2's 7th bay to the onboard M.2 slot to test whether it can achieve native PCIe 5.0 speeds. Re-benchmark results will follow once complete.</p>
+</blockquote>
+<p><strong>3. PCIe OCuLink Adapter</strong><br />
+Installed a <strong>PCIe x4 to SFF-8612 adapter</strong> into Slot 1 of ZimaCube 2. Slot 1 is a physical x16 slot wired at PCIe 4.0 x4 lanes (~8 GB/s) — the card fits a full-length x16 form factor but only uses four lanes electrically.</p>
+<p><em>Install PCIe OCuLink Adapter</em>
+<img alt="ZimaCube 2 Interior - Install PCIe OCuLink Adapter 01" src="../../images/phase1.5/day02-pcie-card-install-02.jpg" />
+<img alt="ZimaCube 2 Interior - Install PCIe OCuLink Adapter 02" src="../../images/phase1.5/day02-pcie-card-install-03.jpg" /></p>
+<blockquote>
+<p>💡 <strong>Implication:</strong> With Slot 1 occupied by the OCuLink adapter, both Thunderbolt 4 ports on the ZimaCube 2 are now free — available for a <strong>TB4 eGPU dock</strong> (Phase 4b) or <strong>TB4 direct networking</strong> to a Mac/PC for high-speed file transfer beyond the 2.5GbE ceiling.</p>
+</blockquote>
+<p><strong>4. Aoostar TB4S-OC NVMe Enclosure (OCuLink)</strong><br />
+Connected the <strong>Aoostar TB4S-OC</strong> (USB4/Thunderbolt 4 + OCuLink NVMe DAS) via OCuLink after Thunderbolt 4 failed (see <a href="#thunderbolt-4-issue-and-oculink-resolution">Thunderbolt 4 Issue</a>). The enclosure holds <strong>4× 2TB PCIe Gen4 NVMe M.2 SSDs</strong> (<code>nvme1n1</code>–<code>nvme4n1</code>), formatted as <strong>ZFS RAIDZ1</strong> named <strong>glacier</strong>.</p>
+<p><em>Aoostar TB4S-OC NVMe Enclosure (OCuLink) seated on top of ZimaCube 2</em>
+<img alt="ZimaCube 2 - Aoostar TB4S-OC NVMe Enclosure 01" src="../../images/phase1.5/day02-zimadock-setup-top-01.jpg" />
+<img alt="ZimaCube 2 - Aoostar TB4S-OC NVMe Enclosure 02" src="../../images/phase1.5/day02-zimadock-powered-on-01.jpg" />
+<img alt="ZimaCube 2 - Aoostar TB4S-OC NVMe Enclosure 03" src="../../images/phase1.5/day02-rear-cables-connected-01.jpg" />
+<img alt="ZimaCube 2 - Aoostar TB4S-OC NVMe Enclosure 04" src="../../images/phase1.5/day02-rear-display-ports-cabled-01.jpg" /></p>
+<p><strong>5. USB Storage (Temporary)</strong><br />
+Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
+- <strong>Transcend ESD310C 1TB</strong> — USB 10Gbps, dual Type-C/Type-A (<code>sda</code>)
+- <strong>SanDisk Portable SSD SDSSDE30 1TB</strong> — USB 3.2 Gen 2, up to 800 MB/s (<code>sdb</code>)</p>
+<p><strong>Coming soon:</strong> 4× Seagate IronWolf 4TB 3.5" SATA NAS drives (5,400 RPM, CMR, 256MB cache) for the <code>ironwolf</code> btrfs RAID5 pool (~12TB usable) in the 6 SATA bays — bulk media files, movies, TV shows, photos archive. 1 drive received; 3 in transit.</p>
+<hr />
+<h2 id="final-hardware-configuration">Final Hardware Configuration<a class="headerlink" href="#final-hardware-configuration" title="Permanent link">&para;</a></h2>
+<h3 id="zimacube-2-standard-complete-spec">ZimaCube 2 Standard — Complete Spec<a class="headerlink" href="#zimacube-2-standard-complete-spec" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Specification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model</td>
+<td>ZimaCube 2 (Standard)</td>
+</tr>
+<tr>
+<td>CPU</td>
+<td>Intel Core i3-1215U (12th Gen Alder Lake, 6-core)</td>
+</tr>
+<tr>
+<td>RAM</td>
+<td>16GB DDR5 — Crucial 5600MHz CL46 SODIMM</td>
+</tr>
+<tr>
+<td>RAM (planned)</td>
+<td>2× 16GB Corsair Vengeance DDR5 4800MHz CL40 SODIMM = <strong>32GB DDR5</strong> (max supported: 64GB via 2× 32GB SODIMM)</td>
+</tr>
+<tr>
+<td>OS</td>
+<td>ZimaOS (Buildroot-based, immutable, RAUC A/B OTA)</td>
+</tr>
+<tr>
+<td>Network</td>
+<td>2× Intel i226 2.5GbE</td>
+</tr>
+<tr>
+<td>Thunderbolt</td>
+<td>2× Thunderbolt 4 ports (both free — eGPU or direct networking use)</td>
+</tr>
+<tr>
+<td>PCIe Slot 1</td>
+<td>Physical x16 slot · PCIe 4.0 x4 lanes → OCuLink SFF-8612 adapter</td>
+</tr>
+<tr>
+<td>PCIe Slot 2</td>
+<td>Physical x8 slot · PCIe 3.0 x2 lanes → <strong>available — reserved for future 10GbE NIC upgrade</strong></td>
+</tr>
+<tr>
+<td>7th Bay</td>
+<td>4× M.2 NVMe slots (800 MB/s total bridge cap on Standard)</td>
+</tr>
+<tr>
+<td>Onboard M.2</td>
+<td>Additional slot available → planned P510 migration (Phase 1.5)</td>
+</tr>
+<tr>
+<td>SATA Bays</td>
+<td>6× 3.5"/2.5" SATA bays (empty — drives arriving soon)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Standard vs Pro:</strong> The ZimaCube 2 Standard uses the same 7th Bay physical layout as the Pro, but the ASMedia bridge limits total 7th Bay bandwidth to 800 MB/s (vs 3,200 MB/s on Pro/Creator). Standard has 2.5GbE-only network (no 10GbE) and an i3-1215U vs the Pro's i5-1235U.</p>
+</blockquote>
+<h3 id="nvme-drive-inventory">NVMe Drive Inventory<a class="headerlink" href="#nvme-drive-inventory" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Model</th>
+<th>Capacity</th>
+<th>Interface</th>
+<th>Location</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nvme5n1</code></td>
+<td>Kingston OM8PGP4 256GB</td>
+<td>256GB</td>
+<td>PCIe Gen4</td>
+<td>Onboard M.2</td>
+<td>ZimaOS boot drive</td>
+</tr>
+<tr>
+<td><code>nvme0n1</code></td>
+<td>Crucial P510 (CT2000P510SSD8)</td>
+<td>2TB</td>
+<td>PCIe Gen5</td>
+<td>7th Bay Slot 1</td>
+<td>Arctic-Storage (btrfs) — may move to onboard slot</td>
+</tr>
+<tr>
+<td><code>nvme1n1</code></td>
+<td>ORICO 2TB</td>
+<td>2TB</td>
+<td>PCIe Gen4</td>
+<td>Aoostar TB4S-OC</td>
+<td>glacier ZFS RAIDZ1</td>
+</tr>
+<tr>
+<td><code>nvme2n1</code></td>
+<td>ORICO 2TB</td>
+<td>2TB</td>
+<td>PCIe Gen4</td>
+<td>Aoostar TB4S-OC</td>
+<td>glacier ZFS RAIDZ1</td>
+</tr>
+<tr>
+<td><code>nvme3n1</code></td>
+<td>XPG GAMMIX S70 BLADE 2TB</td>
+<td>2TB</td>
+<td>PCIe Gen4</td>
+<td>Aoostar TB4S-OC</td>
+<td>glacier ZFS RAIDZ1</td>
+</tr>
+<tr>
+<td><code>nvme4n1</code></td>
+<td>XPG GAMMIX S70 BLADE 2TB</td>
+<td>2TB</td>
+<td>PCIe Gen4</td>
+<td>Aoostar TB4S-OC</td>
+<td>glacier ZFS RAIDZ1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="full-nvme-list-output">Full <code>nvme list</code> Output<a class="headerlink" href="#full-nvme-list-output" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>NAME    TYPE MODEL                   SERIAL                    REV      TRAN  RQ-SIZE  MQ
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>nvme4n1 disk XPG GAMMIX S70 BLADE    2O392L2KE7HJ         3.2.J.JE nvme      1023   8
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>nvme3n1 disk XPG GAMMIX S70 BLADE    2O042LCN42WX         3.2.J.JE nvme      1023   8
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>nvme0n1 disk CT2000P510SSD8          2537E9CA8E7A         K1CR5102 nvme      1023   8
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>nvme2n1 disk ORICO                   XFEFCXMAO7QKT67N27AO GT8ed336 nvme      1023   8
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>nvme1n1 disk ORICO                   SJVB1S14B2FTKWX35VZ3 GT8ed336 nvme      1023   8
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>nvme5n1 disk KINGSTON OM8PGP4256Q-A0 50026B7384587960     ELFK0S.6 nvme      1023   8
+</code></pre></div>
+<h3 id="usb-storage-temporary">USB Storage (Temporary)<a class="headerlink" href="#usb-storage-temporary" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Model</th>
+<th>Capacity</th>
+<th>Interface</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sda</code></td>
+<td>Transcend ESD310C</td>
+<td>1TB</td>
+<td>USB 10Gbps (Type-C + Type-A)</td>
+<td>Temporary media/backup</td>
+</tr>
+<tr>
+<td><code>sdb</code></td>
+<td>SanDisk SDSSDE30 Portable SSD</td>
+<td>1TB</td>
+<td>USB 3.2 Gen 2, up to 800 MB/s</td>
+<td>Temporary overflow storage</td>
+</tr>
+</tbody>
+</table>
+<h3 id="incoming-hardware">Incoming Hardware<a class="headerlink" href="#incoming-hardware" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Specification</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Seagate IronWolf × 4</td>
+<td>4TB, 3.5", SATA 6Gb/s, 5,400 RPM, CMR, 256MB cache</td>
+<td>Cold storage RAID5—ideal for bulk media. I chose the non-Pro Ironwolf model specifically for lower power consumption and quieter operation at 5,400 RPM</td>
+</tr>
+<tr>
+<td>Corsair Vengeance × 2</td>
+<td>16GB DDR5 4800MHz CL40 SODIMM</td>
+<td>RAM upgrade 16GB → 32GB DDR5. Likely during Phase 4 - Local AI hosting</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="storage-architecture">Storage Architecture<a class="headerlink" href="#storage-architecture" title="Permanent link">&para;</a></h2>
+<h3 id="current-storage-tiers">Current Storage Tiers<a class="headerlink" href="#current-storage-tiers" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ZimaCube 2 Standard — Storage Tiers
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>│
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├── TIER 0 — OS (Boot)
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│   └── nvme5n1  Kingston 256GB PCIe Gen4     ZimaOS system drive
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>├── TIER 1 — Fast NVMe (Active workloads)
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│   └── nvme0n1  Crucial P510 2TB PCIe Gen5   Arctic-Storage (btrfs)
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│                └── App Data, Docker images, User database
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>│                └── Currently: 7th Bay (800 MB/s sequential cap)
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>│                └── Planned:   Onboard M.2 slot (native PCIe Gen5 speed)
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>│
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>├── TIER 2 — NVMe RAID (Bulk NVMe storage)
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>│   └── nvme1n1  ORICO 2TB PCIe Gen4          ┐
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>│   └── nvme2n1  ORICO 2TB PCIe Gen4          ├── glacier (ZFS RAIDZ1)
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>│   └── nvme3n1  XPG GAMMIX S70 BLADE 2TB     ├── ~5.5TB usable
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>│   └── nvme4n1  XPG GAMMIX S70 BLADE 2TB     ┘
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>│                └── Immich gallery, media, backup, VM, documents
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>│                └── Via OCuLink (Aoostar TB4S-OC, Slot 1)
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>│
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>├── TIER 3 — USB Portable (Temporary)
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>│   └── sda      Transcend ESD310C 1TB USB    Temporary
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>│   └── sdb      SanDisk Portable SSD 1TB     Temporary
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>│
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>└── TIER 4 — Cold Storage (Arriving soon)
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>    └── 4× Seagate IronWolf 4TB 3.5&quot; SATA     ironwolf (btrfs RAID5, ~12TB usable)
+</code></pre></div>
+<hr />
+<h2 id="thunderbolt-4-issue-and-oculink-resolution">Thunderbolt 4 Issue and OCuLink Resolution<a class="headerlink" href="#thunderbolt-4-issue-and-oculink-resolution" title="Permanent link">&para;</a></h2>
+<h3 id="what-happened">What Happened<a class="headerlink" href="#what-happened" title="Permanent link">&para;</a></h3>
+<p>The Aoostar TB4S-OC was originally intended to connect via Thunderbolt 4. After extensive troubleshooting across multiple sessions — two 40GBps 240W USB-C cables, both ports tested, external power confirmed — the connection failed consistently with the following kernel errors:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>thunderbolt: tb_path_activate+0x100/0x350 [thunderbolt]
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>thunderbolt 0000:00:0d.2: 0:8 &lt;-&gt; 1:3 (PCI): activation failed
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>thunderbolt 1-1: reading DROM failed: -107
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>thunderbolt 1-1: failed to initialize port 1
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>[endless retimer connect/disconnect loop in dmesg]
+</code></pre></div>
+<h3 id="possible-root-causes">Possible Root Causes<a class="headerlink" href="#possible-root-causes" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Issue</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>thunderbolt.host_reset=false</code></td>
+<td>ZimaOS kernel boot parameter — TB controller won't reset when a new device is plugged in</td>
+</tr>
+<tr>
+<td><code>security=user</code> on both TB domains</td>
+<td>All TB devices require manual authorization before PCIe tunneling; device never enumerated to authorize</td>
+</tr>
+<tr>
+<td><code>DROM failed: -107 (ENOTCONN)</code></td>
+<td>ASMedia ASM2462PDX inside Aoostar can't complete DROM handshake with ZimaCube 2 TB controller</td>
+</tr>
+<tr>
+<td>One TB port dead at boot</td>
+<td><code>0000:00:0d.3: 0:1: failed to reach state TB_PORT_UP. Ignoring port</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="resolution">Resolution<a class="headerlink" href="#resolution" title="Permanent link">&para;</a></h3>
+<p>Installed a <strong>PCIe x4 → SFF-8612 OCuLink adapter</strong> in Slot 1. All 4 drives detected on first boot. Zero configuration needed.</p>
+<h3 id="downstream-impact-on-phase-4b-egpu">Downstream Impact on Phase 4b eGPU<a class="headerlink" href="#downstream-impact-on-phase-4b-egpu" title="Permanent link">&para;</a></h3>
+<p>With PCIe Slot 1 occupied by the OCuLink adapter:
+- Unable to use ~~Minisforum DEG1~~ (OCuLink-only) → ruled out as Slot 1 OCuLink connection is occupied by Aoostar TB4S-OC DAS
+- Both TB4 ports now free → exploring to purchase <strong>Minisforum DEG2</strong> (TB5 + OCuLink) or an Aoostar AG02/AG03 TB4/TB5 eGPU dock as the viable paths for Phase 4b</p>
+<h3 id="troubleshooting-takeaway-to-be-verified-with-other-enclosures">Troubleshooting Takeaway (To be verified with other enclosures)<a class="headerlink" href="#troubleshooting-takeaway-to-be-verified-with-other-enclosures" title="Permanent link">&para;</a></h3>
+<p>If connecting an Aoostar TB4S-OC (or any ASM2462PDX-based NVMe enclosure) to a ZimaCube 2 — <strong>use OCuLink, not Thunderbolt 4</strong>. Direct PCIe via OCuLink means no tunneling protocol, no authorization requirements, no firmware handshake. It also delivers lower latency than TB4 tunneling.</p>
+<h3 id="tb4-peer-to-peer-networking-planned-experiment">TB4 Peer-to-Peer Networking — Planned Experiment<a class="headerlink" href="#tb4-peer-to-peer-networking-planned-experiment" title="Permanent link">&para;</a></h3>
+<p>The TB4 failure above was specific to PCIe tunneling to an external NVMe enclosure. A completely separate TB4 capability — <strong>IP over Thunderbolt (TB4 direct connection)</strong> — remains available and untested.</p>
+<p>By connecting a Mac or PC directly to one of ZimaCube 2's TB4 ports with a single cable, the OS on both ends creates a high-speed point-to-point network link. This bypasses the 2.5GbE bottleneck entirely:</p>
+<table>
+<thead>
+<tr>
+<th>Link</th>
+<th>Effective bandwidth</th>
+<th>Glacier seq. read accessible</th>
+<th>Arctic seq. read accessible</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2.5GbE (current)</td>
+<td>~312 MB/s</td>
+<td>12% of 2,591 MB/s</td>
+<td>36% of 874 MB/s</td>
+</tr>
+<tr>
+<td>TB4 networking (~10–20Gbps)</td>
+<td>1,250–2,500 MB/s</td>
+<td>48–96% of 2,591 MB/s</td>
+<td>~100% of 874 MB/s</td>
+</tr>
+</tbody>
+</table>
+<p>For workloads like pulling raw photos from Immich, streaming high-bitrate media, or running Ollama inference from a client machine, the 2.5GbE link is the real throughput ceiling — not the storage. TB4 networking removes that ceiling for a directly-connected machine.</p>
+<blockquote>
+<p>⚠️ <strong>Caveats to test:</strong>
+- ZimaOS's <code>security=user</code> TB policy requires manual device authorization via <code>boltctl enroll</code> — this may need to be run once per connected machine.
+- One TB4 port was dead at boot during the Aoostar investigation (<code>0000:00:0d.3: 0:1: failed to reach state TB_PORT_UP</code>). Will verify whether either or both ports work for peer-to-peer.
+- IP over Thunderbolt on ZimaOS (Buildroot) needs kernel module confirmation (<code>thunderbolt_net</code> / <code>apple-tbnet</code>).</p>
+</blockquote>
+<hr />
+<h2 id="zfs-pool-setup">ZFS Pool Setup<a class="headerlink" href="#zfs-pool-setup" title="Permanent link">&para;</a></h2>
+<h3 id="why-zfs-raidz1">Why ZFS RAIDZ1<a class="headerlink" href="#why-zfs-raidz1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Factor</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data integrity</td>
+<td>ZFS checksums detect and self-heal silent corruption — critical for photo and document storage</td>
+</tr>
+<tr>
+<td>Redundancy</td>
+<td>RAIDZ1 survives 1 drive failure across 4 drives</td>
+</tr>
+<tr>
+<td>Snapshots</td>
+<td>Copy-on-write snapshots are instant — essential before Phase 4 experiments</td>
+</tr>
+<tr>
+<td>Compression</td>
+<td>lz4 is near-zero CPU cost on i3-1215U with real savings on documents and logs</td>
+</tr>
+</tbody>
+</table>
+<h3 id="why-btrfs-for-arctic-storage-and-ironwolf">Why btrfs for Arctic-Storage and ironwolf<a class="headerlink" href="#why-btrfs-for-arctic-storage-and-ironwolf" title="Permanent link">&para;</a></h3>
+<p>Both <code>Arctic-Storage</code> and <code>ironwolf</code> are formatted as <strong>btrfs</strong> — ZimaOS's native filesystem. This is a deliberate choice to stay within the ZimaOS ecosystem for these two pools, prioritising seamless UI integration over the advanced features ZFS offers.</p>
+<table>
+<thead>
+<tr>
+<th>Pool</th>
+<th>Configuration</th>
+<th>Reason for btrfs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Arctic-Storage</code></td>
+<td>Single drive (Crucial P510 2TB)</td>
+<td>ZimaOS recognises btrfs volumes natively — the Storage app, Files app, and AppData migration tool all work without any manual symlinks or workarounds</td>
+</tr>
+<tr>
+<td><code>ironwolf</code></td>
+<td>4× Seagate IronWolf 4TB — btrfs RAID5</td>
+<td>Configured via ZimaOS Storage Manager UI — same native recognition as Arctic-Storage; no CLI required to set up or manage the array</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What this gives in practice:</strong></p>
+<ul>
+<li><strong>ZimaOS Storage app</strong> — both pools appear in the dashboard with health status and usage at a glance</li>
+<li><strong>ZimaOS Files app</strong> — browse, upload, and manage files on both pools directly through the web UI</li>
+<li><strong>AppData migration tool</strong> — Settings → Storage → Apps can move Docker container data between these pools without manual intervention</li>
+<li><strong>No symlink workarounds needed</strong> — unlike glacier (CLI-created ZFS pool), btrfs pools are first-class citizens in ZimaOS</li>
+</ul>
+<blockquote>
+<p><strong>The trade-off:</strong> btrfs lacks ZFS's self-healing checksums and copy-on-write snapshot depth. For <code>Arctic-Storage</code> (active app data) and <code>ironwolf</code> (bulk media), the ZimaOS integration benefit outweighs the ZFS feature gap — especially since <code>glacier</code> already handles the workloads where data integrity is non-negotiable.</p>
+</blockquote>
+<h3 id="pool-creation">Pool Creation<a class="headerlink" href="#pool-creation" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>sudo<span class="w"> </span>-i
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># Wipe drives first (removes any previous partition tables or ZFS labels)</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span>/dev/nvme1n1<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>1M<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">10</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span>/dev/nvme2n1<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>1M<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">10</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span>/dev/nvme3n1<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>1M<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">10</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span>/dev/nvme4n1<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>1M<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">10</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="c1"># Create pool</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>zpool<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span>-m<span class="w"> </span>/media/glacier<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">ashift</span><span class="o">=</span><span class="m">12</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">  </span>-O<span class="w"> </span><span class="nv">compression</span><span class="o">=</span>lz4<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">  </span>-O<span class="w"> </span><span class="nv">atime</span><span class="o">=</span>off<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">  </span>-O<span class="w"> </span><span class="nv">xattr</span><span class="o">=</span>sa<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">  </span>-O<span class="w"> </span><span class="nv">acltype</span><span class="o">=</span>posixacl<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">  </span>glacier<span class="w"> </span>raidz1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">  </span>/dev/nvme1n1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">  </span>/dev/nvme2n1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">  </span>/dev/nvme3n1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">  </span>/dev/nvme4n1
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="c1"># Enable autotrim (NVMe health)</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>zpool<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">autotrim</span><span class="o">=</span>on<span class="w"> </span>glacier
+</code></pre></div>
+<h3 id="datasets">Datasets<a class="headerlink" href="#datasets" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>zfs<span class="w"> </span>create<span class="w"> </span>glacier/VM
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>zfs<span class="w"> </span>create<span class="w"> </span>glacier/appdata
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>zfs<span class="w"> </span>create<span class="w"> </span>glacier/backup
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>zfs<span class="w"> </span>create<span class="w"> </span>glacier/documents
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>zfs<span class="w"> </span>create<span class="w"> </span>glacier/downloads
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>zfs<span class="w"> </span>create<span class="w"> </span>glacier/gallery
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>zfs<span class="w"> </span>create<span class="w"> </span>glacier/media
+</code></pre></div>
+<h3 id="pool-health">Pool Health<a class="headerlink" href="#pool-health" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>pool: glacier
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>state: ONLINE
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>config:
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    NAME         STATE     READ WRITE CKSUM
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    glacier      ONLINE       0     0     0
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>      raidz1-0   ONLINE       0     0     0
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>        nvme1n1  ONLINE       0     0     0
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>        nvme2n1  ONLINE       0     0     0
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>        nvme3n1  ONLINE       0     0     0
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>        nvme4n1  ONLINE       0     0     0
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>errors: No known data errors
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>NAME     SIZE   ALLOC   FREE  FRAG  CAP  DEDUP  HEALTH
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>glacier  7.44T   346G  7.10T    0%    4%  1.00x  ONLINE
+</code></pre></div>
+<hr />
+<h2 id="zimaos-integration">ZimaOS Integration<a class="headerlink" href="#zimaos-integration" title="Permanent link">&para;</a></h2>
+<h3 id="why-cli-created-zfs-pools-dont-appear-in-the-ui">Why CLI-Created ZFS Pools Don't Appear in the UI<a class="headerlink" href="#why-cli-created-zfs-pools-dont-appear-in-the-ui" title="Permanent link">&para;</a></h3>
+<p>ZimaOS only recognises storage pools and drives that were created or configured through its own Storage Manager UI. ZFS pools created via CLI — like <code>glacier</code> — are invisible to the storage dashboard and the AppData migration tool. This is a known limitation with multiple open feature requests on ZimaOS GitHub: <a href="https://github.com/IceWhaleTech/ZimaOS/issues/423">#423 — ZFS RAIDZ Support</a>, <a href="https://github.com/IceWhaleTech/ZimaOS/issues/216">#216 — ZFS Web GUI configuration</a>, <a href="https://github.com/IceWhaleTech/ZimaOS/issues/298">#298 — Local mountpoints in Storage Management</a>.</p>
+<blockquote>
+<p><strong>Alternative approach for Proxmox-hosted ZimaOS:</strong> When running ZimaOS as a Proxmox VM, there is a workaround that achieves native pool recognition without symlinks. Create the ZFS pool directly in the Proxmox Shell using the same CLI commands as above, then present the pool to the ZimaOS VM as a virtual SCSI disk. ZimaOS treats it like any other block device — the same way it sees the Crucial P510 NVMe — and the Storage Manager picks it up natively. This was discovered while setting up a DIY ZimaOS instance on Proxmox and is not applicable to bare-metal installs like the ZimaCube 2, but is worth knowing for anyone running ZimaOS virtualised.</p>
+</blockquote>
+<h3 id="solution-symlinks-in-data">Solution — Symlinks in /DATA<a class="headerlink" href="#solution-symlinks-in-data" title="Permanent link">&para;</a></h3>
+<p>Creating symlinks in <code>/DATA</code> makes datasets appear in the ZimaOS Files app as if they were native volumes:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ln<span class="w"> </span>-s<span class="w"> </span>/media/glacier/VM<span class="w">        </span>/DATA/glacier-VM
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>ln<span class="w"> </span>-s<span class="w"> </span>/media/glacier/appdata<span class="w">   </span>/DATA/glacier-AppData
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>ln<span class="w"> </span>-s<span class="w"> </span>/media/glacier/backup<span class="w">    </span>/DATA/glacier-Backup
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>ln<span class="w"> </span>-s<span class="w"> </span>/media/glacier/documents<span class="w"> </span>/DATA/glacier-Documents
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>ln<span class="w"> </span>-s<span class="w"> </span>/media/glacier/downloads<span class="w"> </span>/DATA/glacier-Downloads
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>ln<span class="w"> </span>-s<span class="w"> </span>/media/glacier/gallery<span class="w">   </span>/DATA/glacier-Gallery
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>ln<span class="w"> </span>-s<span class="w"> </span>/media/glacier/media<span class="w">     </span>/DATA/glacier-Media
+</code></pre></div>
+<h3 id="appdata-migration-to-arctic-storage">AppData Migration to Arctic-Storage<a class="headerlink" href="#appdata-migration-to-arctic-storage" title="Permanent link">&para;</a></h3>
+<p>ZimaOS's built-in <strong>Settings → Storage → Apps</strong> migration tool moved App Data from ZimaOS-HD to Arctic-Storage natively. ZimaOS created symlinks automatically — all apps continued working without reconfiguration:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>AppData   → /media/Arctic-Storage/AppData
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>Documents → /media/Arctic-Storage/Documents
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>Downloads → /media/Arctic-Storage/Downloads
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>Gallery   → /media/Arctic-Storage/Gallery
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>Backup    → /media/Arctic-Storage/Backup
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>Media     → /media/Arctic-Storage/Media
+</code></pre></div>
+<hr />
+<h2 id="arctic-storage-setup">Arctic-Storage Setup<a class="headerlink" href="#arctic-storage-setup" title="Permanent link">&para;</a></h2>
+<p>The Crucial P510 2TB PCIe Gen5 was installed in the 7th Bay and formatted via the ZimaOS GUI — ZimaOS automatically formatted it as <strong>btrfs</strong> and named it Arctic-Storage. Using btrfs here (rather than ZFS) gives it native ZimaOS UI recognition: the storage dashboard, Apps migration tool, and Docker volume mounts all work without any symlink workarounds.</p>
+<p>AppData was migrated from ZimaOS-HD to Arctic-Storage using <strong>Settings → Storage → Apps</strong> — ZimaOS handles the symlinks automatically, and all apps continued working immediately.</p>
+<blockquote>
+<p>⚠️ <strong>7th Bay bandwidth cap:</strong> The ZimaCube 2 Standard caps the 7th Bay at 800 MB/s total via its ASMedia bridge. The P510 is capable of 9,000+ MB/s natively but is bridge-limited here. Both sequential read (874 MB/s) and write (788 MB/s) hit this ceiling. Random IOPS are unaffected — the 205,588 IOPS and 0.6ms latency of the P510 are fully available for Docker workloads.</p>
+<p>🔬 <strong>Planned — Phase 1.5:</strong> Move P510 to the additional onboard M.2 slot to test native PCIe Gen5 sequential speed. Re-benchmark and compare.</p>
+</blockquote>
+<hr />
+<h2 id="benchmark-methodology">Benchmark Methodology<a class="headerlink" href="#benchmark-methodology" title="Permanent link">&para;</a></h2>
+<h3 id="tool">Tool<a class="headerlink" href="#tool" title="Permanent link">&para;</a></h3>
+<p><code>fio 3.38</code> — natively available on ZimaOS Buildroot. No installation required; confirmed with <code>fio --version</code> in the web terminal.</p>
+<blockquote>
+<p><strong>Note:</strong> ZimaOS is Buildroot-based with no <code>apt</code>, <code>yum</code>, or package manager. <code>fio</code>, <code>zpool</code>, <code>zfs</code>, <code>nvme</code>, and <code>iostat</code> are available natively. All other software runs as Docker containers.</p>
+</blockquote>
+<h3 id="terminal-access">Terminal Access<a class="headerlink" href="#terminal-access" title="Permanent link">&para;</a></h3>
+<p>ZimaOS does not expose SSH by default. The web-based terminal was accessed via:</p>
+<ol>
+<li>Open ZimaOS <strong>Settings</strong></li>
+<li>Navigate to <strong>General → Developer Mode</strong></li>
+<li>Click <strong>View</strong> to open the Developer panel</li>
+<li>Launch the <strong>Web-based terminal</strong></li>
+</ol>
+<p>All commands were run as root:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>sudo<span class="w"> </span>-i
+</code></pre></div>
+<h3 id="script-deployment-via-winscp">Script Deployment via WinSCP<a class="headerlink" href="#script-deployment-via-winscp" title="Permanent link">&para;</a></h3>
+<p>The benchmark scripts (maintained in this repo under <a href="../resources/scripts/"><code>docs/resources/scripts/</code></a>) were uploaded from the Windows host to ZimaCube using <strong>WinSCP</strong>:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Local (repo)</strong></td>
+<td><code>docs/resources/scripts/</code></td>
+</tr>
+<tr>
+<td><strong>Remote (ZimaCube)</strong></td>
+<td><code>/DATA/Documents/nvme-benchmark/</code></td>
+</tr>
+</tbody>
+</table>
+<p>WinSCP connection: host <code>192.168.xxx.xxx</code> · Protocol: SFTP · Port 22</p>
+<p>Files uploaded:
+- <a href="../../resources/scripts/benchmark-glacier.sh"><code>benchmark-glacier.sh</code></a>
+- <a href="../../resources/scripts/benchmark-arctic.sh"><code>benchmark-arctic.sh</code></a>
+- <a href="../../resources/scripts/benchmark-compare.sh"><code>benchmark-compare.sh</code></a></p>
+<h3 id="execution">Execution<a class="headerlink" href="#execution" title="Permanent link">&para;</a></h3>
+<p>Scripts were run individually from the web terminal:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>sudo<span class="w"> </span>-i
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nb">cd</span><span class="w"> </span>/DATA/Documents/nvme-benchmark
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>chmod<span class="w"> </span>+x<span class="w"> </span>benchmark-glacier.sh<span class="w"> </span>benchmark-arctic.sh<span class="w"> </span>benchmark-compare.sh
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>./benchmark-glacier.sh
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>./benchmark-arctic.sh
+</code></pre></div>
+<p>Each script runs 4 sequential fio tests (seq write → seq read → rand 4K write → rand 4K read), captures filesystem-specific stats, cleans up its temp file, and saves results automatically:</p>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Results saved to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>benchmark-glacier.sh</code></td>
+<td><code>/media/glacier/benchmark-results-glacier.txt</code></td>
+</tr>
+<tr>
+<td><code>benchmark-arctic.sh</code></td>
+<td><code>/media/Arctic-Storage/benchmark-results-arctic.txt</code></td>
+</tr>
+<tr>
+<td><code>benchmark-compare.sh</code></td>
+<td><code>/root/benchmark-comparison-summary.txt</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="test-parameters">Test Parameters<a class="headerlink" href="#test-parameters" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Block size</th>
+<th>Jobs</th>
+<th>Queue depth</th>
+<th>Size</th>
+<th>Duration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sequential write</td>
+<td>1M</td>
+<td>4</td>
+<td>8</td>
+<td>8GB</td>
+<td>60s</td>
+</tr>
+<tr>
+<td>Sequential read</td>
+<td>1M</td>
+<td>4</td>
+<td>8</td>
+<td>8GB</td>
+<td>60s</td>
+</tr>
+<tr>
+<td>Random 4K write</td>
+<td>4K</td>
+<td>4</td>
+<td>32</td>
+<td>4GB</td>
+<td>60s</td>
+</tr>
+<tr>
+<td>Random 4K read</td>
+<td>4K</td>
+<td>4</td>
+<td>32</td>
+<td>4GB</td>
+<td>60s</td>
+</tr>
+</tbody>
+</table>
+<p>All tests: <code>--direct=1</code> (bypasses OS page cache) · <code>--ioengine=libaio</code></p>
+<h3 id="monitoring">Monitoring<a class="headerlink" href="#monitoring" title="Permanent link">&para;</a></h3>
+<p>Real-time system metrics monitored via <strong>btop</strong> — installed from the ZimaOS App Marketplace.</p>
+<hr />
+<h2 id="benchmark-results">Benchmark Results<a class="headerlink" href="#benchmark-results" title="Permanent link">&para;</a></h2>
+<h3 id="glacier-zfs-raidz1-oculink-may-23-2026">Glacier — ZFS RAIDZ1 (OCuLink) — May 23, 2026<a class="headerlink" href="#glacier-zfs-raidz1-oculink-may-23-2026" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Bandwidth</th>
+<th>IOPS</th>
+<th>Avg latency</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sequential write</td>
+<td><strong>1,726 MB/s</strong></td>
+<td>1,646</td>
+<td>19.4ms</td>
+</tr>
+<tr>
+<td>Sequential read</td>
+<td><strong>2,591 MB/s</strong></td>
+<td>2,470</td>
+<td>12.9ms</td>
+</tr>
+<tr>
+<td>Random 4K write</td>
+<td>56.5 MB/s</td>
+<td><strong>13,795</strong></td>
+<td>9.3ms</td>
+</tr>
+<tr>
+<td>Random 4K read</td>
+<td>60.5 MB/s</td>
+<td><strong>14,781</strong></td>
+<td>8.7ms</td>
+</tr>
+</tbody>
+</table>
+<h3 id="arctic-storage-btrfs-pcie-50-7th-bay-800-mbs-cap-may-23-2026">Arctic-Storage — btrfs PCIe 5.0 (7th Bay, 800 MB/s cap) — May 23, 2026<a class="headerlink" href="#arctic-storage-btrfs-pcie-50-7th-bay-800-mbs-cap-may-23-2026" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Bandwidth</th>
+<th>IOPS</th>
+<th>Avg latency</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sequential write</td>
+<td><strong>788 MB/s</strong></td>
+<td>751</td>
+<td>42.6ms</td>
+</tr>
+<tr>
+<td>Sequential read</td>
+<td><strong>874 MB/s</strong></td>
+<td>833</td>
+<td>38.4ms</td>
+</tr>
+<tr>
+<td>Random 4K write</td>
+<td>357 MB/s</td>
+<td><strong>87,099</strong></td>
+<td>1.5ms</td>
+</tr>
+<tr>
+<td>Random 4K read</td>
+<td>842 MB/s</td>
+<td><strong>205,588</strong></td>
+<td>0.6ms</td>
+</tr>
+</tbody>
+</table>
+<h3 id="head-to-head-comparison">Head-to-Head Comparison<a class="headerlink" href="#head-to-head-comparison" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Glacier ZFS RAIDZ1</th>
+<th>Arctic btrfs PCIe 5.0</th>
+<th>Winner</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sequential write</td>
+<td>1,726 MB/s</td>
+<td>788 MB/s</td>
+<td>🧊 Glacier +119%</td>
+</tr>
+<tr>
+<td>Sequential read</td>
+<td>2,591 MB/s</td>
+<td>874 MB/s</td>
+<td>🧊 Glacier +196%</td>
+</tr>
+<tr>
+<td>Random 4K write IOPS</td>
+<td>13,795</td>
+<td>87,099</td>
+<td>🌨️ Arctic 6.3×</td>
+</tr>
+<tr>
+<td>Random 4K read IOPS</td>
+<td>14,781</td>
+<td>205,588</td>
+<td>🌨️ Arctic 14×</td>
+</tr>
+<tr>
+<td>Random 4K write latency</td>
+<td>9.3ms</td>
+<td>1.5ms</td>
+<td>🌨️ Arctic 6× lower</td>
+</tr>
+<tr>
+<td>Random 4K read latency</td>
+<td>8.7ms</td>
+<td>0.6ms</td>
+<td>🌨️ Arctic 14× lower</td>
+</tr>
+<tr>
+<td>Usable capacity</td>
+<td>5.5TB</td>
+<td>1.8TB</td>
+<td>🧊 Glacier 3×</td>
+</tr>
+<tr>
+<td>Drive redundancy</td>
+<td>1 drive failure</td>
+<td>None</td>
+<td>🧊 Glacier</td>
+</tr>
+<tr>
+<td>Data integrity</td>
+<td>ZFS checksums + self-healing</td>
+<td>btrfs checksums</td>
+<td>🧊 Glacier</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="analysis">Analysis<a class="headerlink" href="#analysis" title="Permanent link">&para;</a></h2>
+<h3 id="sequential-performance-glacier-dominates">Sequential Performance — Glacier Dominates<a class="headerlink" href="#sequential-performance-glacier-dominates" title="Permanent link">&para;</a></h3>
+<p>With 4 drives in RAIDZ1, ZFS stripes reads across all drives simultaneously. The 2,591 MB/s sequential read result is <strong>approximately 81% of the theoretical 3,200 MB/s OCuLink ceiling</strong> — demonstrating near-optimal read distribution across all 4 drives. The remaining ~19% gap is expected ZFS overhead: metadata management, checksum verification, and stripe coordination.</p>
+<p>Sequential write at 1,726 MB/s is strong given RAIDZ1 parity overhead, which adds one parity block per stripe across every write.</p>
+<p>Arctic-Storage sequential results confirm the 800 MB/s Standard 7th Bay bridge cap — both read (874 MB/s) and write (788 MB/s) are bottlenecked by the ASMedia bridge hardware, not the PCIe 5.0 drive itself.</p>
+<h3 id="random-iops-arctic-dominates">Random IOPS — Arctic Dominates<a class="headerlink" href="#random-iops-arctic-dominates" title="Permanent link">&para;</a></h3>
+<p>Arctic-Storage delivers <strong>205,588 IOPS</strong> random 4K read at <strong>0.6ms average latency</strong> — completely unimpeded by the 7th Bay sequential cap. This is genuine PCIe 5.0 NVMe random I/O performance, and exactly why this slot makes sense for Docker app databases and inference model loading.</p>
+<p>Glacier's 14,781 IOPS reflects ZFS RAIDZ1 copy-on-write overhead, parity calculation latency, and OCuLink tunnel baseline latency. These are <strong>cold-cache numbers</strong> — in practice, ZFS ARC (Adaptive Replacement Cache) will cache frequently accessed data in RAM, improving random read performance for real workloads over time.</p>
+<h3 id="zfs-arc-measured-behaviour-june-3-2026">ZFS ARC — Measured Behaviour (June 3, 2026)<a class="headerlink" href="#zfs-arc-measured-behaviour-june-3-2026" title="Permanent link">&para;</a></h3>
+<p>The fio benchmarks use <code>--direct=1</code> — bypassing the OS cache entirely. Real workloads go through ZFS ARC, which is the difference between the fio cold numbers and daily-use performance.</p>
+<p>After 11 days of uptime, the measured ARC stats from <code>/proc/spl/kstat/zfs/arcstats</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Raw value</th>
+<th>Human-readable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>size</code> (current ARC)</td>
+<td>10,004,018,376</td>
+<td><strong>9.32 GiB</strong></td>
+</tr>
+<tr>
+<td><code>c_max</code> (ARC ceiling)</td>
+<td>15,431,536,640</td>
+<td><strong>14.37 GiB</strong></td>
+</tr>
+<tr>
+<td><code>c_min</code> (ARC floor)</td>
+<td>515,789,952</td>
+<td><strong>492 MiB</strong></td>
+</tr>
+<tr>
+<td><code>hits</code></td>
+<td>22,642,971</td>
+<td>reads served from RAM</td>
+</tr>
+<tr>
+<td><code>misses</code></td>
+<td>1,529,588</td>
+<td>reads that went to NVMe</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Hit rate: 93.7%</strong> — 19 out of 20 glacier reads served directly from RAM, never touching NVMe.</p>
+<p><code>c_max</code> of 14.37 GiB is ZFS's default: <strong>total RAM − 1 GB</strong>. On a 15.3 GiB system that means ZFS can claim almost all of memory for cache. The ZimaOS dashboard widget reports 78% RAM used — alarming, but it counts ARC as "used." btop tells the real picture:</p>
+<table>
+<thead>
+<tr>
+<th>btop metric</th>
+<th>Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Used</td>
+<td>3.97 GiB</td>
+<td>Actual application RAM</td>
+</tr>
+<tr>
+<td>Cached</td>
+<td>11.4 GiB</td>
+<td>ZFS ARC + Linux page cache</td>
+</tr>
+<tr>
+<td>Available</td>
+<td>11.3 GiB</td>
+<td>RAM available to apps on demand</td>
+</tr>
+</tbody>
+</table>
+<p>ARC is evicted immediately when applications need RAM — the system is not RAM-starved.</p>
+<table>
+<thead>
+<tr>
+<th>RAM config</th>
+<th>Practical ARC headroom</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16 GB (current)</td>
+<td>~8–10 GB</td>
+<td>Hot Docker databases and small working sets</td>
+</tr>
+<tr>
+<td>32 GB (planned)</td>
+<td>~20–24 GB</td>
+<td>Immich thumbnails + databases + Ollama model pages simultaneously</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-14-iops-gap-architectural-not-a-flaw">The 14× IOPS Gap — Architectural, Not a Flaw<a class="headerlink" href="#the-14-iops-gap-architectural-not-a-flaw" title="Permanent link">&para;</a></h3>
+<p>ZFS RAIDZ1 trades random I/O efficiency for sequential throughput, redundancy, and data integrity. The correct response is tiered workload routing — not trying to close the gap.</p>
+<hr />
+<h2 id="zfs-arc-tuning">ZFS ARC Tuning<a class="headerlink" href="#zfs-arc-tuning" title="Permanent link">&para;</a></h2>
+<h3 id="why-cap-c_max-now">Why cap c_max now?<a class="headerlink" href="#why-cap-c_max-now" title="Permanent link">&para;</a></h3>
+<p>At 16 GB RAM, c_max defaulting to 14.37 GiB leaves only ~1 GB guaranteed for the OS + apps. ZFS is smart enough to evict ARC under memory pressure, but ZFS ARC eviction is slower than Linux page cache eviction. When Phase 2 lands and Jellyfin starts transcoding, ARC competing with a 831 MB+ process creates unnecessary pressure. Capping at 8 GiB gives glacier a generous read cache while guaranteeing ~7 GB headroom for all other workloads.</p>
+<h3 id="how-to-check-current-arc-stats">How to check current ARC stats<a class="headerlink" href="#how-to-check-current-arc-stats" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Raw stats — size, ceiling, floor, hits, misses</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>cat<span class="w"> </span>/proc/spl/kstat/zfs/arcstats<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;^(size|c_max|c_min|hits|misses) &quot;</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># Hit rate in one line</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>awk<span class="w"> </span><span class="s1">&#39;/^hits/{h=$3} /^misses/{m=$3} END{printf &quot;ARC hit rate: %.1f%%\n&quot;, h/(h+m)*100}&#39;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span>/proc/spl/kstat/zfs/arcstats
+</code></pre></div>
+<p>Measured output on Day 11 (June 3, 2026):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>ARC hit rate: 93.7%
+</code></pre></div></p>
+<h3 id="cap-arc-at-8-gib-current-16-gb-system">Cap ARC at 8 GiB (current 16 GB system)<a class="headerlink" href="#cap-arc-at-8-gib-current-16-gb-system" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Create or update the ZFS module config</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;options zfs zfs_arc_max=8589934592&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/modprobe.d/zfs.conf
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># Apply immediately — no reboot needed</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="nb">echo</span><span class="w"> </span><span class="m">8589934592</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/sys/module/zfs/parameters/zfs_arc_max
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="c1"># Verify</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>cat<span class="w"> </span>/sys/module/zfs/parameters/zfs_arc_max
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="c1"># Expected: 8589934592</span>
+</code></pre></div>
+<p>The <code>/etc/modprobe.d/zfs.conf</code> entry ensures the cap survives reboots. The <code>/sys/module/...</code> write applies it live to the running kernel.</p>
+<h3 id="after-the-32-gb-ram-upgrade">After the 32 GB RAM upgrade<a class="headerlink" href="#after-the-32-gb-ram-upgrade" title="Permanent link">&para;</a></h3>
+<p>With 32 GB installed, raise the cap to 16 GiB — gives glacier a large cache while still leaving 14+ GB for Jellyfin, Immich, *arr, and future Ollama workloads:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># 16 GiB cap for 32 GB system (16 × 1024³ = 17179869184)</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;options zfs zfs_arc_max=17179869184&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/modprobe.d/zfs.conf
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="nb">echo</span><span class="w"> </span><span class="m">17179869184</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/sys/module/zfs/parameters/zfs_arc_max
+</code></pre></div>
+<h3 id="arc-sizing-reference">ARC sizing reference<a class="headerlink" href="#arc-sizing-reference" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>RAM</th>
+<th>Recommended c_max</th>
+<th>Reasoning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16 GB (current)</td>
+<td><strong>8 GiB</strong></td>
+<td>Half of RAM; leaves ~7 GB free for apps</td>
+</tr>
+<tr>
+<td>32 GB (planned)</td>
+<td><strong>16 GiB</strong></td>
+<td>Half of RAM; comfortable for Phase 4a Ollama inference</td>
+</tr>
+<tr>
+<td>32 GB + GPU workloads</td>
+<td><strong>12 GiB</strong></td>
+<td>Tighter if Ollama model loading competes for RAM</td>
+</tr>
+</tbody>
+</table>
+<h3 id="benchmarking-arc-performance">Benchmarking ARC performance<a class="headerlink" href="#benchmarking-arc-performance" title="Permanent link">&para;</a></h3>
+<p>The standard fio suite uses <code>--direct=1</code> to measure raw NVMe speed — those are cold-cache floor numbers. To measure the real-world uplift from ZFS ARC, use the dedicated ARC benchmark script:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>sudo<span class="w"> </span>-i
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nb">cd</span><span class="w"> </span>/DATA/Documents/nvme-benchmark
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>chmod<span class="w"> </span>+x<span class="w"> </span>benchmark-arc.sh
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>./benchmark-arc.sh
+</code></pre></div>
+<p>The script runs five steps automatically:</p>
+<ol>
+<li><strong>Capture ARC state before</strong> — baseline hits, misses, cache size</li>
+<li><strong>Warm-up pass</strong> — 8 GiB sequential read without <code>--direct=1</code> to populate ARC with the test file</li>
+<li><strong>Warm ARC benchmark</strong> — random 4K read without <code>--direct=1</code>; requests are served from RAM</li>
+<li><strong>Capture ARC state after</strong> — calculates session hit rate delta</li>
+<li><strong>Cold reference</strong> — same random 4K test with <code>--direct=1</code> to bypass ARC, for direct comparison</li>
+</ol>
+<p><code>zpool iostat glacier</code> runs in the background during step 3 — low disk read MB/s there confirms ARC was serving the requests, not the NVMe drives.</p>
+<p>Results are saved to <code>/media/glacier/benchmark-results-arc.txt</code>. Expected outcome: warm ARC IOPS will be a multiple of the cold <code>--direct=1</code> baseline.</p>
+<blockquote>
+<p>The script source is at <a href="../../resources/scripts/benchmark-arc.sh"><code>docs/resources/scripts/benchmark-arc.sh</code></a>.</p>
+</blockquote>
+<hr />
+<h2 id="recommended-workload-split">Recommended Workload Split<a class="headerlink" href="#recommended-workload-split" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Full phase-by-phase breakdown (Phase 1 through Phase 6) is in <a href="../../benchmarks/PHASE1-BENCHMARK/#recommended-workload-split">PHASE1-BENCHMARK.md — Recommended Workload Split</a>.</p>
+</blockquote>
+<h3 id="phase-1-summary">Phase 1 Summary<a class="headerlink" href="#phase-1-summary" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Workload</th>
+<th>Storage</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ZimaOS system</td>
+<td><code>nvme5n1</code> (Kingston)</td>
+<td>Boot stability, OS independence</td>
+</tr>
+<tr>
+<td>Docker AppData (all containers)</td>
+<td>Arctic-Storage</td>
+<td>205K IOPS, 0.6ms — random I/O dominant</td>
+</tr>
+<tr>
+<td>Immich photo library files</td>
+<td>Arctic-Storage</td>
+<td><code>/DATA/Gallery/immich</code> — standard ZimaOS path on P510 NVMe</td>
+</tr>
+<tr>
+<td>Immich PostgreSQL database</td>
+<td>Arctic-Storage</td>
+<td>High random IOPS; ZFS ARC partially compensates but sub-ms beats 8.7ms</td>
+</tr>
+<tr>
+<td>Immich ML model cache</td>
+<td>Arctic-Storage</td>
+<td>Low latency random reads for inference</td>
+</tr>
+<tr>
+<td>VM disk images</td>
+<td>glacier</td>
+<td>Large sequential I/O, RAIDZ1 redundancy</td>
+</tr>
+<tr>
+<td>Documents</td>
+<td>glacier</td>
+<td>ZFS checksums + snapshots for integrity</td>
+</tr>
+<tr>
+<td>Cold media (arriving)</td>
+<td><code>ironwolf</code></td>
+<td>Capacity and cost-per-TB; sequential access only</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="immich-migration">Immich Migration ✅<a class="headerlink" href="#immich-migration" title="Permanent link">&para;</a></h2>
+<p>Immich has been fully migrated from the DIY ZimaOS instance to ZimaCube 2. Full migration details and troubleshooting notes are in <a href="../02.5-immich/">Phase 2.5 — Immich</a>.</p>
+<h3 id="migration-status">Migration Status<a class="headerlink" href="#migration-status" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Source:</strong> DIY ZimaOS instance (LAN)</li>
+<li><strong>Destination:</strong> ZimaCube 2 (LAN)</li>
+<li><strong>Volume:</strong> 14,505 photos + 925 videos, 134 GiB — <strong>zero data loss</strong></li>
+<li><strong>Method:</strong> ZimaOS Files app LAN Storage copy of <code>/DATA/AppData/immich</code> + <code>/DATA/Gallery/immich</code></li>
+<li><strong>Status:</strong> ✅ Complete — all albums, faces, people, memories, and metadata intact</li>
+</ul>
+<h3 id="immich-architecture-on-zimacube-2">Immich Architecture on ZimaCube 2<a class="headerlink" href="#immich-architecture-on-zimacube-2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Container</th>
+<th>Version</th>
+<th>Data Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>immich-server</td>
+<td>v2.7.2</td>
+<td><code>/DATA/Gallery/immich</code></td>
+</tr>
+<tr>
+<td>immich-postgres</td>
+<td>14-vectorchord0.4.3</td>
+<td><code>/DATA/AppData/immich/pgdata</code></td>
+</tr>
+<tr>
+<td>immich-machine-learning</td>
+<td>v2.7.2</td>
+<td><code>/DATA/AppData/immich/model-cache</code></td>
+</tr>
+<tr>
+<td>immich-redis (valkey)</td>
+<td>8</td>
+<td>In-memory only</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Verified:</strong> Database confirmed healthy via <code>ANALYZE</code> + <code>SELECT COUNT(*) FROM asset;</code> → 15,471 assets (14,505 photos + 925 videos + 41 motion photo components). <code>person</code>: 462, <code>album</code>: 7, <code>album_asset</code>: 1,652.</p>
+</blockquote>
+<hr />
+<h2 id="zimaos-observations">ZimaOS Observations<a class="headerlink" href="#zimaos-observations" title="Permanent link">&para;</a></h2>
+<p>ZimaOS is <strong>Buildroot-based</strong> with an immutable read-only OS. Key implications for homelab work:</p>
+<table>
+<thead>
+<tr>
+<th>Fact</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No apt/yum/package manager</td>
+<td>All extra software runs as Docker containers or is natively available</td>
+</tr>
+<tr>
+<td><code>fio</code>, <code>zpool</code>, <code>zfs</code>, <code>nvme</code>, <code>iostat</code> available natively</td>
+<td>Benchmarking and ZFS management work out of the box</td>
+</tr>
+<tr>
+<td>ZFS pools created via CLI are invisible to the UI</td>
+<td>Use symlinks in <code>/DATA</code> to expose datasets in the Files app</td>
+</tr>
+<tr>
+<td><code>thunderbolt.host_reset=false</code> in kernel boot</td>
+<td>TB devices don't re-enumerate on plug-in — affects all TB connections</td>
+</tr>
+<tr>
+<td>RAUC A/B OTA updates</td>
+<td>Kernel updates are safe, but verify ZFS DKMS survives each update</td>
+</tr>
+<tr>
+<td>AppData migration tool in Settings → Storage → Apps</td>
+<td>Moves AppData/Docker images to any ZimaOS-recognised drive — symlinks created automatically</td>
+</tr>
+<tr>
+<td>RAM widget shows 78% "used" with 16 GB</td>
+<td>ZimaOS counts ZFS ARC cache as used RAM — misleading. Use btop or arcstats for the real picture. Available RAM was 11.3 GiB with 9.32 GiB absorbed by ARC</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="honest-friction-log">Honest Friction Log<a class="headerlink" href="#honest-friction-log" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>TB4 failure</strong> — biggest surprise. ZimaOS TB4 kernel config + ASMedia ASM2462PDX incompatibility = hours of troubleshooting. OCuLink was the right answer all along; skip straight to it on this hardware combination.</li>
+<li><strong>ZFS invisible to ZimaOS UI</strong> — expected, but still a rough edge. The symlink workaround is functional but not elegant. Open feature request on ZimaOS GitHub.</li>
+<li><strong>Immich database empty after file migration</strong> — moving photo files without moving the database gives you photos but no albums, faces, or metadata. The fix: copy the entire <code>/DATA/AppData/immich</code> folder (including <code>pgdata</code>) alongside the photo library. Stop Immich on the source first. See <a href="../02.5-immich/">Phase 2.5</a> for the full method.</li>
+<li><strong>ZimaOS package manager missing</strong> — <code>apt install fio</code> doesn't work. Discovering fio was already natively available saved the day; anything else requires Docker.</li>
+<li><strong><code>hostname -I</code> not supported</strong> — Buildroot's hostname binary doesn't support the <code>-I</code> flag. Use <code>ip addr</code> instead in scripts.</li>
+<li><strong>ZimaOS RAM widget shows 78% used</strong> — alarming but misleading. ZimaOS counts ZFS ARC cache as "used" RAM. btop breaks it down correctly: 3.97 GiB actual app usage, 11.4 GiB ZFS ARC, 11.3 GiB available. ZFS will evict ARC immediately if applications need the memory. The fix is capping <code>c_max</code> to prevent ARC from ever growing past a sensible ceiling — see <a href="#zfs-arc-tuning">ZFS ARC Tuning</a>.</li>
+</ul>
+<hr />
+<h2 id="whats-coming-next">What's Coming Next<a class="headerlink" href="#whats-coming-next" title="Permanent link">&para;</a></h2>
+<h3 id="planned-hardware-upgrades">Planned Hardware Upgrades<a class="headerlink" href="#planned-hardware-upgrades" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Upgrade</th>
+<th>Detail</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAM → 32GB DDR5</td>
+<td>2× Corsair Vengeance 16GB DDR5 4800MHz CL40</td>
+<td>Doubles ZFS ARC headroom; better VM and AI performance</td>
+</tr>
+<tr>
+<td>P510 → onboard M.2</td>
+<td>Move Crucial P510 from 7th Bay to onboard slot</td>
+<td>Unlock native PCIe Gen5 speeds — re-benchmark planned</td>
+</tr>
+<tr>
+<td>4× Seagate IronWolf 4TB</td>
+<td>SATA bays — <code>ironwolf</code> pool (~12TB btrfs RAID5)</td>
+<td>Bulk media archive tier; unblocks Phase 2 · 1 received, 3 in transit</td>
+</tr>
+<tr>
+<td>eGPU dock (TBD)</td>
+<td>Minisforum DEG2 (TB5+OCuLink) or TB4 eGPU enclosure</td>
+<td>Phase 4b GPU inference — both TB4 ports now free</td>
+</tr>
+<tr>
+<td><strong>10GbE NIC — PCIe Slot 2</strong></td>
+<td>Intel X550-T1 (RJ45) or Mellanox MCX311A (SFP+)</td>
+<td>4× network uplift: 2.5GbE (~312 MB/s) → 10GbE (~1,100 MB/s) — when ZimaCube 2 is under heavier workload demand</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>Future-proofing note — PCIe Slot 2:</strong> The ZimaCube 2 Standard's PCIe 3.0 x2 slot (physical x8) has enough bandwidth (~2 GB/s) to run a 10GbE NIC at full line rate. Two viable card options:</p>
+<table>
+<thead>
+<tr>
+<th>Card</th>
+<th>Interface</th>
+<th>Cable to switch</th>
+<th>Cost (used)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Intel X550-T1</td>
+<td>10GBASE-T RJ45</td>
+<td>Cat6A → Port 9 RJ45 (10G COMBO)</td>
+<td>~$70–100</td>
+</tr>
+<tr>
+<td>Mellanox ConnectX-3 MCX311A</td>
+<td>SFP+</td>
+<td>DAC cable → Port 9 SFP+ (10G COMBO)</td>
+<td>~$25–35</td>
+</tr>
+</tbody>
+</table>
+<p>Both connect directly to the <strong>Ubiquiti UniFi Flex 2.5G PoE</strong> Port 9 (<strong>10G COMBO</strong> — has both RJ45 and SFP+ slots) with no adapters needed. The existing <code>i226</code> 2.5GbE port stays connected to one of the 8× access ports as a management/fallback link. PCIe Slot 2 remains empty until the NAS workload justifies the upgrade.</p>
+</blockquote>
+<h3 id="planned-experiments">Planned Experiments<a class="headerlink" href="#planned-experiments" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p><strong>Phase 1.5:</strong> Move Crucial P510 to onboard M.2 slot → re-run <code>benchmark-arctic.sh</code> → publish comparison. Expected: sequential speeds climb from ~800 MB/s to 9,000+ MB/s; random IOPS similar.</p>
+</li>
+<li>
+<p><strong>TB4 direct networking:</strong> Connect a Mac/PC directly to ZimaCube 2 via TB4 cable → configure IP over Thunderbolt on both ends → benchmark file transfer speeds. Goal: determine whether TB4 networking can unlock the full glacier sequential read (2,591 MB/s) and Arctic-Storage random IOPS for directly-connected clients, bypassing the 2.5GbE ceiling (~312 MB/s). Will also verify <code>boltctl</code> authorization flow on ZimaOS and which TB4 port is functional.</p>
+</li>
+</ul>
+<h3 id="software-phases">Software Phases<a class="headerlink" href="#software-phases" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Phase 2</strong></td>
+<td>Jellyfin media server — Intel QuickSync transcoding, <code>ironwolf</code> media library (on hold — SATA drives arriving)</td>
+</tr>
+<tr>
+<td><strong>Phase 2.5</strong></td>
+<td>Immich migration — 14,505 photos + 925 videos (134 GiB) from DIY ZimaOS to ZimaCube 2 via Arctic-Storage (<code>/DATA/Gallery/immich</code>) — ✅ complete</td>
+</tr>
+<tr>
+<td><strong>Phase 3</strong></td>
+<td>Personal cloud, Nextcloud, 3-2-1 backup strategy</td>
+</tr>
+<tr>
+<td><strong>Phase 4a</strong></td>
+<td>Ollama CPU-only AI baseline — i3-1215U inference benchmarks</td>
+</tr>
+<tr>
+<td><strong>Phase 4b</strong></td>
+<td>GPU-accelerated inference — RTX 4090 via TB4 eGPU or Minisforum DEG2</td>
+</tr>
+<tr>
+<td><strong>Phase 5</strong></td>
+<td>Local AI semantic search across glacier storage (Khoj + Qdrant)</td>
+</tr>
+<tr>
+<td><strong>Phase 6</strong></td>
+<td>Steam Machine — bare metal Linux gaming</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="benchmark-scripts">Benchmark Scripts<a class="headerlink" href="#benchmark-scripts" title="Permanent link">&para;</a></h2>
+<p>Available in <a href="../resources/scripts/"><code>docs/resources/scripts/</code></a>:</p>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../resources/scripts/benchmark-glacier.sh"><code>benchmark-glacier.sh</code></a></td>
+<td>Full fio suite for glacier ZFS RAIDZ1 — 4 tests + pool stats</td>
+</tr>
+<tr>
+<td><a href="../../resources/scripts/benchmark-arctic.sh"><code>benchmark-arctic.sh</code></a></td>
+<td>Full fio suite for Arctic-Storage btrfs — 4 tests + btrfs stats + NVMe SMART</td>
+</tr>
+<tr>
+<td><a href="../../resources/scripts/benchmark-compare.sh"><code>benchmark-compare.sh</code></a></td>
+<td>Combined benchmark with side-by-side summary output</td>
+</tr>
+<tr>
+<td><a href="../../resources/scripts/benchmark-arc.sh"><code>benchmark-arc.sh</code></a></td>
+<td>ZFS ARC warm cache benchmark — warm vs cold comparison + ARC hit rate delta</td>
+</tr>
+</tbody>
+</table>
+<p>Upload via <strong>WinSCP</strong> to <code>/DATA/Documents/nvme-benchmark/</code> on ZimaCube, then from the web terminal:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>sudo<span class="w"> </span>-i
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nb">cd</span><span class="w"> </span>/DATA/Documents/nvme-benchmark
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>chmod<span class="w"> </span>+x<span class="w"> </span>benchmark-glacier.sh<span class="w"> </span>benchmark-arctic.sh<span class="w"> </span>benchmark-compare.sh<span class="w"> </span>benchmark-arc.sh
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>./benchmark-glacier.sh
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>./benchmark-arctic.sh
+</code></pre></div>
+<blockquote>
+<p><strong>Known issue:</strong> <code>hostname -I</code> is unsupported on ZimaOS Buildroot. The current scripts use <code>ip addr</code> instead. If you have an older copy, replace <code>hostname -I</code> with:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>ip<span class="w"> </span>addr<span class="w"> </span>show<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;inet &#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s1">&#39;127.0.0.1&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d/<span class="w"> </span>-f1<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1
+</code></pre></div></p>
+</blockquote>
+<hr />
+<h2 id="system-information">System Information<a class="headerlink" href="#system-information" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>Model:     ZimaCube 2 (Standard)
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>OS:        ZimaOS (Buildroot-based, immutable)
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>Kernel:    Linux 6.17.13-3-pve
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>ZFS:       OpenZFS 2.3.2
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>fio:       3.38
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>btop:      ZimaOS App Marketplace
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>Date:      Saturday, May 23, 2026
+</code></pre></div>
+<hr />
+<h2 id="resources">Resources<a class="headerlink" href="#resources" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://www.zimaspace.com/docs/zimaos/zfs-setup">ZimaOS Documentation</a></li>
+<li><a href="https://community.zimaspace.com">IceWhale Community Forum</a></li>
+<li><a href="https://github.com/IceWhaleTech/ZimaOS/issues">ZimaOS GitHub — RAIDZ Feature Request</a></li>
+<li><a href="https://openzfs.github.io/openzfs-docs/">OpenZFS Documentation</a></li>
+<li><a href="https://www.aoostar.com">Aoostar TB4S-OC</a></li>
+</ul>
+<hr />
+<p><em>ZimaCube 2 Pioneer Program build documentation by ted-knight</em><br />
+<em>Build weekend: May 21–23, 2026</em><br />
+<em>Feedback welcome — IceWhale Community Forum · Reddit r/ZimaCube · r/selfhosted · r/homelab</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

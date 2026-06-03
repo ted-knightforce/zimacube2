@@ -1,0 +1,1648 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documenting the full journey of building a tiered-storage, AI-capable self-hosting server on a ZimaCube 2 Standard — from unboxing to local LLMs, media streaming, and own-device privacy.">
+      
+      
+        <meta name="author" content="ted-knight">
+      
+      
+        <link rel="canonical" href="https://ted-knightforce.github.io/zimacube2/phases/02.5-immich/">
+      
+      
+        <link rel="prev" href="../02-media/">
+      
+      
+        <link rel="next" href="../03-data/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Phase 2.5: Immich ZimaOS-to-ZimaCube 2 Migration - ZimaCube 2 Build</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="cyan" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#phase-25-immich-zimaos-to-zimacube-2-migration" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="ZimaCube 2 Build" class="md-header__button md-logo" aria-label="ZimaCube 2 Build" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ZimaCube 2 Build
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Phase 2.5: Immich ZimaOS-to-ZimaCube 2 Migration
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ted-knightforce/zimacube2" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ted-knightforce/zimacube2
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../01-foundation/" class="md-tabs__link">
+          
+  
+  
+  Build Phases
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../benchmarks/PHASE1-BENCHMARK/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Phase 1 Storage Benchmark
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="ZimaCube 2 Build" class="md-nav__button md-logo" aria-label="ZimaCube 2 Build" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ZimaCube 2 Build
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ted-knightforce/zimacube2" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ted-knightforce/zimacube2
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build Phases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Build Phases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-foundation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 1: Foundation, Storage & Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-media/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 2: Jellyfin, *arr, IronWolf Pool
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 2.5: Immich ZimaOS-to-ZimaCube 2 Migration
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 2.5: Immich ZimaOS-to-ZimaCube 2 Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#goal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Goal
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-immich-stores-and-what-must-move" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📦 What Immich Stores (and What Must Move)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-method-zimaos-files-app-lan-copy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Migration Method — ZimaOS Files App (LAN Copy)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="✅ Migration Method — ZimaOS Files App (LAN Copy)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-add-source-machine-as-lan-storage-on-zimacube-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1 — Add source machine as LAN Storage on ZimaCube 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-stop-immich-on-the-source-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2 — Stop Immich on the source machine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-copy-the-appdata-and-gallery-folders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3 — Copy the AppData and Gallery folders
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-install-immich-on-zimacube-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4 — Install Immich on ZimaCube 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-log-in-with-existing-credentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5 — Log in with existing credentials
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-check-job-queues-optional-but-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6 — Check Job Queues (optional but recommended)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#immich-container-configuration-zimacube-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔧 Immich Container Configuration (ZimaCube 2)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting-known-pitfalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ Troubleshooting — Known Pitfalls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="⚠️ Troubleshooting — Known Pitfalls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compose-app-fails-to-start-wrong-image-tag-on-app-containers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compose app fails to start — wrong image tag on app containers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#photos-load-but-albumsfacespeople-are-missing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Photos load but albums/faces/people are missing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#immich-starts-but-database-is-empty-no-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Immich starts but database is empty (no assets)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-mode-not-set-to-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network mode not set to host
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verifying-database-health" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🗄️ Verifying Database Health
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#option-a-vs-option-b-when-to-use-each" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Option A vs Option B — When to Use Each
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📝 Option A vs Option B — When to Use Each">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-a-pgdata-directory-copy-used-in-this-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option A — pgdata directory copy ← used in this migration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-official-pg_dump-restore-not-personally-tested" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option B — Official pg_dump / restore ← not personally tested
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Migration Stats
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 3: Backup, Nextcloud & 3-2-1 Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04a-cpu-ai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 4a: CPU-Only Local AI Baseline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04b-gpu-ai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 4b: RTX 4090 + eGPU Dock
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../benchmarks/PHASE1-BENCHMARK/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phase 1 Storage Benchmark
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#goal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Goal
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-immich-stores-and-what-must-move" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📦 What Immich Stores (and What Must Move)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-method-zimaos-files-app-lan-copy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Migration Method — ZimaOS Files App (LAN Copy)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="✅ Migration Method — ZimaOS Files App (LAN Copy)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-add-source-machine-as-lan-storage-on-zimacube-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1 — Add source machine as LAN Storage on ZimaCube 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-stop-immich-on-the-source-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2 — Stop Immich on the source machine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-copy-the-appdata-and-gallery-folders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3 — Copy the AppData and Gallery folders
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-install-immich-on-zimacube-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4 — Install Immich on ZimaCube 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-log-in-with-existing-credentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5 — Log in with existing credentials
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-check-job-queues-optional-but-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6 — Check Job Queues (optional but recommended)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#immich-container-configuration-zimacube-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔧 Immich Container Configuration (ZimaCube 2)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting-known-pitfalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ Troubleshooting — Known Pitfalls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="⚠️ Troubleshooting — Known Pitfalls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compose-app-fails-to-start-wrong-image-tag-on-app-containers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compose app fails to start — wrong image tag on app containers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#photos-load-but-albumsfacespeople-are-missing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Photos load but albums/faces/people are missing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#immich-starts-but-database-is-empty-no-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Immich starts but database is empty (no assets)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-mode-not-set-to-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network mode not set to host
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verifying-database-health" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🗄️ Verifying Database Health
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#option-a-vs-option-b-when-to-use-each" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Option A vs Option B — When to Use Each
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📝 Option A vs Option B — When to Use Each">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-a-pgdata-directory-copy-used-in-this-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option A — pgdata directory copy ← used in this migration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-official-pg_dump-restore-not-personally-tested" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option B — Official pg_dump / restore ← not personally tested
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Migration Stats
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="phase-25-immich-zimaos-to-zimacube-2-migration">Phase 2.5 — Immich: ZimaOS-to-ZimaCube 2 Migration<a class="headerlink" href="#phase-25-immich-zimaos-to-zimacube-2-migration" title="Permanent link">&para;</a></h1>
+<p><strong>Status:</strong> ✅ Complete<br />
+<strong>Started:</strong> May 24, 2026<br />
+<strong>Updated:</strong> May 24, 2026  </p>
+<hr />
+<h2 id="goal">🎯 Goal<a class="headerlink" href="#goal" title="Permanent link">&para;</a></h2>
+<p>Migrate an existing Immich photo library (14,505 photos + 925 videos, 134 GiB) from a DIY ZimaOS server to the new ZimaCube 2, preserving all albums, face tags, memories, shared links, and metadata — with zero data loss.</p>
+<hr />
+<h2 id="what-immich-stores-and-what-must-move">📦 What Immich Stores (and What Must Move)<a class="headerlink" href="#what-immich-stores-and-what-must-move" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Location on source</th>
+<th>Contains</th>
+<th>Must migrate?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pgdata</code></td>
+<td><code>/DATA/AppData/immich/pgdata</code></td>
+<td>Full PostgreSQL database — albums, faces, people, metadata</td>
+<td>✅ Yes — critical</td>
+</tr>
+<tr>
+<td><code>model-cache</code></td>
+<td><code>/DATA/AppData/immich/model-cache</code></td>
+<td>Downloaded CLIP/facial recognition models</td>
+<td>✅ Yes — saves re-download time</td>
+</tr>
+<tr>
+<td><code>redis</code></td>
+<td><code>/DATA/AppData/immich/redis</code></td>
+<td>Session cache (in-memory, technically skippable)</td>
+<td>✅ Yes — included in folder copy</td>
+</tr>
+<tr>
+<td>Photo library</td>
+<td><code>/DATA/Gallery/immich</code></td>
+<td>14,505 photos + 925 videos, thumbnails, encoded video (134 GiB)</td>
+<td>✅ Yes — the actual media</td>
+</tr>
+<tr>
+<td>Auto-backups</td>
+<td><code>/DATA/Gallery/immich/backups</code></td>
+<td>Daily database snapshots — last 14 kept automatically</td>
+<td>💡 Already there — see below</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>Critical:</strong> Moving only the photo files — without the <code>pgdata</code> directory — gives you all your photos but <strong>none of your albums, face tags, people, memories, or shared links</strong>. Immich treats the PostgreSQL database as the source of truth. Both must move together.</p>
+<p>💡 <strong>Immich automatic backups:</strong> Immich creates a database backup every day at <strong>2:00 AM</strong> and stores the last 14 in <code>/DATA/Gallery/immich/backups/</code> on your source machine. These are database-only snapshots (no photos). You may already have up to 14 days of backups sitting there right now — check before running a manual dump. A backup can also be triggered on demand via <strong>Admin → Job Queues → Create Database Backup</strong>.</p>
+</blockquote>
+<hr />
+<h2 id="migration-method-zimaos-files-app-lan-copy">✅ Migration Method — ZimaOS Files App (LAN Copy)<a class="headerlink" href="#migration-method-zimaos-files-app-lan-copy" title="Permanent link">&para;</a></h2>
+<p>This is the simplest and most reliable method when both machines are on the same LAN and running the <strong>same version of Immich from the same App Store source</strong>.</p>
+<h3 id="step-1-add-source-machine-as-lan-storage-on-zimacube-2">Step 1 — Add source machine as LAN Storage on ZimaCube 2<a class="headerlink" href="#step-1-add-source-machine-as-lan-storage-on-zimacube-2" title="Permanent link">&para;</a></h3>
+<p>On ZimaCube 2, open the <strong>Files</strong> app:
+- Click <strong>+ Add Storage</strong>
+- Select <strong>LAN Storage</strong>
+- Enter your source ZimaOS machine's local IP address
+- Authenticate and mount it</p>
+<p>You can now browse the source machine's files directly from ZimaCube 2's Files app.</p>
+<h3 id="step-2-stop-immich-on-the-source-machine">Step 2 — Stop Immich on the source machine<a class="headerlink" href="#step-2-stop-immich-on-the-source-machine" title="Permanent link">&para;</a></h3>
+<p><strong>Stop Immich on the source before copying.</strong> This ensures the PostgreSQL database is in a consistent, flushed state — no writes happening mid-copy.</p>
+<p>In ZimaOS App Store on the source → Immich → <strong>Stop</strong>.</p>
+<h3 id="step-3-copy-the-appdata-and-gallery-folders">Step 3 — Copy the AppData and Gallery folders<a class="headerlink" href="#step-3-copy-the-appdata-and-gallery-folders" title="Permanent link">&para;</a></h3>
+<p>From the Files app on ZimaCube 2, navigate to the source machine and select:</p>
+<table>
+<thead>
+<tr>
+<th>Source path</th>
+<th>Destination path on ZimaCube 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/DATA/AppData/immich</code></td>
+<td><code>/DATA/AppData/immich</code></td>
+</tr>
+<tr>
+<td><code>/DATA/Gallery/immich</code></td>
+<td><code>/DATA/Gallery/immich</code></td>
+</tr>
+</tbody>
+</table>
+<p>Select both locations, click <strong>Migrate</strong>, choose:
+- <strong>Overwrite</strong> at destination
+- <strong>Retain originals</strong> on source (do not delete source — keep it as backup until verified)</p>
+<p>Wait for the transfer to complete. Over 2.5GbE, ~134 GiB takes approximately 10–15 minutes.</p>
+<h3 id="step-4-install-immich-on-zimacube-2">Step 4 — Install Immich on ZimaCube 2<a class="headerlink" href="#step-4-install-immich-on-zimacube-2" title="Permanent link">&para;</a></h3>
+<p>Open <strong>ZimaOS App Store</strong> and search for Immich.</p>
+<blockquote>
+<p>⚠️ <strong>Choose the correct version.</strong> The App Store may show multiple Immich variants:
+- ✅ <strong>Immich</strong> (official ZimaOS/CasaOS app) — use this
+- ❌ <strong>BigBearCasaOS Immich</strong> — different docker-compose variables (different postgres credentials, db name, network config) — <strong>incompatible with a direct pgdata copy as my original uses Immich (the non-BigBearCasaOS version)</strong></p>
+<p>The App Store version must match your source exactly. The docker-compose variables (postgres username, password, database name, network mode) are baked into the app definition — any mismatch will prevent Immich from connecting to the restored database.</p>
+</blockquote>
+<p>Click <strong>Install</strong> and let it complete. <strong>Start</strong> the app immediately after install — Immich will detect the existing <code>pgdata</code> directory and connect to it rather than initialising a new empty database.</p>
+<h3 id="step-5-log-in-with-existing-credentials">Step 5 — Log in with existing credentials<a class="headerlink" href="#step-5-log-in-with-existing-credentials" title="Permanent link">&para;</a></h3>
+<p>Open Immich at <code>http://192.168.x.x:2283</code>.</p>
+<p>Log in with your <strong>existing username and password</strong> from the source instance. Your full library, albums, faces, and settings will be exactly as they were.</p>
+<h3 id="step-6-check-job-queues-optional-but-recommended">Step 6 — Check Job Queues (optional but recommended)<a class="headerlink" href="#step-6-check-job-queues-optional-but-recommended" title="Permanent link">&para;</a></h3>
+<p>Navigate to: <strong>Profile icon (top right) → Administration → Job Queues</strong></p>
+<p>The Job Queues page lists all background processing jobs. After a pgdata migration, the database already contains all previously processed results — thumbnails, face vectors, CLIP embeddings, EXIF data — so most queues will show <strong>Active: 0 / Waiting: 0</strong>.</p>
+<p>If any queue shows a non-zero count under <strong>Missing</strong>, click its <strong>Missing</strong> button to queue only the unprocessed assets:</p>
+<table>
+<thead>
+<tr>
+<th>Job</th>
+<th>What it does</th>
+<th>When to run Missing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Generate Thumbnails</td>
+<td>Large, small, blurred thumbs for each asset and person</td>
+<td>If any photos show blank previews</td>
+</tr>
+<tr>
+<td>Extract Metadata</td>
+<td>GPS, EXIF, resolution</td>
+<td>If any assets are missing location or date</td>
+</tr>
+<tr>
+<td>Smart Search</td>
+<td>CLIP ML embeddings for semantic search</td>
+<td>If smart search returns no results</td>
+</tr>
+<tr>
+<td>Face Detection</td>
+<td>Detect faces in each asset</td>
+<td>If face data appears incomplete</td>
+</tr>
+<tr>
+<td>Facial Recognition</td>
+<td>Group detected faces into people</td>
+<td>Run after Face Detection if needed</td>
+</tr>
+<tr>
+<td>Duplicate Detection</td>
+<td>Find similar images</td>
+<td>Optional — relies on Smart Search</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>If all queues show 0 — that's correct.</strong> It means your pgdata copy carried over all previously completed processing. You don't need to reprocess 15,000+ assets from scratch.</p>
+</blockquote>
+<hr />
+<h2 id="immich-container-configuration-zimacube-2">🔧 Immich Container Configuration (ZimaCube 2)<a class="headerlink" href="#immich-container-configuration-zimacube-2" title="Permanent link">&para;</a></h2>
+<p>As deployed from ZimaOS App Store on ZimaCube 2:</p>
+<table>
+<thead>
+<tr>
+<th>Container</th>
+<th>Image</th>
+<th>Tag</th>
+<th>Network</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>immich-server</td>
+<td><code>ghcr.io/immich-app/immich-server</code></td>
+<td><code>v2.7.2</code></td>
+<td>host</td>
+</tr>
+<tr>
+<td>immich-machine-learning</td>
+<td><code>ghcr.io/immich-app/immich-machine-learning</code></td>
+<td><code>v2.7.2</code></td>
+<td>host</td>
+</tr>
+<tr>
+<td>immich-postgres</td>
+<td><code>ghcr.io/immich-app/postgres</code></td>
+<td><code>14-vectorchord0.4.3</code></td>
+<td>host</td>
+</tr>
+<tr>
+<td>immich-redis (valkey)</td>
+<td><code>valkey/valkey</code></td>
+<td><code>8</code></td>
+<td>host</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Container</th>
+<th>ZimaOS path</th>
+<th>Container path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>immich-server</td>
+<td><code>/DATA/Gallery/immich</code></td>
+<td><code>/usr/src/app/upload</code></td>
+</tr>
+<tr>
+<td>immich-machine-learning</td>
+<td><code>/DATA/AppData/immich/model-cache</code></td>
+<td><code>/cache</code></td>
+</tr>
+<tr>
+<td>immich-postgres</td>
+<td><code>/DATA/AppData/immich/pgdata</code></td>
+<td><code>/var/lib/postgresql/data</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="troubleshooting-known-pitfalls">⚠️ Troubleshooting — Known Pitfalls<a class="headerlink" href="#troubleshooting-known-pitfalls" title="Permanent link">&para;</a></h2>
+<h3 id="compose-app-fails-to-start-wrong-image-tag-on-app-containers">Compose app fails to start — wrong image tag on app containers<a class="headerlink" href="#compose-app-fails-to-start-wrong-image-tag-on-app-containers" title="Permanent link">&para;</a></h3>
+<p><strong>Symptom:</strong> <code>immich-server</code> or <code>immich-machine-learning</code> containers show tag <code>14-vectorchord0.4.3</code> instead of a valid Immich version. Compose fails immediately.</p>
+<p><strong>Cause:</strong> The PostgreSQL image tag (<code>14-vectorchord0.4.3</code>) was incorrectly applied to the application containers. <code>ghcr.io/immich-app/immich-server:14-vectorchord0.4.3</code> does not exist — Docker cannot pull it and the stack refuses to start.</p>
+<p><strong>Fix:</strong> In ZimaOS App Store → Immich → Settings:
+- <code>immich-server</code> tab → Tag: change to <code>v2.7.2</code>
+- <code>immich-machine-learning</code> tab → Tag: change to <code>v2.7.2</code>
+- <code>database</code> tab → Tag: leave as <code>14-vectorchord0.4.3</code> ← correct for postgres</p>
+<p>Save → Restart.</p>
+<hr />
+<h3 id="photos-load-but-albumsfacespeople-are-missing">Photos load but albums/faces/people are missing<a class="headerlink" href="#photos-load-but-albumsfacespeople-are-missing" title="Permanent link">&para;</a></h3>
+<p><strong>Cause:</strong> Only the photo files (<code>/DATA/Gallery/immich</code>) were migrated — the database (<code>/DATA/AppData/immich/pgdata</code>) was not.</p>
+<p><strong>Fix:</strong> Stop Immich on source. Copy <code>/DATA/AppData/immich</code> to ZimaCube 2. Restart Immich.</p>
+<hr />
+<h3 id="immich-starts-but-database-is-empty-no-assets">Immich starts but database is empty (no assets)<a class="headerlink" href="#immich-starts-but-database-is-empty-no-assets" title="Permanent link">&para;</a></h3>
+<p><strong>Symptom:</strong> Logging in shows an empty library. Confirmed via:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sudo<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>immich-postgres<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>postgres<span class="w"> </span>-d<span class="w"> </span>immich<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;SELECT COUNT(*) FROM asset;&quot;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># Returns 0 if database is empty or freshly initialised</span>
+</code></pre></div></p>
+<p><strong>Cause:</strong> Immich initialised a fresh empty database because the pgdata copy failed, landed in the wrong path, or the wrong App Store variant was installed (different postgres credentials = can't connect to the copied database).</p>
+<p><strong>Fix — Option A: Re-copy pgdata</strong> ← <em>this is the method used in this migration</em></p>
+<p>Verify <code>/DATA/AppData/immich/pgdata</code> exists and is populated on ZimaCube 2. Re-run the Files app Migrate from source if missing. Ensure Immich is stopped on source before re-copying.</p>
+<hr />
+<p><strong>Fix — Option B: Official Immich pg_dump / restore</strong> ← <em>not personally tested</em></p>
+<p>Refer directly to the official Immich documentation for the correct backup and restore procedure, including the exact commands, restore sequence, and the required <code>search_path</code> fix:</p>
+<p>👉 <strong><a href="https://docs.immich.app/administration/backup-and-restore/">Immich Backup and Restore — docs.immich.app</a></strong></p>
+<blockquote>
+<p>⚠️ <strong>ZimaOS container name difference:</strong> The official docs use <code>immich_postgres</code> (underscore). ZimaOS App Store names it <code>immich-postgres</code> (hyphen). Substitute accordingly in any commands from the official docs.</p>
+<p>💡 <strong>Check for existing auto-backups first:</strong> Before running a manual dump, check <code>/DATA/Gallery/immich/backups/</code> on your source machine — Immich may already have up to 14 daily backups ready to use.</p>
+</blockquote>
+<hr />
+<h3 id="network-mode-not-set-to-host">Network mode not set to host<a class="headerlink" href="#network-mode-not-set-to-host" title="Permanent link">&para;</a></h3>
+<p><strong>Symptom:</strong> Immich containers start but cannot communicate with each other. Server logs show database connection refused.</p>
+<p><strong>Cause:</strong> Default network mode in ZimaOS App Store may be blank/bridge instead of <code>host</code>.</p>
+<p><strong>Fix:</strong> In Immich Settings for each container tab, set <strong>Network</strong> to <code>host</code>. Save → Restart.</p>
+<hr />
+<h2 id="verifying-database-health">🗄️ Verifying Database Health<a class="headerlink" href="#verifying-database-health" title="Permanent link">&para;</a></h2>
+<p>Connect to the Immich postgres container:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sudo<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>immich-postgres<span class="w"> </span>psql<span class="w"> </span>-U<span class="w"> </span>postgres
+</code></pre></div>
+<blockquote>
+<p>⚠️ The username is <code>postgres</code> — not <code>postgre</code>. A common typo produces <code>role "postgre" does not exist</code> and drops you back to the shell.</p>
+</blockquote>
+<p>Then run:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">-- Switch to immich database</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="err">\</span><span class="k">c</span><span class="w"> </span><span class="n">immich</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1">-- Refresh statistics first — n_live_tup is stale after a pgdata copy</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1">-- and will show 0 for all tables until ANALYZE runs</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="k">ANALYZE</span><span class="p">;</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="c1">-- Row counts for all tables — the primary health check</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">relname</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">table</span><span class="p">,</span><span class="w"> </span><span class="n">n_live_tup</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">rows</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="k">FROM</span><span class="w"> </span><span class="n">pg_stat_user_tables</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">n_live_tup</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="c1">-- Verify total asset count (photos and videos are in the same table)</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">asset</span><span class="p">;</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="c1">-- Verify album count</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">album</span><span class="p">;</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="c1">-- Check the 5 most recently added assets</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="k">SELECT</span><span class="w"> </span><span class="ss">&quot;originalFileName&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;createdAt&quot;</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="k">FROM</span><span class="w"> </span><span class="n">asset</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="ss">&quot;createdAt&quot;</span><span class="w"> </span><span class="k">DESC</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="k">LIMIT</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="c1">-- Exit</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="err">\</span><span class="n">q</span>
+</code></pre></div>
+<blockquote>
+<p>⚠️ <strong>Every statement must end with a semicolon on the same line.</strong> If you press Enter without one, psql shows <code>immich-#</code> and waits for more input — any subsequent line is treated as a continuation of the same statement, not a new one. Type <code>;</code> and press Enter to execute, or <code>\q</code> to cancel and start over.</p>
+<p>💡 <strong>Table names are singular</strong> in the Immich schema: <code>asset</code>, <code>album</code>, <code>person</code> — not <code>assets</code>, <code>albums</code>, <code>persons</code>. Querying the plural form returns <code>relation does not exist</code>.</p>
+<p>💡 <strong><code>"createdAt"</code> is when the asset was added to Immich</strong>, not when the photo was taken. The 5 most recently added assets will typically be your last import batch, not your most recently shot photos.</p>
+</blockquote>
+<p><strong>Expected output after a successful migration:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>          table          |  rows
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>-------------------------+--------
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a> geodata_places          | 224210
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a> asset_file              |  31197
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a> asset_face              |  19536
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a> face_search             |  19536
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a> asset_exif              |  15471
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a> asset                   |  15471   ← 14,505 photos + 925 videos + ~41 motion photo components
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a> asset_job_status        |  15471
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a> smart_search            |  15427
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a> naturalearth_countries  |   4274
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a> album_asset             |   1652   ← photo↔album membership links
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a> person                  |    462   ← unique people identified
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a> migration_overrides     |     81
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a> kysely_migrations       |     68
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a> memory_asset            |     54
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a> memory_audit            |     32
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a> memory                  |     13   ← memories preserved
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a> system_metadata         |      8
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a> album                   |      7   ← all 7 albums migrated
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a> ...
+</code></pre></div>
+<p><code>SELECT COUNT(*) FROM asset</code> → <strong>15,471</strong><br />
+<code>SELECT COUNT(*) FROM album</code> → <strong>7</strong></p>
+<hr />
+<h2 id="option-a-vs-option-b-when-to-use-each">📝 Option A vs Option B — When to Use Each<a class="headerlink" href="#option-a-vs-option-b-when-to-use-each" title="Permanent link">&para;</a></h2>
+<h3 id="option-a-pgdata-directory-copy-used-in-this-migration">Option A — pgdata directory copy ← <em>used in this migration</em><a class="headerlink" href="#option-a-pgdata-directory-copy-used-in-this-migration" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><strong>Note:</strong> This approach is not in the official Immich docs. It works because both machines ran the exact same postgres image (<code>14-vectorchord0.4.3</code>). The official docs only document pg_dump/restore.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅ Simpler</td>
+<td>No CLI commands — done entirely through ZimaOS Files app</td>
+</tr>
+<tr>
+<td>✅ Faster</td>
+<td>Direct binary copy, no SQL parsing</td>
+</tr>
+<tr>
+<td>✅ Complete</td>
+<td>Preserves extensions, roles, sequences, all databases</td>
+</tr>
+<tr>
+<td>⚠️ Version-locked</td>
+<td>Requires <strong>identical postgres image version</strong> on both machines</td>
+</tr>
+<tr>
+<td>⚠️ Source must be stopped</td>
+<td>Copying a running postgres = corrupted data</td>
+</tr>
+</tbody>
+</table>
+<h3 id="option-b-official-pg_dump-restore-not-personally-tested">Option B — Official pg_dump / restore ← <em>not personally tested</em><a class="headerlink" href="#option-b-official-pg_dump-restore-not-personally-tested" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅ Cross-version</td>
+<td>Works across different postgres versions</td>
+</tr>
+<tr>
+<td>✅ Portable</td>
+<td>Plain SQL + gzip — can be stored anywhere</td>
+</tr>
+<tr>
+<td>✅ Live-safe</td>
+<td>Can dump from a running database</td>
+</tr>
+<tr>
+<td>✅ Official</td>
+<td>Documented and supported by Immich</td>
+</tr>
+<tr>
+<td>❌ More steps</td>
+<td>Requires CLI, sed fix, specific restore sequence</td>
+</tr>
+<tr>
+<td>❌ Slower</td>
+<td>Must parse and re-execute all SQL</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Use Option A</strong> when both machines run the same ZimaOS App Store Immich version (same postgres image).<br />
+<strong>Use Option B</strong> when migrating across different Immich/postgres versions, or for regular scheduled backups.</p>
+<hr />
+<h2 id="migration-stats">📊 Migration Stats<a class="headerlink" href="#migration-stats" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Photos migrated</td>
+<td>14,505 (41.8 GiB)</td>
+</tr>
+<tr>
+<td>Videos migrated</td>
+<td>925 (92 GiB)</td>
+</tr>
+<tr>
+<td>Total storage</td>
+<td>134 GiB</td>
+</tr>
+<tr>
+<td>Transfer method</td>
+<td>ZimaOS Files app — LAN Storage (2.5GbE)</td>
+</tr>
+<tr>
+<td>Transfer time</td>
+<td>~10–15 minutes</td>
+</tr>
+<tr>
+<td>Post-migration data loss</td>
+<td>Zero — account, memories, and library intact</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>Phase 2.5 complete — Immich running on ZimaCube 2 · May 24, 2026</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
