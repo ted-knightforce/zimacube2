@@ -11,7 +11,7 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 | Phase | Description | Status |
 |---|---|---|
 | **Phase 1** | Foundation — Storage, ZFS, Core Services | 🟡 In Progress |
-| **Phase 1.5** | P510 Onboard M.2 Migration + Re-benchmark | ⏳ Planned |
+| **Phase 1.5** | Storage Benchmarks — cold baseline + warm ZFS ARC (P510 onboard re-benchmark planned) | ✅ Complete |
 | **Phase 2** | Media Stack — Jellyfin, *arr, IronWolf pool | ⏸️ On Hold (drives arriving) |
 | **Phase 2.5** | Immich Migration — 14,505 photos + 925 videos (134 GiB) | ✅ Complete |
 | **Phase 3** | Data Management — Backup, Nextcloud | ⏳ Planned |

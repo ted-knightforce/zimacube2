@@ -28,14 +28,14 @@ theme:
 nav:
   - Home: index.md
   - Build Phases:
-    - "Phase 1: Foundation, Storage & Benchmarks": phases/01-foundation.md
+    - "Phase 1: Foundation & Storage": phases/01-foundation.md
+    - "Phase 1.5: Storage Benchmarks": phases/01.5-benchmarks.md
     - "Phase 2: Jellyfin, *arr, IronWolf Pool": phases/02-media.md
     - "Phase 2.5: Immich ZimaOS-to-ZimaCube 2 Migration": phases/02.5-immich.md
     - "Phase 3: Backup, Nextcloud & 3-2-1 Strategy": phases/03-data.md
     - "Phase 4a: CPU-Only Local AI Baseline": phases/04a-cpu-ai.md
     - "Phase 4b: RTX 4090 + eGPU Dock": phases/04b-gpu-ai.md
-  - "Phase 1 Storage Benchmark": benchmarks/PHASE1-BENCHMARK.md
-  - "Phase 1 Results Visualisation": benchmarks/results-visual.html
+  - "Phase 1.5 Results Visualisation": benchmarks/results-visual.html
 
 markdown_extensions:
   - tables
