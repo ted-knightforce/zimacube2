@@ -187,6 +187,8 @@ Real-time metrics captured via Netdata running as a Docker container. Dashboard 
 
 ## Results
 
+📊 **[Interactive results visualisation →](results-visual.html)** — bar charts comparing Glacier cold, Glacier warm ARC, and Arctic btrfs across all four tests.
+
 ![Storage Benchmarks](../benchmarks/images/day02-zimacube2-benchmarking-storage.jpg)
 
 ### Glacier — ZFS RAIDZ1 (OCuLink)

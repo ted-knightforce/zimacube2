@@ -35,6 +35,7 @@ nav:
     - "Phase 4a: CPU-Only Local AI Baseline": phases/04a-cpu-ai.md
     - "Phase 4b: RTX 4090 + eGPU Dock": phases/04b-gpu-ai.md
   - "Phase 1 Storage Benchmark": benchmarks/PHASE1-BENCHMARK.md
+  - "Phase 1 Results Visualisation": benchmarks/results-visual.html
 
 markdown_extensions:
   - tables
