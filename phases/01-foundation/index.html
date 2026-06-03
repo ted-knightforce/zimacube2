@@ -3498,15 +3498,21 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </tr>
 <tr>
 <td><strong>Completion latency (avg)</strong></td>
-<td><strong>1.49 µs</strong></td>
-<td>~7–8 ms</td>
-<td><strong>~5,000×</strong></td>
+<td><strong>1.49 ms</strong></td>
+<td><strong>7.62 ms</strong></td>
+<td><strong>5.1×</strong></td>
 </tr>
 <tr>
 <td>99th percentile latency</td>
-<td>2.1 ms</td>
-<td>8.9 ms</td>
+<td>2.11 ms</td>
+<td>8.98 ms</td>
 <td>4.2×</td>
+</tr>
+<tr>
+<td><strong>99.99th percentile latency</strong></td>
+<td><strong>4.49 ms</strong></td>
+<td><strong>44.8 ms</strong></td>
+<td><strong>10×</strong></td>
 </tr>
 <tr>
 <td>I/O served in 60 s</td>
@@ -3543,13 +3549,38 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </tr>
 </tbody>
 </table>
-<p>99.9% of the 83K IOPS were served from RAM. The 9,037 misses over 60 seconds (~150/sec) represent ZFS evicting and re-fetching a small fraction of data at the working-set boundary.</p>
-<p><strong>System impact during warm ARC benchmark (btop, 23:19):</strong>
-- <strong>CPU: 2%</strong> overall — reads came from RAM, not NVMe; the i3-1215U cores were almost entirely idle
-- <code>z_rd_int</code> kernel threads appeared at the top of the process list during the cold <code>--direct=1</code> pass — ZFS read interrupts confirming actual NVMe I/O
-- Load average peaked at 2.46, returned to baseline within seconds of completion</p>
+<p>99.9% of the 83K IOPS were served from RAM. The 9,037 misses over 60 seconds (~150/sec) represent ZFS evicting and re-fetching a small fraction of data at the working-set boundary — the 8 GiB test file fit comfortably within the 8.70 GiB ARC.</p>
+<p><strong>System impact (fio CPU stats + btop, 23:19):</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Warm ARC</th>
+<th>Cold (<code>--direct=1</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU <code>sys</code> (fio processes)</td>
+<td>95.97%</td>
+<td>8.23%</td>
+</tr>
+<tr>
+<td>Context switches</td>
+<td>6,370</td>
+<td>954,944</td>
+</tr>
+<tr>
+<td>Overall system CPU (btop)</td>
+<td><strong>2%</strong></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>The warm ARC kernel <code>sys</code> figure (95.97%) reflects ZFS serving I/O from RAM in tight kernel loops — almost no user-space overhead. The 6,370 context switches across 5 million I/Os means ZFS batched ARC lookups efficiently with minimal scheduler overhead.</p>
+<p>The cold pass tells the opposite story: 954,944 context switches across 976K I/Os — nearly one interrupt-driven context switch per request as each read dispatched to the NVMe queue, waited for a hardware interrupt, and returned through the ZFS I/O pipeline. <code>z_rd_int</code> kernel threads appeared at the top of btop's process list during this pass, confirming real NVMe activity.</p>
 <blockquote>
-<p><strong>Takeaway:</strong> With a warm ARC, glacier behaves like a 83K IOPS RAM array, not a 16K IOPS NVMe RAIDZ1. Workloads with repeated access patterns — Immich metadata lookups, Jellyfin library scans, Nextcloud file indexing — will experience this warm-cache tier, not the cold-cache floor numbers from Phase 1 fio benchmarks.</p>
+<p><strong>Takeaway:</strong> With a warm ARC, glacier behaves like a 83K IOPS RAM array, not a 16K IOPS NVMe RAIDZ1. Workloads with repeated access patterns — Immich metadata lookups, Jellyfin library scans, Nextcloud file indexing — will experience this warm-cache tier, not the cold-cache floor numbers from Phase 1 fio benchmarks. Tail latency is also 10× better under ARC (4.49 ms vs 44.8 ms at the 99.99th percentile).</p>
 </blockquote>
 <h3 id="the-14-iops-gap-architectural-not-a-flaw">The 14× IOPS Gap — Architectural, Not a Flaw<a class="headerlink" href="#the-14-iops-gap-architectural-not-a-flaw" title="Permanent link">&para;</a></h3>
 <p>ZFS RAIDZ1 trades random I/O efficiency for sequential throughput, redundancy, and data integrity. The correct response is tiered workload routing — not trying to close the gap.</p>
