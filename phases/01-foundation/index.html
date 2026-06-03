@@ -965,6 +965,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Execution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-1-initial-cold-benchmarks-may-23-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1 — Initial cold benchmarks (May 23, 2026)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-2-expanded-glacier-testing-cold-warm-arc-june-34-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2 — Expanded glacier testing: cold + warm ARC (June 3–4, 2026)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -1007,10 +1035,21 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#glacier-zfs-raidz1-oculink-may-23-2026" class="md-nav__link">
+  <a href="#glacier-zfs-raidz1-oculink-cold-baseline-may-23-2026" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Glacier — ZFS RAIDZ1 (OCuLink) — May 23, 2026
+        Glacier — ZFS RAIDZ1 (OCuLink) — Cold Baseline — May 23, 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#glacier-warm-zfs-arc-june-34-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Glacier — Warm ZFS ARC (June 3–4, 2026)
       
     </span>
   </a>
@@ -2105,6 +2144,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Execution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-1-initial-cold-benchmarks-may-23-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1 — Initial cold benchmarks (May 23, 2026)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-2-expanded-glacier-testing-cold-warm-arc-june-34-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2 — Expanded glacier testing: cold + warm ARC (June 3–4, 2026)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -2147,10 +2214,21 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#glacier-zfs-raidz1-oculink-may-23-2026" class="md-nav__link">
+  <a href="#glacier-zfs-raidz1-oculink-cold-baseline-may-23-2026" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Glacier — ZFS RAIDZ1 (OCuLink) — May 23, 2026
+        Glacier — ZFS RAIDZ1 (OCuLink) — Cold Baseline — May 23, 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#glacier-warm-zfs-arc-june-34-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Glacier — Warm ZFS ARC (June 3–4, 2026)
       
     </span>
   </a>
@@ -2535,7 +2613,7 @@
 <p><strong>Author:</strong> ted-knight<br />
 <strong>Status:</strong> 🟡 In Progress<br />
 <strong>Started:</strong> May 21, 2026<br />
-<strong>Updated:</strong> June 03, 2026<br />
+<strong>Updated:</strong> June 04, 2026<br />
 <strong>Program:</strong> ZimaCube 2 Pioneer Program  </p>
 <hr />
 <h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
@@ -3166,9 +3244,11 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <p>Files uploaded:
 - <a href="../../resources/scripts/benchmark-glacier.sh"><code>benchmark-glacier.sh</code></a>
 - <a href="../../resources/scripts/benchmark-arctic.sh"><code>benchmark-arctic.sh</code></a>
-- <a href="../../resources/scripts/benchmark-compare.sh"><code>benchmark-compare.sh</code></a></p>
+- <a href="../../resources/scripts/benchmark-compare.sh"><code>benchmark-compare.sh</code></a>
+- <a href="../../resources/scripts/benchmark-arc.sh"><code>benchmark-arc.sh</code></a></p>
 <h3 id="execution">Execution<a class="headerlink" href="#execution" title="Permanent link">&para;</a></h3>
-<p>Scripts were run individually from the web terminal:</p>
+<h4 id="phase-1-initial-cold-benchmarks-may-23-2026">Phase 1 — Initial cold benchmarks (May 23, 2026)<a class="headerlink" href="#phase-1-initial-cold-benchmarks-may-23-2026" title="Permanent link">&para;</a></h4>
+<p><code>benchmark-glacier.sh</code> and <code>benchmark-arctic.sh</code> were run first to establish raw cold-cache throughput for both pools:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>sudo<span class="w"> </span>-i
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nb">cd</span><span class="w"> </span>/DATA/Documents/nvme-benchmark
 <a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
@@ -3177,7 +3257,21 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>./benchmark-glacier.sh
 <a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>./benchmark-arctic.sh
 </code></pre></div>
-<p>Each script runs 4 sequential fio tests (seq write → seq read → rand 4K write → rand 4K read), captures filesystem-specific stats, cleans up its temp file, and saves results automatically:</p>
+<p>Each script runs 4 sequential fio tests (seq write → seq read → rand 4K write → rand 4K read) with <code>--direct=1</code> throughout, captures pool-specific stats, cleans up its temp file, and saves results automatically.</p>
+<h4 id="phase-2-expanded-glacier-testing-cold-warm-arc-june-34-2026">Phase 2 — Expanded glacier testing: cold + warm ARC (June 3–4, 2026)<a class="headerlink" href="#phase-2-expanded-glacier-testing-cold-warm-arc-june-34-2026" title="Permanent link">&para;</a></h4>
+<p>After the initial cold baseline, <code>benchmark-arc.sh</code> was added to extend glacier testing across both cold and warm cache paths. It is the definitive glacier benchmark — runs cold write tests identically to <code>benchmark-glacier.sh</code>, then adds an ARC warm-up pass, a warm ARC read, and a cold <code>--direct=1</code> reference read side-by-side in a single run:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>./benchmark-arc.sh
+</code></pre></div>
+<p>The script runs 7 steps automatically:</p>
+<ol>
+<li>Capture ARC state before (baseline hits, misses, cache size)</li>
+<li>Sequential write — <code>--direct=1</code>, 4 jobs, 1 M blocks, 60 s</li>
+<li>Random 4K write — <code>--direct=1</code>, 4 jobs, 4 K blocks, 60 s</li>
+<li>Warm-up pass — sequential read without <code>--direct=1</code> (populates ZFS ARC with the test file)</li>
+<li>Warm ARC read — random 4K without <code>--direct=1</code> (requests served from ARC in RAM)</li>
+<li>Capture ARC state after — session hit rate delta, <code>zpool iostat</code> (low physical read MB/s here confirms ARC served the requests, not the NVMe drives)</li>
+<li>Cold reference read — random 4K with <code>--direct=1</code> (bypasses ARC; direct NVMe for side-by-side comparison)</li>
+</ol>
 <table>
 <thead>
 <tr>
@@ -3198,9 +3292,14 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <td><code>benchmark-compare.sh</code></td>
 <td><code>/root/benchmark-comparison-summary.txt</code></td>
 </tr>
+<tr>
+<td><code>benchmark-arc.sh</code></td>
+<td><code>/media/glacier/benchmark-results-arc.txt</code></td>
+</tr>
 </tbody>
 </table>
 <h3 id="test-parameters">Test Parameters<a class="headerlink" href="#test-parameters" title="Permanent link">&para;</a></h3>
+<p><strong>Cold fio tests</strong> — <code>benchmark-glacier.sh</code> and <code>benchmark-arctic.sh</code>:</p>
 <table>
 <thead>
 <tr>
@@ -3247,12 +3346,83 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </tr>
 </tbody>
 </table>
-<p>All tests: <code>--direct=1</code> (bypasses OS page cache) · <code>--ioengine=libaio</code></p>
+<p>All cold tests: <code>--direct=1</code> (bypasses OS page cache) · <code>--ioengine=libaio</code></p>
+<p><strong>ARC benchmark</strong> — <code>benchmark-arc.sh</code> (glacier only):</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Test</th>
+<th>Block size</th>
+<th>Jobs</th>
+<th>Queue depth</th>
+<th>Size</th>
+<th>Duration</th>
+<th>Cache mode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>Sequential write</td>
+<td>1M</td>
+<td>4</td>
+<td>8</td>
+<td>8GB</td>
+<td>60s</td>
+<td><code>--direct=1</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Random 4K write</td>
+<td>4K</td>
+<td>4</td>
+<td>32</td>
+<td>8GB</td>
+<td>60s</td>
+<td><code>--direct=1</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Warm-up (seq read)</td>
+<td>1M</td>
+<td>1</td>
+<td>8</td>
+<td>8GB</td>
+<td>Single pass</td>
+<td>Buffered — populates ARC</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Warm ARC rand read</td>
+<td>4K</td>
+<td>4</td>
+<td>32</td>
+<td>8GB</td>
+<td>60s</td>
+<td>Buffered — served from ARC</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Cold rand read</td>
+<td>4K</td>
+<td>4</td>
+<td>32</td>
+<td>8GB</td>
+<td>60s</td>
+<td><code>--direct=1</code> — bypasses ARC</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Steps 2–3 produce results directly comparable to <code>benchmark-glacier.sh</code> write tests. Steps 5 and 7 deliver the warm vs cold read comparison in a single run.</p>
+</blockquote>
 <h3 id="monitoring">Monitoring<a class="headerlink" href="#monitoring" title="Permanent link">&para;</a></h3>
 <p>Real-time system metrics monitored via <strong>btop</strong> — installed from the ZimaOS App Marketplace.</p>
 <hr />
 <h2 id="benchmark-results">Benchmark Results<a class="headerlink" href="#benchmark-results" title="Permanent link">&para;</a></h2>
-<h3 id="glacier-zfs-raidz1-oculink-may-23-2026">Glacier — ZFS RAIDZ1 (OCuLink) — May 23, 2026<a class="headerlink" href="#glacier-zfs-raidz1-oculink-may-23-2026" title="Permanent link">&para;</a></h3>
+<h3 id="glacier-zfs-raidz1-oculink-cold-baseline-may-23-2026">Glacier — ZFS RAIDZ1 (OCuLink) — Cold Baseline — May 23, 2026<a class="headerlink" href="#glacier-zfs-raidz1-oculink-cold-baseline-may-23-2026" title="Permanent link">&para;</a></h3>
+<p>All tests with <code>--direct=1</code> (bypasses OS page cache; raw pool throughput).</p>
 <table>
 <thead>
 <tr>
@@ -3289,6 +3459,59 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </tr>
 </tbody>
 </table>
+<h3 id="glacier-warm-zfs-arc-june-34-2026">Glacier — Warm ZFS ARC (June 3–4, 2026)<a class="headerlink" href="#glacier-warm-zfs-arc-june-34-2026" title="Permanent link">&para;</a></h3>
+<p>Measured using <code>benchmark-arc.sh</code> across six runs. ZFS ARC does not cache write operations — warm ARC affects reads only. Write figures reflect steady-state <code>benchmark-glacier.sh</code> results with SLC cache intact.</p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Bandwidth</th>
+<th>IOPS</th>
+<th>Avg latency</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sequential write</td>
+<td>1,685–1,752 MiB/s</td>
+<td>—</td>
+<td>—</td>
+<td>Cold pool throughput; ARC not involved</td>
+</tr>
+<tr>
+<td>Random 4K write</td>
+<td>—</td>
+<td>13,387–13,725</td>
+<td>—</td>
+<td>Cold IOPS; ARC not involved</td>
+</tr>
+<tr>
+<td>Sequential read (warm-up)</td>
+<td>3,329–4,459 MiB/s</td>
+<td>—</td>
+<td>—</td>
+<td>ARC-buffered prefetch pass</td>
+</tr>
+<tr>
+<td><strong>Random 4K read — Warm ARC</strong></td>
+<td><strong>324–328 MiB/s</strong></td>
+<td><strong>83,416–83,992</strong></td>
+<td><strong>1.48–1.49 ms</strong></td>
+<td>Served from RAM; 99.4–100% session hit rate</td>
+</tr>
+<tr>
+<td>Random 4K read — Cold</td>
+<td>63–72 MiB/s</td>
+<td>16,276–18,315</td>
+<td>7.05–7.62 ms</td>
+<td><code>--direct=1</code>; raw NVMe baseline</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Warm ARC IOPS spans only <strong>0.7% variance</strong> across all six runs regardless of starting ARC state or preceding write load. Average latency locked at 1.48–1.49 ms every run.</p>
+</blockquote>
 <h3 id="arctic-storage-btrfs-pcie-50-7th-bay-800-mbs-cap-may-23-2026">Arctic-Storage — btrfs PCIe 5.0 (7th Bay, 800 MB/s cap) — May 23, 2026<a class="headerlink" href="#arctic-storage-btrfs-pcie-50-7th-bay-800-mbs-cap-may-23-2026" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -3331,7 +3554,8 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <thead>
 <tr>
 <th>Test</th>
-<th>Glacier ZFS RAIDZ1</th>
+<th>Glacier Cold</th>
+<th>Glacier Warm ARC</th>
 <th>Arctic btrfs PCIe 5.0</th>
 <th>Winner</th>
 </tr>
@@ -3340,68 +3564,81 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <tr>
 <td>Sequential write</td>
 <td>1,726 MB/s</td>
+<td>—</td>
 <td>788 MB/s</td>
 <td>🧊 Glacier +119%</td>
 </tr>
 <tr>
 <td>Sequential read</td>
 <td>2,591 MB/s</td>
+<td>~4,300–4,460 MiB/s</td>
 <td>874 MB/s</td>
-<td>🧊 Glacier +196%</td>
+<td>🧊 Glacier (warm ARC)</td>
 </tr>
 <tr>
 <td>Random 4K write IOPS</td>
 <td>13,795</td>
+<td>—</td>
 <td>87,099</td>
 <td>🌨️ Arctic 6.3×</td>
 </tr>
 <tr>
 <td>Random 4K read IOPS</td>
 <td>14,781</td>
+<td><strong>83,929</strong></td>
 <td>205,588</td>
-<td>🌨️ Arctic 14×</td>
+<td>🌨️ Arctic — 14× cold · 2.5× warm</td>
 </tr>
 <tr>
 <td>Random 4K write latency</td>
-<td>9.3ms</td>
-<td>1.5ms</td>
+<td>9.3 ms</td>
+<td>—</td>
+<td>1.5 ms</td>
 <td>🌨️ Arctic 6× lower</td>
 </tr>
 <tr>
 <td>Random 4K read latency</td>
-<td>8.7ms</td>
-<td>0.6ms</td>
-<td>🌨️ Arctic 14× lower</td>
+<td>8.7 ms</td>
+<td><strong>1.48 ms</strong></td>
+<td>0.6 ms</td>
+<td>🌨️ Arctic — 14× lower cold · 2.5× lower warm</td>
 </tr>
 <tr>
 <td>Usable capacity</td>
-<td>5.5TB</td>
-<td>1.8TB</td>
+<td>5.5 TB</td>
+<td>—</td>
+<td>1.8 TB</td>
 <td>🧊 Glacier 3×</td>
 </tr>
 <tr>
 <td>Drive redundancy</td>
 <td>1 drive failure</td>
+<td>—</td>
 <td>None</td>
 <td>🧊 Glacier</td>
 </tr>
 <tr>
 <td>Data integrity</td>
 <td>ZFS checksums + self-healing</td>
+<td>—</td>
 <td>btrfs checksums</td>
 <td>🧊 Glacier</td>
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p><code>—</code> in the Glacier Warm ARC column indicates write operations and pool characteristics are unaffected by ARC — cold and warm results are identical for writes. Warm ARC IOPS (83,929) is the Run 4 representative value; six-run range is 83,416–83,992.</p>
+</blockquote>
 <hr />
 <h2 id="analysis">Analysis<a class="headerlink" href="#analysis" title="Permanent link">&para;</a></h2>
 <h3 id="sequential-performance-glacier-dominates">Sequential Performance — Glacier Dominates<a class="headerlink" href="#sequential-performance-glacier-dominates" title="Permanent link">&para;</a></h3>
 <p>With 4 drives in RAIDZ1, ZFS stripes reads across all drives simultaneously. The 2,591 MB/s sequential read result is <strong>approximately 81% of the theoretical 3,200 MB/s OCuLink ceiling</strong> — demonstrating near-optimal read distribution across all 4 drives. The remaining ~19% gap is expected ZFS overhead: metadata management, checksum verification, and stripe coordination.</p>
-<p>Sequential write at 1,726 MB/s is strong given RAIDZ1 parity overhead, which adds one parity block per stripe across every write.</p>
+<p>With a warm ZFS ARC, sequential reads climb further to <strong>3,329–4,459 MiB/s</strong> across six <code>benchmark-arc.sh</code> runs — ARC's prefetch engine can stage the next sequential block before the application requests it, pulling data from RAM rather than waiting on NVMe I/O. This is approximately <strong>1.5–1.7× the cold sequential read speed</strong>.</p>
+<p>Sequential write at 1,726 MB/s is strong given RAIDZ1 parity overhead, which adds one parity block per stripe across every write. ARC does not cache write operations — warm ARC provides no write uplift.</p>
 <p>Arctic-Storage sequential results confirm the 800 MB/s Standard 7th Bay bridge cap — both read (874 MB/s) and write (788 MB/s) are bottlenecked by the ASMedia bridge hardware, not the PCIe 5.0 drive itself.</p>
 <h3 id="random-iops-arctic-dominates">Random IOPS — Arctic Dominates<a class="headerlink" href="#random-iops-arctic-dominates" title="Permanent link">&para;</a></h3>
 <p>Arctic-Storage delivers <strong>205,588 IOPS</strong> random 4K read at <strong>0.6ms average latency</strong> — completely unimpeded by the 7th Bay sequential cap. This is genuine PCIe 5.0 NVMe random I/O performance, and exactly why this slot makes sense for Docker app databases and inference model loading.</p>
-<p>Glacier's 14,781 IOPS reflects ZFS RAIDZ1 copy-on-write overhead, parity calculation latency, and OCuLink tunnel baseline latency. These are <strong>cold-cache numbers</strong> — in practice, ZFS ARC (Adaptive Replacement Cache) will cache frequently accessed data in RAM, improving random read performance for real workloads over time.</p>
+<p>Glacier's 14,781 IOPS reflects ZFS RAIDZ1 copy-on-write overhead, parity calculation latency, and OCuLink tunnel baseline latency. These are <strong>cold-cache floor numbers</strong>. With a warm ZFS ARC, glacier delivers <strong>83,416–83,992 IOPS at 1.48–1.49 ms</strong> — a consistent <strong>5.1–5.7× uplift</strong> measured across six benchmark runs. The 14× gap to Arctic-Storage narrows to approximately <strong>2.5×</strong> under warm cache conditions. See <a href="#zfs-arc--warm-cache-benchmark-results-june-3-4-2026">ZFS ARC — Warm Cache Benchmark Results</a> below for the full six-run analysis and CPU behaviour.</p>
 <h3 id="zfs-arc-measured-behaviour-june-3-2026">ZFS ARC — Measured Behaviour (June 3, 2026)<a class="headerlink" href="#zfs-arc-measured-behaviour-june-3-2026" title="Permanent link">&para;</a></h3>
 <p>The fio benchmarks use <code>--direct=1</code> — bypassing the OS cache entirely. Real workloads go through ZFS ARC, which is the difference between the fio cold numbers and daily-use performance.</p>
 <p>After 11 days of uptime, the measured ARC stats from <code>/proc/spl/kstat/zfs/arcstats</code>:</p>
@@ -3941,33 +4178,33 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <h3 id="why-cap-c_max-now">Why cap c_max now?<a class="headerlink" href="#why-cap-c_max-now" title="Permanent link">&para;</a></h3>
 <p>At 16 GB RAM, c_max defaulting to 14.37 GiB leaves only ~1 GB guaranteed for the OS + apps. ZFS is smart enough to evict ARC under memory pressure, but ZFS ARC eviction is slower than Linux page cache eviction. When Phase 2 lands and Jellyfin starts transcoding, ARC competing with a 831 MB+ process creates unnecessary pressure. Capping at 8 GiB gives glacier a generous read cache while guaranteeing ~7 GB headroom for all other workloads.</p>
 <h3 id="how-to-check-current-arc-stats">How to check current ARC stats<a class="headerlink" href="#how-to-check-current-arc-stats" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Raw stats — size, ceiling, floor, hits, misses</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>cat<span class="w"> </span>/proc/spl/kstat/zfs/arcstats<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;^(size|c_max|c_min|hits|misses) &quot;</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># Hit rate in one line</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>awk<span class="w"> </span><span class="s1">&#39;/^hits/{h=$3} /^misses/{m=$3} END{printf &quot;ARC hit rate: %.1f%%\n&quot;, h/(h+m)*100}&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span>/proc/spl/kstat/zfs/arcstats
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Raw stats — size, ceiling, floor, hits, misses</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>cat<span class="w"> </span>/proc/spl/kstat/zfs/arcstats<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;^(size|c_max|c_min|hits|misses) &quot;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># Hit rate in one line</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>awk<span class="w"> </span><span class="s1">&#39;/^hits/{h=$3} /^misses/{m=$3} END{printf &quot;ARC hit rate: %.1f%%\n&quot;, h/(h+m)*100}&#39;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">    </span>/proc/spl/kstat/zfs/arcstats
 </code></pre></div>
 <p>Measured output on Day 11 (June 3, 2026):
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>ARC hit rate: 93.7%
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>ARC hit rate: 93.7%
 </code></pre></div></p>
 <h3 id="cap-arc-at-8-gib-current-16-gb-system">Cap ARC at 8 GiB (current 16 GB system)<a class="headerlink" href="#cap-arc-at-8-gib-current-16-gb-system" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Create or update the ZFS module config</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;options zfs zfs_arc_max=8589934592&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/modprobe.d/zfs.conf
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># Apply immediately — no reboot needed</span>
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="nb">echo</span><span class="w"> </span><span class="m">8589934592</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/sys/module/zfs/parameters/zfs_arc_max
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="c1"># Verify</span>
-<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>cat<span class="w"> </span>/sys/module/zfs/parameters/zfs_arc_max
-<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="c1"># Expected: 8589934592</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Create or update the ZFS module config</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;options zfs zfs_arc_max=8589934592&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/modprobe.d/zfs.conf
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># Apply immediately — no reboot needed</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="nb">echo</span><span class="w"> </span><span class="m">8589934592</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/sys/module/zfs/parameters/zfs_arc_max
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="c1"># Verify</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>cat<span class="w"> </span>/sys/module/zfs/parameters/zfs_arc_max
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="c1"># Expected: 8589934592</span>
 </code></pre></div>
 <p>The <code>/etc/modprobe.d/zfs.conf</code> entry ensures the cap survives reboots. The <code>/sys/module/...</code> write applies it live to the running kernel.</p>
 <h3 id="after-the-32-gb-ram-upgrade">After the 32 GB RAM upgrade<a class="headerlink" href="#after-the-32-gb-ram-upgrade" title="Permanent link">&para;</a></h3>
 <p>With 32 GB installed, raise the cap to 16 GiB — gives glacier a large cache while still leaving 14+ GB for Jellyfin, Immich, *arr, and future Ollama workloads:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># 16 GiB cap for 32 GB system (16 × 1024³ = 17179869184)</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;options zfs zfs_arc_max=17179869184&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/modprobe.d/zfs.conf
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="nb">echo</span><span class="w"> </span><span class="m">17179869184</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/sys/module/zfs/parameters/zfs_arc_max
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># 16 GiB cap for 32 GB system (16 × 1024³ = 17179869184)</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;options zfs zfs_arc_max=17179869184&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/modprobe.d/zfs.conf
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="nb">echo</span><span class="w"> </span><span class="m">17179869184</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/sys/module/zfs/parameters/zfs_arc_max
 </code></pre></div>
 <h3 id="arc-sizing-reference">ARC sizing reference<a class="headerlink" href="#arc-sizing-reference" title="Permanent link">&para;</a></h3>
 <table>
@@ -3998,10 +4235,10 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </table>
 <h3 id="benchmarking-arc-performance">Benchmarking ARC performance<a class="headerlink" href="#benchmarking-arc-performance" title="Permanent link">&para;</a></h3>
 <p>The standard fio suite uses <code>--direct=1</code> to measure raw NVMe speed — those are cold-cache floor numbers. To measure the real-world uplift from ZFS ARC, use the dedicated ARC benchmark script:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>sudo<span class="w"> </span>-i
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nb">cd</span><span class="w"> </span>/DATA/Documents/nvme-benchmark
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>chmod<span class="w"> </span>+x<span class="w"> </span>benchmark-arc.sh
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>./benchmark-arc.sh
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>sudo<span class="w"> </span>-i
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nb">cd</span><span class="w"> </span>/DATA/Documents/nvme-benchmark
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>chmod<span class="w"> </span>+x<span class="w"> </span>benchmark-arc.sh
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>./benchmark-arc.sh
 </code></pre></div>
 <p>The script runs seven steps automatically:</p>
 <ol>
@@ -4317,26 +4554,26 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </tbody>
 </table>
 <p>Upload via <strong>WinSCP</strong> to <code>/DATA/Documents/nvme-benchmark/</code> on ZimaCube, then from the web terminal:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>sudo<span class="w"> </span>-i
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nb">cd</span><span class="w"> </span>/DATA/Documents/nvme-benchmark
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>chmod<span class="w"> </span>+x<span class="w"> </span>benchmark-glacier.sh<span class="w"> </span>benchmark-arctic.sh<span class="w"> </span>benchmark-compare.sh<span class="w"> </span>benchmark-arc.sh
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>./benchmark-glacier.sh
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>./benchmark-arctic.sh
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>sudo<span class="w"> </span>-i
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="nb">cd</span><span class="w"> </span>/DATA/Documents/nvme-benchmark
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>chmod<span class="w"> </span>+x<span class="w"> </span>benchmark-glacier.sh<span class="w"> </span>benchmark-arctic.sh<span class="w"> </span>benchmark-compare.sh<span class="w"> </span>benchmark-arc.sh
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>./benchmark-glacier.sh
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>./benchmark-arctic.sh
 </code></pre></div>
 <blockquote>
 <p><strong>Known issue:</strong> <code>hostname -I</code> is unsupported on ZimaOS Buildroot. The current scripts use <code>ip addr</code> instead. If you have an older copy, replace <code>hostname -I</code> with:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>ip<span class="w"> </span>addr<span class="w"> </span>show<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;inet &#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s1">&#39;127.0.0.1&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d/<span class="w"> </span>-f1<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>ip<span class="w"> </span>addr<span class="w"> </span>show<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;inet &#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s1">&#39;127.0.0.1&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d/<span class="w"> </span>-f1<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1
 </code></pre></div></p>
 </blockquote>
 <hr />
 <h2 id="system-information">System Information<a class="headerlink" href="#system-information" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>Model:     ZimaCube 2 (Standard)
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>OS:        ZimaOS (Buildroot-based, immutable)
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>Kernel:    Linux 6.17.13-3-pve
-<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>ZFS:       OpenZFS 2.3.2
-<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>fio:       3.38
-<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>btop:      ZimaOS App Marketplace
-<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>Date:      Saturday, May 23, 2026
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>Model:     ZimaCube 2 (Standard)
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>OS:        ZimaOS (Buildroot-based, immutable)
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>Kernel:    Linux 6.17.13-3-pve
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>ZFS:       OpenZFS 2.3.2
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>fio:       3.38
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>btop:      ZimaOS App Marketplace
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>Date:      Saturday, May 23, 2026
 </code></pre></div>
 <hr />
 <h2 id="resources">Resources<a class="headerlink" href="#resources" title="Permanent link">&para;</a></h2>
