@@ -3722,7 +3722,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </tr>
 </tbody>
 </table>
-<p><strong>Four-run ARC benchmark summary:</strong></p>
+<p><strong>Five-run ARC benchmark summary:</strong></p>
 <table>
 <thead>
 <tr>
@@ -3731,6 +3731,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <th>Run 2</th>
 <th>Run 3</th>
 <th>Run 4</th>
+<th>Run 5</th>
 </tr>
 </thead>
 <tbody>
@@ -3740,13 +3741,15 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <td>0.22 GiB</td>
 <td>0.23 GiB</td>
 <td>0.23 GiB</td>
+<td>0.23 GiB</td>
 </tr>
 <tr>
-<td>Warmup speed (seq read)</td>
+<td>Warmup speed</td>
 <td>3,329 MiB/s</td>
 <td>4,298 MiB/s</td>
 <td>4,459 MiB/s</td>
 <td>4,328 MiB/s</td>
+<td>3,832 MiB/s²</td>
 </tr>
 <tr>
 <td><strong>Warm ARC IOPS (avg)</strong></td>
@@ -3754,10 +3757,12 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <td><strong>83,707</strong></td>
 <td><strong>83,588</strong></td>
 <td><strong>83,929</strong></td>
+<td><strong>83,858</strong></td>
 </tr>
 <tr>
 <td>Warm ARC latency (avg)</td>
 <td>1.49 ms</td>
+<td>1.48 ms</td>
 <td>1.48 ms</td>
 <td>1.48 ms</td>
 <td>1.48 ms</td>
@@ -3768,13 +3773,15 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <td>100.0%</td>
 <td>100.0%</td>
 <td>100.0%</td>
+<td>99.4%³</td>
 </tr>
 <tr>
-<td>Misses during warm test</td>
+<td>Misses during session</td>
 <td>9,037</td>
 <td>2,603</td>
 <td>2,001¹</td>
 <td>2,001</td>
+<td>67,392³</td>
 </tr>
 <tr>
 <td>Cold rand read IOPS</td>
@@ -3782,6 +3789,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <td>18,315</td>
 <td>~14,063</td>
 <td>17,577</td>
+<td>16,497</td>
 </tr>
 <tr>
 <td>Cold rand read latency</td>
@@ -3789,12 +3797,85 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <td>—</td>
 <td>—</td>
 <td>7.05 ms</td>
+<td>7.52 ms</td>
 </tr>
 </tbody>
 </table>
-<p>¹ Run 3 and Run 4 share the same ARC size before (0.23 GiB) and similar miss counts — ARC started near-empty both nights after the test file from the previous run had been deleted and evicted.</p>
-<p>Warm ARC IOPS spans <strong>83,416–83,929 across all four runs — under 0.6% variance</strong>. Average latency is locked at 1.48–1.49 ms in every run. The ceiling is determined by kernel ARC lookup speed (hash table query + spinlock + DMA copy to userspace), not by NVMe or pool conditions.</p>
-<p>Cold random IOPS spans 14K–18.3K — a wider band explained by NVMe queue state, RAIDZ1 parity scheduling, and background system load varying between sessions. btop during Run 4's warm pass confirmed the same CPU pattern as Run 1: 59% overall, cores C1/C5/C6/C7 at 100%, Load AVG ~4.0 — ARC serving 83K IOPS is CPU-intensive regardless of starting conditions.</p>
+<p>¹ Runs 3–4 share ARC size before (0.23 GiB) and similar miss counts — ARC started near-empty each night after the previous run's test file was deleted and evicted.</p>
+<p>² Run 5 warmup started with ARC already ~11.5 GiB (ZFS cached the sequentially written test file during the write tests). Evictions during the warmup pass produced lower throughput than a clean cold start.</p>
+<p>³ Run 5 session hit rate and miss count cover the entire 7-step benchmark including write phases. ZFS performed ARC lookups during the write tests and the warmup needed to evict ~3 GiB of write-cached data, accounting for the extra 67K misses. The warm ARC rand read itself was as consistent as all prior runs.</p>
+<p>Warm ARC IOPS spans <strong>83,416–83,929 across five runs — under 0.6% variance</strong>. Average latency is locked at 1.48–1.49 ms in every run. The ceiling is determined by kernel ARC lookup speed (hash table query + spinlock + DMA copy to userspace), not by NVMe or pool conditions.</p>
+<p>Cold random IOPS spans 14K–18.3K across all runs — a wider band consistent with NVMe queue state, RAIDZ1 parity scheduling, and background system load varying between sessions. btop during warm ARC passes (Runs 1, 4, 5) consistently shows 58–64% overall CPU, multiple cores at 98–100%, Load AVG 4–5.5 — ARC serving 83K IOPS is CPU-intensive regardless of starting conditions.</p>
+<p><strong>Write benchmarks — benchmark-arc.sh Run 5 (June 4, 01:17):</strong></p>
+<p>Run 5 was the first run using the updated 7-step <code>benchmark-arc.sh</code> that includes sequential write and random 4K write tests (both <code>--direct=1</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Run 5 (<code>benchmark-arc.sh</code>)</th>
+<th>Runs 3–4 (<code>benchmark-glacier.sh</code>)</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sequential write</td>
+<td><strong>1,679 MiB/s</strong> (1,760 MB/s)</td>
+<td>1,685–1,752 MiB/s</td>
+<td>Consistent — ARC has no effect on writes</td>
+</tr>
+<tr>
+<td>Random 4K write</td>
+<td><strong>9,883 IOPS</strong></td>
+<td>13,387–13,725 IOPS</td>
+<td><strong>−26% lower</strong> — see below</td>
+</tr>
+</tbody>
+</table>
+<p>Sequential write is consistent with <code>benchmark-glacier.sh</code> — as expected since ARC is not in the write path.</p>
+<p>Random write IOPS is ~26% lower. The cause is <strong>test sequencing with no recovery pause</strong>: <code>benchmark-arc.sh</code> runs sequential write (4 jobs, 60 s, ~100 GiB total written looping over the 8 GiB file) immediately followed by random write. The NVMe drives' SLC write cache is still saturated when random write begins, depressing random IOPS. <code>benchmark-glacier.sh</code> runs a 60-second sequential read between its write tests, giving the SLC cache time to drain — its rand write figures are therefore more representative of sustained write performance.</p>
+<p>Additionally, ZFS cached the sequentially written 8 GiB file in ARC during the seq write pass (<code>--direct=1</code> prevents OS page-cache use but does not block ZFS ARC caching): btop confirmed ARC grew from 0.23 GiB → ~11.5 GiB during the write tests. The subsequent warmup pass had to evict ~3 GiB of that write-cached data before the random read benchmark.</p>
+<blockquote>
+<p>Use <code>benchmark-glacier.sh</code> for the most representative standalone write numbers. The write tests in <code>benchmark-arc.sh</code> are included for completeness and are accurate for sequential write; the random write figures will be lower whenever they follow a heavy sequential write pass without a recovery period.</p>
+</blockquote>
+<p><strong>btop observations during Run 5 write tests:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>CPU</th>
+<th>Notable processes</th>
+<th>Peak temp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sequential write (01:17:40)</td>
+<td>~48%</td>
+<td>4× <code>arc-seqwrite</code> at 10.4% each</td>
+<td><strong>74°C</strong></td>
+</tr>
+<tr>
+<td>Random write (01:18:28)</td>
+<td>~64%</td>
+<td><code>z_wr_iss</code> at 7.6–7.8%, 4× <code>arc-randwrite</code> at 1.7%</td>
+<td><strong>74°C</strong></td>
+</tr>
+<tr>
+<td>Warm ARC read (01:19:18)</td>
+<td>~58%</td>
+<td>4× <code>arc-randread</code> at 12.5%, Load AVG 5.56</td>
+<td>58°C</td>
+</tr>
+<tr>
+<td>Cold read (01:20:37)</td>
+<td>~9%</td>
+<td>4× <code>arc-randread</code> at ~1%, <code>z_rd_int</code> threads visible</td>
+<td>49°C</td>
+</tr>
+</tbody>
+</table>
+<p>74°C during writes is the highest temperature recorded across all benchmark sessions — ZFS RAIDZ1 CoW parity writes push the i3-1215U harder than read operations. <code>z_wr_iss</code> (ZFS write issue) threads dominating btop during random write confirms the bottleneck is in the ZFS write pipeline, not fio itself.</p>
 <h3 id="the-14-iops-gap-architectural-not-a-flaw">The 14× IOPS Gap — Architectural, Not a Flaw<a class="headerlink" href="#the-14-iops-gap-architectural-not-a-flaw" title="Permanent link">&para;</a></h3>
 <p>The Phase 1 benchmark showed a 14× random 4K IOPS gap between glacier (14,781 IOPS) and Arctic-Storage (205,588 IOPS). That gap exists for structural reasons, not defective hardware:</p>
 <ul>
