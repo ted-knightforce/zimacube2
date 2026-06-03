@@ -148,7 +148,7 @@ echo -e "${CYAN}"
 echo "============================================================"
 echo "  Benchmark Complete!"
 echo "  Results saved to: $RESULTS"
-echo "  Open Netdata: http://$(hostname -I | awk '{print $1}'):19999"
+echo "  Monitor live stats: btop (ZimaOS App Marketplace)"
 echo "============================================================"
 echo -e "${NC}"
 

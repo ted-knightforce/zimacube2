@@ -699,6 +699,31 @@ echo 17179869184 | sudo tee /sys/module/zfs/parameters/zfs_arc_max
 | 32 GB (planned) | **16 GiB** | Half of RAM; comfortable for Phase 4a Ollama inference |
 | 32 GB + GPU workloads | **12 GiB** | Tighter if Ollama model loading competes for RAM |
 
+### Benchmarking ARC performance
+
+The standard fio suite uses `--direct=1` to measure raw NVMe speed — those are cold-cache floor numbers. To measure the real-world uplift from ZFS ARC, use the dedicated ARC benchmark script:
+
+```bash
+sudo -i
+cd /DATA/Documents/nvme-benchmark
+chmod +x benchmark-arc.sh
+./benchmark-arc.sh
+```
+
+The script runs five steps automatically:
+
+1. **Capture ARC state before** — baseline hits, misses, cache size
+2. **Warm-up pass** — 8 GiB sequential read without `--direct=1` to populate ARC with the test file
+3. **Warm ARC benchmark** — random 4K read without `--direct=1`; requests are served from RAM
+4. **Capture ARC state after** — calculates session hit rate delta
+5. **Cold reference** — same random 4K test with `--direct=1` to bypass ARC, for direct comparison
+
+`zpool iostat glacier` runs in the background during step 3 — low disk read MB/s there confirms ARC was serving the requests, not the NVMe drives.
+
+Results are saved to `/media/glacier/benchmark-results-arc.txt`. Expected outcome: warm ARC IOPS will be a multiple of the cold `--direct=1` baseline.
+
+> The script source is at [`docs/resources/scripts/benchmark-arc.sh`](../resources/scripts/benchmark-arc.sh).
+
 ---
 
 ## Recommended Workload Split
@@ -822,13 +847,14 @@ Available in [`docs/resources/scripts/`](../resources/scripts/):
 | [`benchmark-glacier.sh`](../resources/scripts/benchmark-glacier.sh) | Full fio suite for glacier ZFS RAIDZ1 — 4 tests + pool stats |
 | [`benchmark-arctic.sh`](../resources/scripts/benchmark-arctic.sh) | Full fio suite for Arctic-Storage btrfs — 4 tests + btrfs stats + NVMe SMART |
 | [`benchmark-compare.sh`](../resources/scripts/benchmark-compare.sh) | Combined benchmark with side-by-side summary output |
+| [`benchmark-arc.sh`](../resources/scripts/benchmark-arc.sh) | ZFS ARC warm cache benchmark — warm vs cold comparison + ARC hit rate delta |
 
 Upload via **WinSCP** to `/DATA/Documents/nvme-benchmark/` on ZimaCube, then from the web terminal:
 
 ```bash
 sudo -i
 cd /DATA/Documents/nvme-benchmark
-chmod +x benchmark-glacier.sh benchmark-arctic.sh benchmark-compare.sh
+chmod +x benchmark-glacier.sh benchmark-arctic.sh benchmark-compare.sh benchmark-arc.sh
 ./benchmark-glacier.sh
 ./benchmark-arctic.sh
 ```
