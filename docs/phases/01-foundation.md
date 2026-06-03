@@ -347,6 +347,24 @@ For workloads like pulling raw photos from Immich, streaming high-bitrate media,
 | Snapshots | Copy-on-write snapshots are instant — essential before Phase 4 experiments |
 | Compression | lz4 is near-zero CPU cost on i3-1215U with real savings on documents and logs |
 
+### Why btrfs for Arctic-Storage and ironwolf
+
+Both `Arctic-Storage` and `ironwolf` are formatted as **btrfs** — ZimaOS's native filesystem. This is a deliberate choice to stay within the ZimaOS ecosystem for these two pools, prioritising seamless UI integration over the advanced features ZFS offers.
+
+| Pool | Configuration | Reason for btrfs |
+|---|---|---|
+| `Arctic-Storage` | Single drive (Crucial P510 2TB) | ZimaOS recognises btrfs volumes natively — the Storage app, Files app, and AppData migration tool all work without any manual symlinks or workarounds |
+| `ironwolf` | 4× Seagate IronWolf 4TB — btrfs RAID5 | Configured via ZimaOS Storage Manager UI — same native recognition as Arctic-Storage; no CLI required to set up or manage the array |
+
+**What this gives in practice:**
+
+- **ZimaOS Storage app** — both pools appear in the dashboard with health status and usage at a glance
+- **ZimaOS Files app** — browse, upload, and manage files on both pools directly through the web UI
+- **AppData migration tool** — Settings → Storage → Apps can move Docker container data between these pools without manual intervention
+- **No symlink workarounds needed** — unlike glacier (CLI-created ZFS pool), btrfs pools are first-class citizens in ZimaOS
+
+> **The trade-off:** btrfs lacks ZFS's self-healing checksums and copy-on-write snapshot depth. For `Arctic-Storage` (active app data) and `ironwolf` (bulk media), the ZimaOS integration benefit outweighs the ZFS feature gap — especially since `glacier` already handles the workloads where data integrity is non-negotiable.
+
 ### Pool Creation
 
 ```bash
