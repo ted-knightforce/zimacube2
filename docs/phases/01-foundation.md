@@ -293,7 +293,7 @@ thunderbolt 1-1: failed to initialize port 1
 [endless retimer connect/disconnect loop in dmesg]
 ```
 
-### Root Causes
+### Possible Root Causes
 
 | Issue | Detail |
 |---|---|
@@ -312,7 +312,7 @@ With PCIe Slot 1 occupied by the OCuLink adapter:
 - Unable to use ~~Minisforum DEG1~~ (OCuLink-only) → ruled out as Slot 1 OCuLink connection is occupied by Aoostar TB4S-OC DAS
 - Both TB4 ports now free → exploring to purchase **Minisforum DEG2** (TB5 + OCuLink) or an Aoostar AG02/AG03 TB4/TB5 eGPU dock as the viable paths for Phase 4b
 
-### Troubleshooting Takeaway
+### Troubleshooting Takeaway (To be verified with other enclosures)
 
 If connecting an Aoostar TB4S-OC (or any ASM2462PDX-based NVMe enclosure) to a ZimaCube 2 — **use OCuLink, not Thunderbolt 4**. Direct PCIe via OCuLink means no tunneling protocol, no authorization requirements, no firmware handshake. It also delivers lower latency than TB4 tunneling.
 
