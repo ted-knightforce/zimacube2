@@ -3492,7 +3492,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </tbody>
 </table>
 <h3 id="zfs-arc-warm-cache-benchmark-results-june-3-2026">ZFS ARC — Warm Cache Benchmark Results (June 3, 2026)<a class="headerlink" href="#zfs-arc-warm-cache-benchmark-results-june-3-2026" title="Permanent link">&para;</a></h3>
-<p>To quantify the real-world ARC uplift, <code>benchmark-arc.sh</code> was run against glacier with an 8 GiB test file. The benchmark first warms the ARC with a sequential pass, then measures random 4K read performance with and without <code>--direct=1</code>.</p>
+<p>To quantify the real-world ARC uplift, <code>benchmark-arc.sh</code> was run against glacier with an 8 GiB test file. The benchmark runs a full write + read suite: sequential write, random 4K write (both <code>--direct=1</code>), an ARC warm-up pass, then random 4K read with warm ARC and cold <code>--direct=1</code> baseline.</p>
 <p><strong>Pre-benchmark ARC state (Day 12):</strong></p>
 <table>
 <thead>
@@ -3796,15 +3796,17 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>chmod<span class="w"> </span>+x<span class="w"> </span>benchmark-arc.sh
 <a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>./benchmark-arc.sh
 </code></pre></div>
-<p>The script runs five steps automatically:</p>
+<p>The script runs seven steps automatically:</p>
 <ol>
 <li><strong>Capture ARC state before</strong> — baseline hits, misses, cache size</li>
+<li><strong>Sequential write</strong> — <code>--direct=1</code>, 4 jobs, 1 M blocks, 60 s; bypasses OS page cache, measures raw ZFS pool write throughput</li>
+<li><strong>Random 4K write</strong> — <code>--direct=1</code>, 4 jobs, 4 K blocks, 60 s; ARC does not cache writes, so results are directly comparable to <code>benchmark-glacier.sh</code></li>
 <li><strong>Warm-up pass</strong> — 8 GiB sequential read without <code>--direct=1</code> to populate ARC with the test file</li>
 <li><strong>Warm ARC benchmark</strong> — random 4K read without <code>--direct=1</code>; requests are served from RAM</li>
 <li><strong>Capture ARC state after</strong> — calculates session hit rate delta</li>
-<li><strong>Cold reference</strong> — same random 4K test with <code>--direct=1</code> to bypass ARC, for direct comparison</li>
+<li><strong>Cold reference</strong> — same random 4K read with <code>--direct=1</code> to bypass ARC, for direct comparison</li>
 </ol>
-<p><code>zpool iostat glacier</code> runs in the background during step 3 — low disk read MB/s there confirms ARC was serving the requests, not the NVMe drives.</p>
+<p><code>zpool iostat glacier</code> runs in the background during step 5 — low disk read MB/s there confirms ARC was serving the requests, not the NVMe drives.</p>
 <p>Results are saved to <code>/media/glacier/benchmark-results-arc.txt</code>. Expected outcome: warm ARC IOPS will be a multiple of the cold <code>--direct=1</code> baseline.</p>
 <blockquote>
 <p>The script source is at <a href="../../resources/scripts/benchmark-arc.sh"><code>docs/resources/scripts/benchmark-arc.sh</code></a>.</p>
@@ -4103,7 +4105,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </tr>
 <tr>
 <td><a href="../../resources/scripts/benchmark-arc.sh"><code>benchmark-arc.sh</code></a></td>
-<td>ZFS ARC warm cache benchmark — warm vs cold comparison + ARC hit rate delta</td>
+<td>Full fio suite with ZFS ARC — seq write, rand write, warm ARC read, cold read + ARC hit rate delta</td>
 </tr>
 </tbody>
 </table>
