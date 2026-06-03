@@ -637,6 +637,50 @@ ARC is evicted immediately when applications need RAM — the system is not RAM-
 | 16 GB (current) | ~8–10 GB | Hot Docker databases and small working sets |
 | 32 GB (planned) | ~20–24 GB | Immich thumbnails + databases + Ollama model pages simultaneously |
 
+### ZFS ARC — Warm Cache Benchmark Results (June 3, 2026)
+
+To quantify the real-world ARC uplift, `benchmark-arc.sh` was run against glacier with an 8 GiB test file. The benchmark first warms the ARC with a sequential pass, then measures random 4K read performance with and without `--direct=1`.
+
+**Pre-benchmark ARC state (Day 12):**
+
+| Metric | Value |
+|---|---|
+| `size` (ARC occupancy) | **9.32 GiB** (10,004,042,288 bytes) |
+| `c_max` (ceiling) | **14.37 GiB** (15,431,536,640 bytes) |
+| Cumulative hit rate | **93.7%** (22,688,107 hits / 1,529,589 misses) |
+
+**Warm-up pass — sequential 8 GiB read (no `--direct=1`):**
+- **3,329 MiB/s** (3,490 MB/s) — ZFS sequential prefetch pulled the 8 GiB test file into ARC in 2.4 seconds
+- ARC size after warm-up: **8.70 GiB**
+
+**Benchmark results — random 4K read, 4 jobs, `iodepth=32`, 60 seconds:**
+
+| Metric | Warm ARC (buffered) | Cold cache (`--direct=1`) | Uplift |
+|---|---|---|---|
+| **IOPS (avg)** | **83,416** | 16,276 | **5.1×** |
+| **Bandwidth** | **326 MiB/s** (342 MB/s) | 63.6 MiB/s (66.7 MB/s) | **5.1×** |
+| **Completion latency (avg)** | **1.49 µs** | ~7–8 ms | **~5,000×** |
+| 99th percentile latency | 2.1 ms | 8.9 ms | 4.2× |
+| I/O served in 60 s | 19.1 GiB | 3.7 GiB | 5.1× |
+
+**Session ARC stats (warm benchmark only):**
+
+| Metric | Value |
+|---|---|
+| Hits during test | 10,106,596 |
+| Misses during test | 9,037 |
+| **Session hit rate** | **99.9%** |
+| ARC size after | 8.49 GiB |
+
+99.9% of the 83K IOPS were served from RAM. The 9,037 misses over 60 seconds (~150/sec) represent ZFS evicting and re-fetching a small fraction of data at the working-set boundary.
+
+**System impact during warm ARC benchmark (btop, 23:19):**
+- **CPU: 2%** overall — reads came from RAM, not NVMe; the i3-1215U cores were almost entirely idle
+- `z_rd_int` kernel threads appeared at the top of the process list during the cold `--direct=1` pass — ZFS read interrupts confirming actual NVMe I/O
+- Load average peaked at 2.46, returned to baseline within seconds of completion
+
+> **Takeaway:** With a warm ARC, glacier behaves like a 83K IOPS RAM array, not a 16K IOPS NVMe RAIDZ1. Workloads with repeated access patterns — Immich metadata lookups, Jellyfin library scans, Nextcloud file indexing — will experience this warm-cache tier, not the cold-cache floor numbers from Phase 1 fio benchmarks.
+
 ### The 14× IOPS Gap — Architectural, Not a Flaw
 
 ZFS RAIDZ1 trades random I/O efficiency for sequential throughput, redundancy, and data integrity. The correct response is tiered workload routing — not trying to close the gap.
