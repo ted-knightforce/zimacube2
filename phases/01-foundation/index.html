@@ -1071,6 +1071,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#zfs-arc-warm-cache-benchmark-results-june-3-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZFS ARC — Warm Cache Benchmark Results (June 3, 2026)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#the-14-iops-gap-architectural-not-a-flaw" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2166,6 +2177,17 @@
     <span class="md-ellipsis">
       
         ZFS ARC — Measured Behaviour (June 3, 2026)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zfs-arc-warm-cache-benchmark-results-june-3-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZFS ARC — Warm Cache Benchmark Results (June 3, 2026)
       
     </span>
   </a>
@@ -3423,6 +3445,112 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </tr>
 </tbody>
 </table>
+<h3 id="zfs-arc-warm-cache-benchmark-results-june-3-2026">ZFS ARC — Warm Cache Benchmark Results (June 3, 2026)<a class="headerlink" href="#zfs-arc-warm-cache-benchmark-results-june-3-2026" title="Permanent link">&para;</a></h3>
+<p>To quantify the real-world ARC uplift, <code>benchmark-arc.sh</code> was run against glacier with an 8 GiB test file. The benchmark first warms the ARC with a sequential pass, then measures random 4K read performance with and without <code>--direct=1</code>.</p>
+<p><strong>Pre-benchmark ARC state (Day 12):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>size</code> (ARC occupancy)</td>
+<td><strong>9.32 GiB</strong> (10,004,042,288 bytes)</td>
+</tr>
+<tr>
+<td><code>c_max</code> (ceiling)</td>
+<td><strong>14.37 GiB</strong> (15,431,536,640 bytes)</td>
+</tr>
+<tr>
+<td>Cumulative hit rate</td>
+<td><strong>93.7%</strong> (22,688,107 hits / 1,529,589 misses)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Warm-up pass — sequential 8 GiB read (no <code>--direct=1</code>):</strong>
+- <strong>3,329 MiB/s</strong> (3,490 MB/s) — ZFS sequential prefetch pulled the 8 GiB test file into ARC in 2.4 seconds
+- ARC size after warm-up: <strong>8.70 GiB</strong></p>
+<p><strong>Benchmark results — random 4K read, 4 jobs, <code>iodepth=32</code>, 60 seconds:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Warm ARC (buffered)</th>
+<th>Cold cache (<code>--direct=1</code>)</th>
+<th>Uplift</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IOPS (avg)</strong></td>
+<td><strong>83,416</strong></td>
+<td>16,276</td>
+<td><strong>5.1×</strong></td>
+</tr>
+<tr>
+<td><strong>Bandwidth</strong></td>
+<td><strong>326 MiB/s</strong> (342 MB/s)</td>
+<td>63.6 MiB/s (66.7 MB/s)</td>
+<td><strong>5.1×</strong></td>
+</tr>
+<tr>
+<td><strong>Completion latency (avg)</strong></td>
+<td><strong>1.49 µs</strong></td>
+<td>~7–8 ms</td>
+<td><strong>~5,000×</strong></td>
+</tr>
+<tr>
+<td>99th percentile latency</td>
+<td>2.1 ms</td>
+<td>8.9 ms</td>
+<td>4.2×</td>
+</tr>
+<tr>
+<td>I/O served in 60 s</td>
+<td>19.1 GiB</td>
+<td>3.7 GiB</td>
+<td>5.1×</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Session ARC stats (warm benchmark only):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hits during test</td>
+<td>10,106,596</td>
+</tr>
+<tr>
+<td>Misses during test</td>
+<td>9,037</td>
+</tr>
+<tr>
+<td><strong>Session hit rate</strong></td>
+<td><strong>99.9%</strong></td>
+</tr>
+<tr>
+<td>ARC size after</td>
+<td>8.49 GiB</td>
+</tr>
+</tbody>
+</table>
+<p>99.9% of the 83K IOPS were served from RAM. The 9,037 misses over 60 seconds (~150/sec) represent ZFS evicting and re-fetching a small fraction of data at the working-set boundary.</p>
+<p><strong>System impact during warm ARC benchmark (btop, 23:19):</strong>
+- <strong>CPU: 2%</strong> overall — reads came from RAM, not NVMe; the i3-1215U cores were almost entirely idle
+- <code>z_rd_int</code> kernel threads appeared at the top of the process list during the cold <code>--direct=1</code> pass — ZFS read interrupts confirming actual NVMe I/O
+- Load average peaked at 2.46, returned to baseline within seconds of completion</p>
+<blockquote>
+<p><strong>Takeaway:</strong> With a warm ARC, glacier behaves like a 83K IOPS RAM array, not a 16K IOPS NVMe RAIDZ1. Workloads with repeated access patterns — Immich metadata lookups, Jellyfin library scans, Nextcloud file indexing — will experience this warm-cache tier, not the cold-cache floor numbers from Phase 1 fio benchmarks.</p>
+</blockquote>
 <h3 id="the-14-iops-gap-architectural-not-a-flaw">The 14× IOPS Gap — Architectural, Not a Flaw<a class="headerlink" href="#the-14-iops-gap-architectural-not-a-flaw" title="Permanent link">&para;</a></h3>
 <p>ZFS RAIDZ1 trades random I/O efficiency for sequential throughput, redundancy, and data integrity. The correct response is tiered workload routing — not trying to close the gap.</p>
 <hr />
