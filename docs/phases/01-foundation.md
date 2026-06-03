@@ -639,7 +639,7 @@ ARC is evicted immediately when applications need RAM — the system is not RAM-
 
 ### ZFS ARC — Warm Cache Benchmark Results (June 3, 2026)
 
-To quantify the real-world ARC uplift, `benchmark-arc.sh` was run against glacier with an 8 GiB test file. The benchmark first warms the ARC with a sequential pass, then measures random 4K read performance with and without `--direct=1`.
+To quantify the real-world ARC uplift, `benchmark-arc.sh` was run against glacier with an 8 GiB test file. The benchmark runs a full write + read suite: sequential write, random 4K write (both `--direct=1`), an ARC warm-up pass, then random 4K read with warm ARC and cold `--direct=1` baseline.
 
 **Pre-benchmark ARC state (Day 12):**
 
@@ -798,15 +798,17 @@ chmod +x benchmark-arc.sh
 ./benchmark-arc.sh
 ```
 
-The script runs five steps automatically:
+The script runs seven steps automatically:
 
 1. **Capture ARC state before** — baseline hits, misses, cache size
-2. **Warm-up pass** — 8 GiB sequential read without `--direct=1` to populate ARC with the test file
-3. **Warm ARC benchmark** — random 4K read without `--direct=1`; requests are served from RAM
-4. **Capture ARC state after** — calculates session hit rate delta
-5. **Cold reference** — same random 4K test with `--direct=1` to bypass ARC, for direct comparison
+2. **Sequential write** — `--direct=1`, 4 jobs, 1 M blocks, 60 s; bypasses OS page cache, measures raw ZFS pool write throughput
+3. **Random 4K write** — `--direct=1`, 4 jobs, 4 K blocks, 60 s; ARC does not cache writes, so results are directly comparable to `benchmark-glacier.sh`
+4. **Warm-up pass** — 8 GiB sequential read without `--direct=1` to populate ARC with the test file
+5. **Warm ARC benchmark** — random 4K read without `--direct=1`; requests are served from RAM
+6. **Capture ARC state after** — calculates session hit rate delta
+7. **Cold reference** — same random 4K read with `--direct=1` to bypass ARC, for direct comparison
 
-`zpool iostat glacier` runs in the background during step 3 — low disk read MB/s there confirms ARC was serving the requests, not the NVMe drives.
+`zpool iostat glacier` runs in the background during step 5 — low disk read MB/s there confirms ARC was serving the requests, not the NVMe drives.
 
 Results are saved to `/media/glacier/benchmark-results-arc.txt`. Expected outcome: warm ARC IOPS will be a multiple of the cold `--direct=1` baseline.
 
@@ -935,7 +937,7 @@ Available in [`docs/resources/scripts/`](../resources/scripts/):
 | [`benchmark-glacier.sh`](../resources/scripts/benchmark-glacier.sh) | Full fio suite for glacier ZFS RAIDZ1 — 4 tests + pool stats |
 | [`benchmark-arctic.sh`](../resources/scripts/benchmark-arctic.sh) | Full fio suite for Arctic-Storage btrfs — 4 tests + btrfs stats + NVMe SMART |
 | [`benchmark-compare.sh`](../resources/scripts/benchmark-compare.sh) | Combined benchmark with side-by-side summary output |
-| [`benchmark-arc.sh`](../resources/scripts/benchmark-arc.sh) | ZFS ARC warm cache benchmark — warm vs cold comparison + ARC hit rate delta |
+| [`benchmark-arc.sh`](../resources/scripts/benchmark-arc.sh) | Full fio suite with ZFS ARC — seq write, rand write, warm ARC read, cold read + ARC hit rate delta |
 
 Upload via **WinSCP** to `/DATA/Documents/nvme-benchmark/` on ZimaCube, then from the web terminal:
 
