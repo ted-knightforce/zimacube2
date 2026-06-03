@@ -1090,10 +1090,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#zfs-arc-warm-cache-benchmark-results-june-3-2026" class="md-nav__link">
+  <a href="#zfs-arc-warm-cache-benchmark-results-june-34-2026" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ZFS ARC — Warm Cache Benchmark Results (June 3, 2026)
+        ZFS ARC — Warm Cache Benchmark Results (June 3–4, 2026)
       
     </span>
   </a>
@@ -2230,10 +2230,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#zfs-arc-warm-cache-benchmark-results-june-3-2026" class="md-nav__link">
+  <a href="#zfs-arc-warm-cache-benchmark-results-june-34-2026" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ZFS ARC — Warm Cache Benchmark Results (June 3, 2026)
+        ZFS ARC — Warm Cache Benchmark Results (June 3–4, 2026)
       
     </span>
   </a>
@@ -3491,7 +3491,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </tr>
 </tbody>
 </table>
-<h3 id="zfs-arc-warm-cache-benchmark-results-june-3-2026">ZFS ARC — Warm Cache Benchmark Results (June 3, 2026)<a class="headerlink" href="#zfs-arc-warm-cache-benchmark-results-june-3-2026" title="Permanent link">&para;</a></h3>
+<h3 id="zfs-arc-warm-cache-benchmark-results-june-34-2026">ZFS ARC — Warm Cache Benchmark Results (June 3–4, 2026)<a class="headerlink" href="#zfs-arc-warm-cache-benchmark-results-june-34-2026" title="Permanent link">&para;</a></h3>
 <p>To quantify the real-world ARC uplift, <code>benchmark-arc.sh</code> was run against glacier with an 8 GiB test file. The benchmark runs a full write + read suite: sequential write, random 4K write (both <code>--direct=1</code>), an ARC warm-up pass, then random 4K read with warm ARC and cold <code>--direct=1</code> baseline.</p>
 <p><strong>Pre-benchmark ARC state (Day 12):</strong></p>
 <table>
@@ -3688,6 +3688,113 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <blockquote>
 <p><strong>Takeaway:</strong> With a warm ARC, glacier behaves like an 83K IOPS RAM array, not a 16K IOPS NVMe RAIDZ1 — at the cost of ~55% CPU during sustained high-IOPS reads. Workloads with repeated access patterns — Immich metadata lookups, Jellyfin library scans, Nextcloud file indexing — will experience this warm-cache tier, not the cold-cache floor numbers. ZFS ARC also proves it evicts promptly: 8.49 GiB of cached data was fully released within 12 minutes of the test file being deleted.</p>
 </blockquote>
+<p><strong>Runs 3 and 4 — cold baseline + ARC (June 3–4, 2026):</strong></p>
+<p>Runs 3 and 4 paired <code>benchmark-glacier.sh</code> immediately before <code>benchmark-arc.sh</code> in the same session, giving a combined cold baseline + warm ARC picture for each night. Run 4 used the original 3-step ARC script; sequential write and random 4K write tests were added to <code>benchmark-arc.sh</code> after this run completed.</p>
+<p><strong><code>benchmark-glacier.sh</code> cold baseline:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Run 3 (June 3, 23:55)</th>
+<th>Run 4 (June 4, 00:55)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sequential write</td>
+<td>1,752 MiB/s (1,837 MB/s)</td>
+<td>1,685 MiB/s (1,767 MB/s)</td>
+</tr>
+<tr>
+<td>Sequential read</td>
+<td>2,285 MiB/s (2,396 MB/s)</td>
+<td>2,375 MiB/s (2,491 MB/s)</td>
+</tr>
+<tr>
+<td>Random 4K write</td>
+<td>13,725 IOPS</td>
+<td>13,387 IOPS</td>
+</tr>
+<tr>
+<td>Random 4K read</td>
+<td>14,063 IOPS</td>
+<td>15,751 IOPS</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Four-run ARC benchmark summary:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Run 1</th>
+<th>Run 2</th>
+<th>Run 3</th>
+<th>Run 4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ARC size before</td>
+<td>9.32 GiB</td>
+<td>0.22 GiB</td>
+<td>0.23 GiB</td>
+<td>0.23 GiB</td>
+</tr>
+<tr>
+<td>Warmup speed (seq read)</td>
+<td>3,329 MiB/s</td>
+<td>4,298 MiB/s</td>
+<td>4,459 MiB/s</td>
+<td>4,328 MiB/s</td>
+</tr>
+<tr>
+<td><strong>Warm ARC IOPS (avg)</strong></td>
+<td><strong>83,416</strong></td>
+<td><strong>83,707</strong></td>
+<td><strong>83,588</strong></td>
+<td><strong>83,929</strong></td>
+</tr>
+<tr>
+<td>Warm ARC latency (avg)</td>
+<td>1.49 ms</td>
+<td>1.48 ms</td>
+<td>1.48 ms</td>
+<td>1.48 ms</td>
+</tr>
+<tr>
+<td>Session hit rate</td>
+<td>99.9%</td>
+<td>100.0%</td>
+<td>100.0%</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Misses during warm test</td>
+<td>9,037</td>
+<td>2,603</td>
+<td>2,001¹</td>
+<td>2,001</td>
+</tr>
+<tr>
+<td>Cold rand read IOPS</td>
+<td>16,276</td>
+<td>18,315</td>
+<td>~14,063</td>
+<td>17,577</td>
+</tr>
+<tr>
+<td>Cold rand read latency</td>
+<td>7.62 ms</td>
+<td>—</td>
+<td>—</td>
+<td>7.05 ms</td>
+</tr>
+</tbody>
+</table>
+<p>¹ Run 3 and Run 4 share the same ARC size before (0.23 GiB) and similar miss counts — ARC started near-empty both nights after the test file from the previous run had been deleted and evicted.</p>
+<p>Warm ARC IOPS spans <strong>83,416–83,929 across all four runs — under 0.6% variance</strong>. Average latency is locked at 1.48–1.49 ms in every run. The ceiling is determined by kernel ARC lookup speed (hash table query + spinlock + DMA copy to userspace), not by NVMe or pool conditions.</p>
+<p>Cold random IOPS spans 14K–18.3K — a wider band explained by NVMe queue state, RAIDZ1 parity scheduling, and background system load varying between sessions. btop during Run 4's warm pass confirmed the same CPU pattern as Run 1: 59% overall, cores C1/C5/C6/C7 at 100%, Load AVG ~4.0 — ARC serving 83K IOPS is CPU-intensive regardless of starting conditions.</p>
 <h3 id="the-14-iops-gap-architectural-not-a-flaw">The 14× IOPS Gap — Architectural, Not a Flaw<a class="headerlink" href="#the-14-iops-gap-architectural-not-a-flaw" title="Permanent link">&para;</a></h3>
 <p>The Phase 1 benchmark showed a 14× random 4K IOPS gap between glacier (14,781 IOPS) and Arctic-Storage (205,588 IOPS). That gap exists for structural reasons, not defective hardware:</p>
 <ul>
