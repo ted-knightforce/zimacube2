@@ -14,17 +14,13 @@
       padding: 2.5rem 1.5rem;
       max-width: 1000px;
       margin: 0 auto;
-      font-size: 14px;
     }
 
     h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.3rem; }
     .subtitle { color: #7d8590; font-size: 0.8rem; margin-bottom: 1.75rem; }
 
     /* ── Legend ── */
-    .legend {
-      display: flex; gap: 1.5rem; flex-wrap: wrap;
-      margin-bottom: 1.5rem;
-    }
+    .legend { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
     .legend-item { display: flex; align-items: center; gap: 0.45rem; font-size: 0.75rem; color: #c9d1d9; }
     .ldot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
     .ldot-cold   { background: #2dd4bf; }
@@ -36,24 +32,20 @@
     .pool-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 0.75rem 1rem; }
     .pool-name { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
     .pool-sub  { font-size: 0.72rem; color: #7d8590; margin-top: 0.2rem; }
-    .cn-glacier { color: #2dd4bf; }
-    .cn-arctic  { color: #818cf8; }
+    .cn-g { color: #2dd4bf; }
+    .cn-a { color: #818cf8; }
 
     /* ── Stat cards ── */
     .stat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 0.6rem; margin-bottom: 2rem; }
-    .stat-card {
-      background: #161b22; border: 1px solid #30363d; border-radius: 8px;
-      padding: 0.85rem 0.6rem; text-align: center;
-    }
+    .stat-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 0.85rem 0.6rem; text-align: center; }
     .s-label { font-size: 0.67rem; text-transform: uppercase; letter-spacing: 0.06em; color: #7d8590; margin-bottom: 0.35rem; }
-    .s-cold  { font-size: 1.15rem; font-weight: 700; color: #2dd4bf; line-height: 1.2; }
-    .s-cold-dim { font-size: 1.15rem; font-weight: 700; color: #818cf8; line-height: 1.2; }
+    .s-val   { font-size: 1.15rem; font-weight: 700; line-height: 1.2; }
     .s-warm  { font-size: 0.85rem; font-weight: 600; color: #38bdf8; margin-top: 0.12rem; }
     .s-vs    { font-size: 0.68rem; color: #555d69; margin-top: 0.25rem; }
     .badge   { display: inline-block; font-size: 0.65rem; font-weight: 600; padding: 0.1rem 0.4rem; border-radius: 4px; margin-top: 0.2rem; }
-    .b-g  { background: rgba(45,212,191,.13); color: #2dd4bf; }
-    .b-a  { background: rgba(129,140,248,.13); color: #818cf8; }
-    .b-w  { background: rgba(56,189,248,.12); color: #38bdf8; }
+    .b-g { background: rgba(45,212,191,.13); color: #2dd4bf; }
+    .b-a { background: rgba(129,140,248,.13); color: #818cf8; }
+    .b-w { background: rgba(56,189,248,.12); color: #38bdf8; }
 
     /* ── Section headings ── */
     .section-head {
@@ -62,80 +54,65 @@
       border-bottom: 1px solid #21262d; padding-bottom: 0.4rem; margin-bottom: 1rem;
     }
     .chart-section { margin-bottom: 2rem; }
-
-    /* ── Chart grid ── */
     .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .chart-wrap {
-      background: #161b22; border: 1px solid #21262d; border-radius: 10px;
-      padding: 1rem 1rem 0.85rem;
-    }
+    .chart-wrap { background: #161b22; border: 1px solid #21262d; border-radius: 10px; padding: 1rem 1rem 0.85rem; }
     .chart-title { font-size: 0.78rem; color: #c9d1d9; font-weight: 500; margin-bottom: 0.9rem; }
 
-    /* ── Bar chart ── */
+    /* ── Bar chart core ── */
     .bar-chart-inner { display: flex; align-items: stretch; gap: 4px; }
 
     .y-axis {
       display: flex; flex-direction: column; justify-content: space-between;
-      width: 38px; flex-shrink: 0; text-align: right; padding-right: 6px;
+      width: 40px; flex-shrink: 0; text-align: right; padding-right: 6px;
     }
     .y-tick { font-size: 0.58rem; color: #555d69; }
 
     .bars-area { flex: 1; position: relative; }
 
-    /* gridlines */
+    /* gridlines every 25% of 200px = 50px steps */
     .gridlines {
-      position: absolute; inset: 0; bottom: 0; pointer-events: none;
-      background:
-        linear-gradient(to bottom,
-          rgba(255,255,255,.04)  0px, rgba(255,255,255,.04)  1px,
-          transparent            1px, transparent             50px,
-          rgba(255,255,255,.04) 50px, rgba(255,255,255,.04)  51px,
-          transparent           51px, transparent            100px,
-          rgba(255,255,255,.04) 100px,rgba(255,255,255,.04) 101px,
-          transparent           101px,transparent            150px,
-          rgba(255,255,255,.04) 150px,rgba(255,255,255,.04) 151px,
-          transparent           151px,transparent            200px
-        );
+      position: absolute; inset: 0; pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,.045) 0px, rgba(255,255,255,.045) 1px,
+        transparent 1px, transparent 50px
+      );
+      background-size: 100% 50px;
     }
 
+    /* bars-row: fixed 200px height, bars bottom-aligned */
     .bars-row {
-      display: flex; align-items: flex-end;
+      display: flex;
+      align-items: flex-end;
       height: 200px;
       border-bottom: 1px solid #30363d;
       position: relative; z-index: 1;
-      gap: 6px;
+      gap: 8px;
     }
+    /* write charts get wider bars since only 2 groups */
+    .bars-row.two-bar { gap: 24px; padding: 0 30px; }
 
-    /* Each bar column */
-    .bc {
-      flex: 1; display: flex; flex-direction: column;
-      align-items: center; gap: 3px;
-    }
-    .bv {
-      font-size: 0.6rem; font-weight: 600; color: #c9d1d9;
-      line-height: 1; white-space: nowrap;
-    }
-    .bv-dim { font-size: 0.6rem; font-weight: 600; color: #6e7681; line-height: 1; white-space: nowrap; }
-    .b { width: 100%; border-radius: 4px 4px 0 0; min-height: 3px; }
-    .b-cold   { background: linear-gradient(180deg,#2dd4bf 0%,#1a9e8f 100%); }
-    .b-warm   { background: linear-gradient(180deg,#38bdf8 0%,#0ea5e9 100%); }
-    .b-warm-n { background: linear-gradient(180deg,#38bdf8 0%,#0ea5e9 100%); opacity: 0.45; }
-    .b-arctic { background: linear-gradient(180deg,#818cf8 0%,#6366f1 100%); }
+    /* bar column */
+    .bc { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .bv  { font-size: 0.6rem; font-weight: 600; color: #c9d1d9; white-space: nowrap; line-height: 1; }
+    .b   { width: 100%; border-radius: 4px 4px 0 0; min-height: 3px; }
 
-    .bar-names {
-      display: flex; gap: 6px; margin-top: 5px;
-    }
-    .bn {
-      flex: 1; text-align: center; font-size: 0.6rem; color: #7d8590;
-    }
+    .b-cold   { background: linear-gradient(180deg, #2dd4bf 0%, #1a9e8f 100%); }
+    .b-warm   { background: linear-gradient(180deg, #38bdf8 0%, #0ea5e9 100%); }
+    .b-arctic { background: linear-gradient(180deg, #818cf8 0%, #6366f1 100%); }
 
-    .chart-note { font-size: 0.62rem; color: #555d69; margin-top: 0.5rem; font-style: italic; }
+    .bar-names { display: flex; gap: 8px; margin-top: 5px; }
+    .bar-names.two-bar { gap: 24px; padding: 0 30px; }
+    .bn { flex: 1; text-align: center; font-size: 0.6rem; color: #7d8590; }
+
+    .chart-note { font-size: 0.62rem; color: #484f58; margin-top: 0.55rem; font-style: italic; }
 
     /* ── Wins ── */
     .wins-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1.75rem; }
     .wins-card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 1rem 1.1rem; }
     .wins-title { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 0.65rem; }
-    .wt-g { color: #2dd4bf; } .wt-a { color: #818cf8; }
+    .wt-g { color: #2dd4bf; }
+    .wt-a { color: #818cf8; }
     .wi { font-size: 0.75rem; color: #c9d1d9; padding: 0.18rem 0; }
     .wi-g::before { content: "✓ "; color: #2dd4bf; font-weight: 700; }
     .wi-a::before { content: "✓ "; color: #818cf8; font-weight: 700; }
@@ -149,74 +126,83 @@
     .arc-callout strong { color: #38bdf8; }
 
     @media (max-width: 620px) {
-      .stat-grid       { grid-template-columns: 1fr 1fr; }
-      .chart-row       { grid-template-columns: 1fr; }
-      .pool-headers    { grid-template-columns: 1fr; }
-      .wins-row        { grid-template-columns: 1fr; }
+      .stat-grid    { grid-template-columns: 1fr 1fr; }
+      .chart-row    { grid-template-columns: 1fr; }
+      .pool-headers { grid-template-columns: 1fr; }
+      .wins-row     { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
 <h1>Results</h1>
-<p class="subtitle">ZimaCube 2 · Phase 1 Storage Benchmark · ZimaOS · fio 3.38</p>
+<p class="subtitle">ZimaCube 2 · Phase 1 Storage Benchmark · ZimaOS · fio 3.38 · benchmark-glacier.sh + benchmark-arc.sh · June 3–4, 2026</p>
 
 <!-- Legend -->
 <div class="legend">
-  <div class="legend-item"><div class="ldot ldot-cold"></div>Glacier ZFS RAIDZ1 — Cold (direct I/O)</div>
-  <div class="legend-item"><div class="ldot ldot-warm"></div>Glacier ZFS RAIDZ1 — Warm ARC (buffered)</div>
-  <div class="legend-item"><div class="ldot ldot-arctic"></div>Arctic btrfs PCIe 5.0</div>
+  <div class="legend-item"><div class="ldot ldot-cold"></div>Glacier ZFS RAIDZ1 — Cold (direct I/O, benchmark-glacier.sh)</div>
+  <div class="legend-item"><div class="ldot ldot-warm"></div>Glacier ZFS RAIDZ1 — Warm ARC (buffered, benchmark-arc.sh)</div>
+  <div class="legend-item"><div class="ldot ldot-arctic"></div>Arctic btrfs PCIe 5.0 (Phase 1 baseline)</div>
 </div>
 
-<!-- Pool header cards -->
+<!-- Pool headers -->
 <div class="pool-headers">
   <div class="pool-card">
-    <div class="pool-name cn-glacier">GLACIER — ZFS RAIDZ1</div>
+    <div class="pool-name cn-g">GLACIER — ZFS RAIDZ1</div>
     <div class="pool-sub">4× 2TB PCIe 4.0 · OCuLink · Aoostar TB4S-OC</div>
   </div>
   <div class="pool-card">
-    <div class="pool-name cn-arctic">ARCTIC — BTRFS PCIE 5.0</div>
+    <div class="pool-name cn-a">ARCTIC — BTRFS PCIE 5.0</div>
     <div class="pool-sub">1× 2TB Crucial P510 · 7th Bay · 800 MB/s cap</div>
   </div>
 </div>
 
-<!-- Stat summary cards -->
+<!-- Stat summary cards
+     Cold values from benchmark-glacier.sh (June 3, 23:55):
+       seq write 1,752 MB/s · seq read 2,285 MB/s · rand write 13,725 IOPS · rand read 14,063 IOPS
+     Warm ARC values from benchmark-arc.sh Run 3 (June 3, 23:59):
+       seq read warm 4,676 MB/s · rand read warm 83,588 IOPS
+     Arctic values from Phase 1 baseline:
+       seq write 788 MB/s · seq read 874 MB/s · rand write 87,099 IOPS · rand read 205,588 IOPS
+-->
 <div class="stat-grid">
   <div class="stat-card">
     <div class="s-label">seq write</div>
-    <div class="s-cold">1,726 MB/s</div>
+    <div class="s-val" style="color:#2dd4bf">1,752 MB/s</div>
     <div class="s-vs">vs 788 MB/s</div>
-    <span class="badge b-g">+119% faster</span>
+    <span class="badge b-g">+122% faster</span>
   </div>
   <div class="stat-card">
     <div class="s-label">seq read</div>
-    <div class="s-cold">2,591 MB/s</div>
-    <div class="s-warm">4,676 MB/s <small style="font-size:.62rem;color:#7d8590">warm ARC</small></div>
+    <div class="s-val" style="color:#2dd4bf">2,285 MB/s</div>
+    <div class="s-warm">4,676 MB/s <small style="font-size:.6rem;color:#7d8590">warm ARC</small></div>
     <div class="s-vs">vs 874 MB/s</div>
-    <span class="badge b-w">+196% cold · +435% warm</span>
+    <span class="badge b-w">+162% cold · +435% warm</span>
   </div>
   <div class="stat-card">
     <div class="s-label">rand 4K write</div>
-    <div class="s-cold-dim">13,795 IOPS</div>
+    <div class="s-val" style="color:#818cf8">13,725 IOPS</div>
     <div class="s-vs">vs 87,099 IOPS</div>
     <span class="badge b-a">Arctic 6.3× faster</span>
   </div>
   <div class="stat-card">
     <div class="s-label">rand 4K read</div>
-    <div class="s-cold-dim" style="font-size:.95rem">14,781 IOPS</div>
-    <div class="s-warm">83,588 IOPS <small style="font-size:.62rem;color:#7d8590">warm ARC</small></div>
+    <div class="s-val" style="color:#818cf8; font-size:.95rem">14,063 IOPS</div>
+    <div class="s-warm">83,588 IOPS <small style="font-size:.6rem;color:#7d8590">warm ARC</small></div>
     <div class="s-vs">vs 205,588 IOPS</div>
     <span class="badge b-a">Arctic 2.5× faster (warm)</span>
   </div>
 </div>
 
-<!-- ═══════════════════════════ SEQUENTIAL ═══════════════════════════ -->
+<!-- ═══════════════════ SEQUENTIAL ═══════════════════════════════════ -->
 <div class="chart-section">
   <div class="section-head">Sequential Throughput — MB/s (higher is better)</div>
   <div class="chart-row">
 
-    <!-- Sequential Write  max=1800 h=200px -->
-    <!-- cold 1726 → 192px | warm 1726 → 192px (ARC n/a) | arctic 788 → 88px -->
+    <!-- ── Sequential Write  cold only: max=1800, h=200px
+         Glacier cold 1,752 → (1752/1800)×200 = 194.7 → 195px
+         Arctic      788   → (788/1800)×200  =  87.6 →  88px
+         NO warm ARC bar — benchmark-arc.sh is reads-only ── -->
     <div class="chart-wrap">
       <div class="chart-title">Sequential Write</div>
       <div class="bar-chart-inner">
@@ -229,32 +215,29 @@
         </div>
         <div class="bars-area">
           <div class="gridlines"></div>
-          <div class="bars-row">
+          <div class="bars-row two-bar">
             <div class="bc">
-              <span class="bv">1,726</span>
-              <div class="b b-cold" style="height:192px"></div>
-            </div>
-            <div class="bc">
-              <span class="bv-dim">1,726 †</span>
-              <div class="b b-warm-n" style="height:192px"></div>
+              <span class="bv">1,752</span>
+              <div class="b b-cold" style="height:195px"></div>
             </div>
             <div class="bc">
               <span class="bv">788</span>
               <div class="b b-arctic" style="height:88px"></div>
             </div>
           </div>
-          <div class="bar-names">
-            <div class="bn">Cold</div>
-            <div class="bn">Warm ARC</div>
+          <div class="bar-names two-bar">
+            <div class="bn">Glacier</div>
             <div class="bn">Arctic</div>
           </div>
-          <div class="chart-note">† ARC does not cache writes — same as cold</div>
+          <div class="chart-note">Warm ARC not shown — ARC does not cache write operations</div>
         </div>
       </div>
     </div>
 
-    <!-- Sequential Read  max=5000 h=200px -->
-    <!-- cold 2591 → 104px | warm 4676 → 187px | arctic 874 → 35px -->
+    <!-- ── Sequential Read  3 bars: max=5000, h=200px
+         Glacier cold 2,285 → (2285/5000)×200 =  91.4 →  91px
+         Glacier warm 4,676 → (4676/5000)×200 = 187.0 → 187px
+         Arctic       874   → (874/5000)×200  =  35.0 →  35px ── -->
     <div class="chart-wrap">
       <div class="chart-title">Sequential Read</div>
       <div class="bar-chart-inner">
@@ -269,8 +252,8 @@
           <div class="gridlines"></div>
           <div class="bars-row">
             <div class="bc">
-              <span class="bv">2,591</span>
-              <div class="b b-cold" style="height:104px"></div>
+              <span class="bv">2,285</span>
+              <div class="b b-cold" style="height:91px"></div>
             </div>
             <div class="bc">
               <span class="bv">4,676</span>
@@ -293,13 +276,15 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════ RANDOM 4K ════════════════════════════ -->
+<!-- ═══════════════════ RANDOM 4K ════════════════════════════════════ -->
 <div class="chart-section">
   <div class="section-head">Random 4K IOPS — 4K blocks · 4 jobs · iodepth 32 (higher is better)</div>
   <div class="chart-row">
 
-    <!-- Random 4K Write  max=100000 h=200px -->
-    <!-- cold 13795 → 28px | warm 13795 → 28px (ARC n/a) | arctic 87099 → 174px -->
+    <!-- ── Random 4K Write  cold only: max=100000, h=200px
+         Glacier cold 13,725 → (13725/100000)×200 =  27.5 →  28px
+         Arctic      87,099  → (87099/100000)×200 = 174.2 → 174px
+         NO warm ARC bar — benchmark-arc.sh is reads-only ── -->
     <div class="chart-wrap">
       <div class="chart-title">Random 4K Write</div>
       <div class="bar-chart-inner">
@@ -312,32 +297,29 @@
         </div>
         <div class="bars-area">
           <div class="gridlines"></div>
-          <div class="bars-row">
+          <div class="bars-row two-bar">
             <div class="bc">
-              <span class="bv">13,795</span>
+              <span class="bv">13,725</span>
               <div class="b b-cold" style="height:28px"></div>
-            </div>
-            <div class="bc">
-              <span class="bv-dim">13,795 †</span>
-              <div class="b b-warm-n" style="height:28px"></div>
             </div>
             <div class="bc">
               <span class="bv">87,099</span>
               <div class="b b-arctic" style="height:174px"></div>
             </div>
           </div>
-          <div class="bar-names">
-            <div class="bn">Cold</div>
-            <div class="bn">Warm ARC</div>
+          <div class="bar-names two-bar">
+            <div class="bn">Glacier</div>
             <div class="bn">Arctic</div>
           </div>
-          <div class="chart-note">† ARC does not cache writes — same as cold</div>
+          <div class="chart-note">Warm ARC not shown — ARC does not cache write operations</div>
         </div>
       </div>
     </div>
 
-    <!-- Random 4K Read  max=250000 h=200px -->
-    <!-- cold 14781 → 12px | warm 83588 → 67px | arctic 205588 → 165px -->
+    <!-- ── Random 4K Read  3 bars: max=250000, h=200px
+         Glacier cold 14,063  → (14063/250000)×200  =  11.3 →  11px
+         Glacier warm 83,588  → (83588/250000)×200  =  66.9 →  67px
+         Arctic      205,588  → (205588/250000)×200 = 164.5 → 165px ── -->
     <div class="chart-wrap">
       <div class="chart-title">Random 4K Read</div>
       <div class="bar-chart-inner">
@@ -352,8 +334,8 @@
           <div class="gridlines"></div>
           <div class="bars-row">
             <div class="bc">
-              <span class="bv">14,781</span>
-              <div class="b b-cold" style="height:12px"></div>
+              <span class="bv">14,063</span>
+              <div class="b b-cold" style="height:11px"></div>
             </div>
             <div class="bc">
               <span class="bv">83,588</span>
@@ -376,10 +358,14 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════ LATENCY ══════════════════════════════ -->
+<!-- ═══════════════════ LATENCY ══════════════════════════════════════ -->
 <div class="chart-section">
   <div class="section-head">Random 4K Read Latency — avg completion latency · ms (lower is better)</div>
-  <div style="max-width:460px">
+  <div style="max-width: 460px">
+    <!-- max=10ms, h=200px
+         Glacier cold 8.82ms → (8.82/10)×200 = 176.4 → 176px
+         Glacier warm 1.48ms → (1.48/10)×200 =  29.6 →  30px
+         Arctic       0.6ms  → (0.6/10)×200  =  12.0 →  12px -->
     <div class="chart-wrap">
       <div class="chart-title">Completion Latency (avg)</div>
       <div class="bar-chart-inner">
@@ -392,7 +378,6 @@
         </div>
         <div class="bars-area">
           <div class="gridlines"></div>
-          <!-- max=10ms, h=200px: cold 8.82→176px | warm 1.48→30px | arctic 0.6→12px -->
           <div class="bars-row">
             <div class="bc">
               <span class="bv">8.82 ms</span>
@@ -418,20 +403,20 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════ WINS ══════════════════════════════════ -->
+<!-- ═══════════════════ WINS ═════════════════════════════════════════ -->
 <div class="wins-row">
   <div class="wins-card">
     <div class="wins-title wt-g">Glacier ZFS RAIDZ1 wins</div>
-    <div class="wi wi-g">Sequential read: <strong>3× faster</strong> than Arctic (cold)</div>
+    <div class="wi wi-g">Sequential read: <strong>2.6× faster</strong> than Arctic (cold)</div>
     <div class="wi wi-g">Sequential read: <strong>5.4× faster</strong> warm ARC</div>
-    <div class="wi wi-g">Sequential write: <strong>2× faster</strong> than Arctic</div>
+    <div class="wi wi-g">Sequential write: <strong>2.2× faster</strong> than Arctic</div>
     <div class="wi wi-g">Redundancy: survives 1 drive failure</div>
     <div class="wi wi-g">5.5 TB usable vs 1.8 TB</div>
     <div class="wi wi-g">ZFS checksums + self-healing</div>
   </div>
   <div class="wins-card">
     <div class="wins-title wt-a">Arctic btrfs PCIe 5.0 wins</div>
-    <div class="wi wi-a">Rand 4K read: <strong>14× IOPS</strong> vs Glacier cold</div>
+    <div class="wi wi-a">Rand 4K read: <strong>14.6× IOPS</strong> vs Glacier cold</div>
     <div class="wi wi-a">Rand 4K read: <strong>2.5× IOPS</strong> vs Glacier warm ARC</div>
     <div class="wi wi-a">Rand 4K write: <strong>6.3× faster IOPS</strong></div>
     <div class="wi wi-a">Latency: <strong>0.6 ms</strong> vs 1.48 ms (warm) / 8.82 ms (cold)</div>
@@ -440,13 +425,13 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════ ARC CALLOUT ════════════════════════ -->
+<!-- ═══════════════════ ARC CALLOUT ══════════════════════════════════ -->
 <div class="arc-callout">
   <strong>ZFS ARC — Warm Cache Effect:</strong> With a warm ARC, glacier random 4K read IOPS climb from
-  <strong>14,781 → 83,588</strong> — a <strong>5.6× uplift</strong> at <strong>1.48 ms avg latency</strong>.
-  Session hit rate: <strong>99.9%</strong>. The 14× cold IOPS gap narrows to <strong>~2.5×</strong> for workloads
-  with repeated read patterns. Day 12 cumulative ARC hit rate: <strong>96.9%</strong>.
-  ARC does not affect write performance — write benchmarks reflect hardware throughput regardless of cache state.
+  <strong>14,063 → 83,588</strong> — a <strong>5.9× uplift</strong> at <strong>1.48 ms avg latency</strong>.
+  Session hit rate: <strong>99.9%</strong>. The 14.6× cold IOPS gap narrows to <strong>~2.5×</strong>
+  for workloads with repeated read patterns. Day 12 cumulative ARC hit rate: <strong>96.9%</strong>.
+  ARC does not affect write operations — write charts show direct hardware throughput only.
 </div>
 
 </body>
