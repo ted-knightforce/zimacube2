@@ -637,7 +637,7 @@ ARC is evicted immediately when applications need RAM — the system is not RAM-
 | 16 GB (current) | ~8–10 GB | Hot Docker databases and small working sets |
 | 32 GB (planned) | ~20–24 GB | Immich thumbnails + databases + Ollama model pages simultaneously |
 
-### ZFS ARC — Warm Cache Benchmark Results (June 3, 2026)
+### ZFS ARC — Warm Cache Benchmark Results (June 3–4, 2026)
 
 To quantify the real-world ARC uplift, `benchmark-arc.sh` was run against glacier with an 8 GiB test file. The benchmark runs a full write + read suite: sequential write, random 4K write (both `--direct=1`), an ARC warm-up pass, then random 4K read with warm ARC and cold `--direct=1` baseline.
 
@@ -708,6 +708,38 @@ Run 2 warm-up was 29% faster because no eviction work was needed — ARC had 14 
 Cold NVMe results show more run-to-run variance (16,276 vs 18,315 IOPS) than ARC-served results — NVMe I/O scheduling, NVMe queue state, and RAIDZ1 parity distribution vary more than ARC hash lookups.
 
 > **Takeaway:** With a warm ARC, glacier behaves like an 83K IOPS RAM array, not a 16K IOPS NVMe RAIDZ1 — at the cost of ~55% CPU during sustained high-IOPS reads. Workloads with repeated access patterns — Immich metadata lookups, Jellyfin library scans, Nextcloud file indexing — will experience this warm-cache tier, not the cold-cache floor numbers. ZFS ARC also proves it evicts promptly: 8.49 GiB of cached data was fully released within 12 minutes of the test file being deleted.
+
+**Runs 3 and 4 — cold baseline + ARC (June 3–4, 2026):**
+
+Runs 3 and 4 paired `benchmark-glacier.sh` immediately before `benchmark-arc.sh` in the same session, giving a combined cold baseline + warm ARC picture for each night. Run 4 used the original 3-step ARC script; sequential write and random 4K write tests were added to `benchmark-arc.sh` after this run completed.
+
+**`benchmark-glacier.sh` cold baseline:**
+
+| Metric | Run 3 (June 3, 23:55) | Run 4 (June 4, 00:55) |
+|---|---|---|
+| Sequential write | 1,752 MiB/s (1,837 MB/s) | 1,685 MiB/s (1,767 MB/s) |
+| Sequential read | 2,285 MiB/s (2,396 MB/s) | 2,375 MiB/s (2,491 MB/s) |
+| Random 4K write | 13,725 IOPS | 13,387 IOPS |
+| Random 4K read | 14,063 IOPS | 15,751 IOPS |
+
+**Four-run ARC benchmark summary:**
+
+| Metric | Run 1 | Run 2 | Run 3 | Run 4 |
+|---|---|---|---|---|
+| ARC size before | 9.32 GiB | 0.22 GiB | 0.23 GiB | 0.23 GiB |
+| Warmup speed (seq read) | 3,329 MiB/s | 4,298 MiB/s | 4,459 MiB/s | 4,328 MiB/s |
+| **Warm ARC IOPS (avg)** | **83,416** | **83,707** | **83,588** | **83,929** |
+| Warm ARC latency (avg) | 1.49 ms | 1.48 ms | 1.48 ms | 1.48 ms |
+| Session hit rate | 99.9% | 100.0% | 100.0% | 100.0% |
+| Misses during warm test | 9,037 | 2,603 | 2,001¹ | 2,001 |
+| Cold rand read IOPS | 16,276 | 18,315 | ~14,063 | 17,577 |
+| Cold rand read latency | 7.62 ms | — | — | 7.05 ms |
+
+¹ Run 3 and Run 4 share the same ARC size before (0.23 GiB) and similar miss counts — ARC started near-empty both nights after the test file from the previous run had been deleted and evicted.
+
+Warm ARC IOPS spans **83,416–83,929 across all four runs — under 0.6% variance**. Average latency is locked at 1.48–1.49 ms in every run. The ceiling is determined by kernel ARC lookup speed (hash table query + spinlock + DMA copy to userspace), not by NVMe or pool conditions.
+
+Cold random IOPS spans 14K–18.3K — a wider band explained by NVMe queue state, RAIDZ1 parity scheduling, and background system load varying between sessions. btop during Run 4's warm pass confirmed the same CPU pattern as Run 1: 59% overall, cores C1/C5/C6/C7 at 100%, Load AVG ~4.0 — ARC serving 83K IOPS is CPU-intensive regardless of starting conditions.
 
 ### The 14× IOPS Gap — Architectural, Not a Flaw
 
