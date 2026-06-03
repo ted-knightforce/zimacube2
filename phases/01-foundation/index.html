@@ -3473,7 +3473,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <p><strong>Warm-up pass — sequential 8 GiB read (no <code>--direct=1</code>):</strong>
 - <strong>3,329 MiB/s</strong> (3,490 MB/s) — ZFS sequential prefetch pulled the 8 GiB test file into ARC in 2.4 seconds
 - ARC size after warm-up: <strong>8.70 GiB</strong></p>
-<p><strong>Benchmark results — random 4K read, 4 jobs, <code>iodepth=32</code>, 60 seconds:</strong></p>
+<p><strong>Benchmark results — random 4K read, 4 jobs, <code>iodepth=32</code>, 60 seconds (Run 1):</strong></p>
 <table>
 <thead>
 <tr>
@@ -3549,8 +3549,8 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </tr>
 </tbody>
 </table>
-<p>99.9% of the 83K IOPS were served from RAM. The 9,037 misses over 60 seconds (~150/sec) represent ZFS evicting and re-fetching a small fraction of data at the working-set boundary — the 8 GiB test file fit comfortably within the 8.70 GiB ARC.</p>
-<p><strong>System impact (fio CPU stats + btop, 23:19):</strong></p>
+<p>99.9% of the 83K IOPS were served from RAM. The 9,037 misses (~150/sec) represent ZFS evicting a small fraction of existing cache entries to maintain the 8 GiB test file's working set at the ARC boundary.</p>
+<p><strong>System impact during warm ARC benchmark (fio CPU stats + btop):</strong></p>
 <table>
 <thead>
 <tr>
@@ -3571,16 +3571,76 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <td>954,944</td>
 </tr>
 <tr>
-<td>Overall system CPU (btop)</td>
-<td><strong>2%</strong></td>
+<td><strong>Overall CPU (btop, during)</strong></td>
+<td><strong>~55–56%</strong></td>
+<td>—</td>
+</tr>
+<tr>
+<td>CPU cores (peak, during)</td>
+<td>multiple at <strong>98–100%</strong></td>
+<td>—</td>
+</tr>
+<tr>
+<td>Temperature (peak, during)</td>
+<td><strong>50–54°C</strong></td>
+<td>—</td>
+</tr>
+<tr>
+<td>After benchmark (idle)</td>
+<td><strong>2–3%</strong>, <strong>32–35°C</strong></td>
 <td>—</td>
 </tr>
 </tbody>
 </table>
-<p>The warm ARC kernel <code>sys</code> figure (95.97%) reflects ZFS serving I/O from RAM in tight kernel loops — almost no user-space overhead. The 6,370 context switches across 5 million I/Os means ZFS batched ARC lookups efficiently with minimal scheduler overhead.</p>
-<p>The cold pass tells the opposite story: 954,944 context switches across 976K I/Os — nearly one interrupt-driven context switch per request as each read dispatched to the NVMe queue, waited for a hardware interrupt, and returned through the ZFS I/O pipeline. <code>z_rd_int</code> kernel threads appeared at the top of btop's process list during this pass, confirming real NVMe activity.</p>
+<p>ZFS serving 83K IOPS from ARC is CPU-intensive work — each read requires a kernel-space hash lookup, spinlock acquisition, and data copy from ARC buffer to userspace. The fio processes spent 96% of their CPU time in <code>sys</code> (kernel mode), and 4 jobs at ~12.5% each drove multiple cores to near-saturation. This is compute work, not I/O wait — which is why latency remains at 1.49 ms (ARC response time) rather than 7.62 ms (NVMe response time).</p>
+<p>The cold pass tells the opposite story: 954,944 context switches across 976K I/Os — nearly one interrupt-driven context switch per request, as each read dispatched to the NVMe queue, waited for a hardware interrupt, and returned through the ZFS I/O pipeline. <code>z_rd_int</code> kernel threads appeared at the top of btop's process list during this pass, confirming real NVMe activity. The CPU recovered to 2–3% within 30 seconds of both tests completing.</p>
+<p><strong>Run 2 — ARC cold-start (same night, ~12 minutes later):</strong></p>
+<p>Between runs, the test file was deleted and ZFS evicted its cached data. ARC shrank from 8.49 GiB to <strong>0.22 GiB</strong> — confirming ZFS actively reclaims memory after data is no longer referenced, not just when under pressure.</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Run 1 (ARC = 9.32 GiB before)</th>
+<th>Run 2 (ARC = 0.22 GiB before)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Warm-up speed</td>
+<td>3,329 MiB/s (2.4 s)</td>
+<td><strong>4,298 MiB/s (1.9 s)</strong></td>
+</tr>
+<tr>
+<td>Warm ARC IOPS (avg)</td>
+<td>83,416</td>
+<td><strong>83,707</strong> (+0.4%)</td>
+</tr>
+<tr>
+<td>Warm ARC latency (avg)</td>
+<td>1.49 ms</td>
+<td>1.48 ms</td>
+</tr>
+<tr>
+<td>Session hit rate</td>
+<td>99.9%</td>
+<td><strong>100.0%</strong></td>
+</tr>
+<tr>
+<td>Misses during warm test</td>
+<td>9,037</td>
+<td><strong>2,603</strong></td>
+</tr>
+<tr>
+<td>Cold IOPS (avg)</td>
+<td>16,276</td>
+<td>18,315</td>
+</tr>
+</tbody>
+</table>
+<p>Run 2 warm-up was 29% faster because no eviction work was needed — ARC had 14 GiB of headroom and filled freely. The warm ARC IOPS is within 0.4% between runs: the ceiling at 83–84K IOPS is consistent and reproducible regardless of starting ARC state. The 100.0% session hit rate in run 2 (vs 99.9%) reflects that the 8 GiB test file had exclusive ARC occupancy with zero competition.</p>
+<p>Cold NVMe results show more run-to-run variance (16,276 vs 18,315 IOPS) than ARC-served results — NVMe I/O scheduling, NVMe queue state, and RAIDZ1 parity distribution vary more than ARC hash lookups.</p>
 <blockquote>
-<p><strong>Takeaway:</strong> With a warm ARC, glacier behaves like a 83K IOPS RAM array, not a 16K IOPS NVMe RAIDZ1. Workloads with repeated access patterns — Immich metadata lookups, Jellyfin library scans, Nextcloud file indexing — will experience this warm-cache tier, not the cold-cache floor numbers from Phase 1 fio benchmarks. Tail latency is also 10× better under ARC (4.49 ms vs 44.8 ms at the 99.99th percentile).</p>
+<p><strong>Takeaway:</strong> With a warm ARC, glacier behaves like an 83K IOPS RAM array, not a 16K IOPS NVMe RAIDZ1 — at the cost of ~55% CPU during sustained high-IOPS reads. Workloads with repeated access patterns — Immich metadata lookups, Jellyfin library scans, Nextcloud file indexing — will experience this warm-cache tier, not the cold-cache floor numbers. ZFS ARC also proves it evicts promptly: 8.49 GiB of cached data was fully released within 12 minutes of the test file being deleted.</p>
 </blockquote>
 <h3 id="the-14-iops-gap-architectural-not-a-flaw">The 14× IOPS Gap — Architectural, Not a Flaw<a class="headerlink" href="#the-14-iops-gap-architectural-not-a-flaw" title="Permanent link">&para;</a></h3>
 <p>ZFS RAIDZ1 trades random I/O efficiency for sequential throughput, redundancy, and data integrity. The correct response is tiered workload routing — not trying to close the gap.</p>
