@@ -1,4 +1,4 @@
-# 🧊 ZimaCube 2 Pioneer Build: Modest AI-Powered NAS & Self-Hosting Cloud Platform
+# 🧊 ZimaCube 2 Build: Modest AI-Powered NAS & Self-Hosting Cloud Platform
 
 Personal documentation for building a tiered-storage, AI-capable self-hosting server on a **ZimaCube 2 Standard** — from unboxing to a fully configured NAS with local LLMs, media streaming, and own-device privacy.
 
@@ -125,7 +125,7 @@ Full documentation with navigation, search, and dark mode is available at the do
 
 | Phase | Doc |
 |---|---|
-| **Phase 1** | [ZimaCube 2 Pioneer Build — Phase 1: Foundation, Storage & Benchmarks](https://ted-knightforce.github.io/zimacube2/phases/01-foundation/) |
+| **Phase 1** | [ZimaCube 2 Build — Phase 1: Foundation, Storage & Benchmarks](https://ted-knightforce.github.io/zimacube2/phases/01-foundation/) |
 | **Phase 2** | [Phase 2 — Media Stack: Jellyfin, *arr, IronWolf Pool](https://ted-knightforce.github.io/zimacube2/phases/02-media/) |
 | **Phase 2.5** | [Phase 2.5 — Immich: ZimaOS-to-ZimaCube 2 Migration](https://ted-knightforce.github.io/zimacube2/phases/02.5-immich/) |
 | **Phase 3** | [Phase 3 — Data Management: Backup, Nextcloud & 3-2-1 Strategy](https://ted-knightforce.github.io/zimacube2/phases/03-data/) |

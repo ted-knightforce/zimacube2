@@ -1,4 +1,4 @@
-# ZimaCube 2 Pioneer Build — Phase 1: Foundation, Storage & Benchmarks
+# ZimaCube 2 Build — Phase 1: Foundation, Storage & Benchmarks
 
 **Author:** ted-knight  
 **Status:** 🟡 In Progress  
@@ -697,8 +697,8 @@ echo 17179869184 | sudo tee /sys/module/zfs/parameters/zfs_arc_max
 | Immich photo library files | Arctic-Storage | `/DATA/Gallery/immich` — standard ZimaOS path on P510 NVMe |
 | Immich PostgreSQL database | Arctic-Storage | High random IOPS; ZFS ARC partially compensates but sub-ms beats 8.7ms |
 | Immich ML model cache | Arctic-Storage | Low latency random reads for inference |
-| VM disk images | Glacier | Large sequential I/O, RAIDZ1 redundancy |
-| Documents | Glacier | ZFS checksums + snapshots for integrity |
+| VM disk images | glacier | Large sequential I/O, RAIDZ1 redundancy |
+| Documents | glacier | ZFS checksums + snapshots for integrity |
 | Cold media (arriving) | `ironwolf` | Capacity and cost-per-TB; sequential access only |
 
 ---
