@@ -15,7 +15,7 @@
 3. [Build Journey](#build-journey)
 4. [Final Hardware Configuration](#final-hardware-configuration)
 5. [Storage Architecture](#storage-architecture)
-6. [Thunderbolt 4 Issue & OCuLink Resolution](#thunderbolt-4-issue--oculink-resolution)
+6. [Thunderbolt 4 Issue & OCuLink Resolution](#thunderbolt-4-issue-oculink-resolution)
 7. [ZFS Pool Setup](#zfs-pool-setup)
 8. [ZimaOS Integration](#zimaos-integration)
 9. [Arctic-Storage Setup](#arctic-storage-setup)
@@ -110,7 +110,7 @@
 - [x] Crucial P510 2TB PCIe Gen5 installed in 7th Bay → Arctic-Storage (btrfs)
 - [x] AppData + User Database migrated from ZimaOS-HD to Arctic-Storage via ZimaOS GUI migration tool
 - [x] PCIe x4 → SFF-8612 OCuLink adapter installed in Slot 1
-- [x] Aoostar TB4S-OC connected via OCuLink (TB4 abandoned — see [Thunderbolt 4 Issue](#thunderbolt-4-issue--oculink-resolution))
+- [x] Aoostar TB4S-OC connected via OCuLink (TB4 abandoned — see [Thunderbolt 4 Issue](#thunderbolt-4-issue-oculink-resolution))
 - [x] All 4× 2TB NVMe drives detected (nvme1n1–nvme4n1)
 - [x] Glacier ZFS RAIDZ1 pool created at `/media/glacier`
 - [x] 7 ZFS datasets created (VM, appdata, backup, documents, downloads, gallery, media)
@@ -168,7 +168,7 @@ Installed a **PCIe x4 to SFF-8612 adapter** into Slot 1 of ZimaCube 2. Slot 1 is
 > 💡 **Implication:** With Slot 1 occupied by the OCuLink adapter, both Thunderbolt 4 ports on the ZimaCube 2 are now free — available for a **TB4 eGPU dock** (Phase 4b) or **TB4 direct networking** to a Mac/PC for high-speed file transfer beyond the 2.5GbE ceiling.
 
 **4. Aoostar TB4S-OC NVMe Enclosure (OCuLink)**  
-Connected the **Aoostar TB4S-OC** (USB4/Thunderbolt 4 + OCuLink NVMe DAS) via OCuLink after Thunderbolt 4 failed (see [Thunderbolt 4 Issue](#thunderbolt-4-issue--oculink-resolution)). The enclosure holds **4× 2TB PCIe Gen4 NVMe M.2 SSDs** (`nvme1n1`–`nvme4n1`), formatted as **ZFS RAIDZ1** named **glacier**.
+Connected the **Aoostar TB4S-OC** (USB4/Thunderbolt 4 + OCuLink NVMe DAS) via OCuLink after Thunderbolt 4 failed (see [Thunderbolt 4 Issue](#thunderbolt-4-issue-oculink-resolution)). The enclosure holds **4× 2TB PCIe Gen4 NVMe M.2 SSDs** (`nvme1n1`–`nvme4n1`), formatted as **ZFS RAIDZ1** named **glacier**.
 
 *Aoostar TB4S-OC NVMe Enclosure (OCuLink) seated on top of ZimaCube 2*
 ![ZimaCube 2 - Aoostar TB4S-OC NVMe Enclosure 01](../images/phase1.5/day02-zimadock-setup-top-01.jpg)
