@@ -116,17 +116,16 @@
 - [x] 7 ZFS datasets created (VM, appdata, backup, documents, downloads, gallery, media)
 - [x] ZimaOS symlinks created: `/DATA/glacier-*` → `/media/glacier/*`
 - [x] Autotrim enabled on glacier pool
-- [x] Netdata deployed (Docker) for real-time NVMe/ZFS monitoring
 - [x] Full storage benchmarks completed (glacier vs Arctic-Storage)
 - [x] Immich migrated from DIY ZimaOS — 14,505 photos + 925 videos (134 GiB), all memories/metadata intact (see [Phase 2.5](02.5-immich.md))
-- [x] ZFS ARC behaviour verified: **93.7% hit rate**, c_max auto-set to 14.37 GiB (total RAM − 1 GB default)
+- [x] ZFS ARC behaviour verified: **93.7% hit rate**, c_max auto-set to 14.37 GiB
 
 ### ⏳ Pending
 
-- [ ] Cap ZFS ARC at 8 GiB — prevent ARC balloon competing with Phase 2 Jellyfin workloads
+- [ ] **[Planned]** Observing whether current utilisation from ZFS ARC at 14.37 GiB would be released when Phase 2 Jellyfin workloads begin. Will cap ZFS ARC at 8 GiB if required.
 - [ ] RAM → 32GB DDR5 (2× Corsair Vengeance 16GB DDR5 4800MHz CL40 SODIMM) → raise ARC cap to 16 GiB after upgrade
 - [ ] Move Crucial P510 to onboard M.2 slot → Phase 1.5 re-benchmark
-- [ ] TB4 direct networking test — connect Mac/PC via TB4 cable, configure IP over Thunderbolt, benchmark vs 2.5GbE
+- [ ] **[TBD]** TB4 direct networking test — connect Mac/PC via TB4 cable, configure IP over Thunderbolt, benchmark vs 2.5GbE
 - [ ] Phase 1 Reddit post
 
 ---
