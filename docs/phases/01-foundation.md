@@ -95,7 +95,7 @@
 *While a PCIe5 NVMe is overkill, it happened to be the best-priced option available given current market conditions.*
 ![Crucial P510 2TB PCIe5 NVMe 2280 M.2 SSD Stick](../images/phase1.5/day02-crucial-p510-nvme-unboxed-01.jpg)
 
-*To solve the bandwidth bottleneck on my ZimaCube 2's 7th tray (capped at 800MB/s), I added hardware fallback storage to my Tier 2 NVMe ZRAID1. I originally tried connecting via Thunderbolt 4 to the Aoostar TB4S-OC DAS, but connection problems made that approach impractical.*
+*The PCIe x4 to OCuLink SFF-8612 adapter — the solution after Thunderbolt 4 failed to establish a stable connection with the Aoostar TB4S-OC. Installed in Slot 1, this card provides a direct PCIe link to the 4× NVMe enclosure with no tunnelling protocol or firmware handshake required, forming the backbone of the glacier ZFS RAIDZ1 Tier 2 pool.*
 ![OCuLink PCIe x4 to SFF-8612 adapter](../images/phase1.5/day02-oculink-pcie-card-01.jpg)
 
 *Solving the ZimaCube 2's 7th tray limitation with a Thunderbolt4 + OCuLink DAS solution. Read the full review of this unit at NASCompares.com. [NASCompares_TB4S-OC Review](https://nascompares.com/2024/10/09/aoostar-tb4s-oc-review/)*
@@ -212,10 +212,10 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 |---|---|---|---|---|---|
 | `nvme5n1` | Kingston OM8PGP4 256GB | 256GB | PCIe Gen4 | Onboard M.2 | ZimaOS boot drive |
 | `nvme0n1` | Crucial P510 (CT2000P510SSD8) | 2TB | PCIe Gen5 | 7th Bay Slot 1 | Arctic-Storage (btrfs) — may move to onboard slot |
-| `nvme1n1` | ORICO 2TB | 2TB | PCIe Gen4 | Aoostar TB4S-OC | Glacier RAIDZ1 |
-| `nvme2n1` | ORICO 2TB | 2TB | PCIe Gen4 | Aoostar TB4S-OC | Glacier RAIDZ1 |
-| `nvme3n1` | XPG GAMMIX S70 BLADE 2TB | 2TB | PCIe Gen4 | Aoostar TB4S-OC | Glacier RAIDZ1 |
-| `nvme4n1` | XPG GAMMIX S70 BLADE 2TB | 2TB | PCIe Gen4 | Aoostar TB4S-OC | Glacier RAIDZ1 |
+| `nvme1n1` | ORICO 2TB | 2TB | PCIe Gen4 | Aoostar TB4S-OC | glacier ZFS RAIDZ1 |
+| `nvme2n1` | ORICO 2TB | 2TB | PCIe Gen4 | Aoostar TB4S-OC | glacier ZFS RAIDZ1 |
+| `nvme3n1` | XPG GAMMIX S70 BLADE 2TB | 2TB | PCIe Gen4 | Aoostar TB4S-OC | glacier ZFS RAIDZ1 |
+| `nvme4n1` | XPG GAMMIX S70 BLADE 2TB | 2TB | PCIe Gen4 | Aoostar TB4S-OC | glacier ZFS RAIDZ1 |
 
 ### Full `nvme list` Output
 
