@@ -550,7 +550,7 @@ All tests: `--direct=1` (bypasses OS page cache) · `--ioengine=libaio`
 
 ### Monitoring
 
-Real-time metrics captured via **Netdata** running as a Docker container with host filesystem mounted read-only. Dashboard at `http://192.168.x.x:19999`.
+Real-time system metrics monitored via **btop** — installed from the ZimaOS App Marketplace.
 
 ---
 
@@ -848,7 +848,7 @@ OS:        ZimaOS (Buildroot-based, immutable)
 Kernel:    Linux 6.17.13-3-pve
 ZFS:       OpenZFS 2.3.2
 fio:       3.38
-Netdata:   Latest (Docker)
+btop:      ZimaOS App Marketplace
 Date:      Saturday, May 23, 2026
 ```
 
