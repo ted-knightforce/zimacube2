@@ -3643,7 +3643,46 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <p><strong>Takeaway:</strong> With a warm ARC, glacier behaves like an 83K IOPS RAM array, not a 16K IOPS NVMe RAIDZ1 — at the cost of ~55% CPU during sustained high-IOPS reads. Workloads with repeated access patterns — Immich metadata lookups, Jellyfin library scans, Nextcloud file indexing — will experience this warm-cache tier, not the cold-cache floor numbers. ZFS ARC also proves it evicts promptly: 8.49 GiB of cached data was fully released within 12 minutes of the test file being deleted.</p>
 </blockquote>
 <h3 id="the-14-iops-gap-architectural-not-a-flaw">The 14× IOPS Gap — Architectural, Not a Flaw<a class="headerlink" href="#the-14-iops-gap-architectural-not-a-flaw" title="Permanent link">&para;</a></h3>
-<p>ZFS RAIDZ1 trades random I/O efficiency for sequential throughput, redundancy, and data integrity. The correct response is tiered workload routing — not trying to close the gap.</p>
+<p>The Phase 1 benchmark showed a 14× random 4K IOPS gap between glacier (14,781 IOPS) and Arctic-Storage (205,588 IOPS). That gap exists for structural reasons, not defective hardware:</p>
+<ul>
+<li><strong>RAIDZ1 parity overhead.</strong> Every random write to glacier triggers a full-stripe read-modify-write cycle — the existing parity block must be read and recalculated before the write can land. Arctic-Storage on a single btrfs drive has no parity to maintain.</li>
+<li><strong>Copy-on-write.</strong> ZFS never overwrites in place. Each write allocates new blocks and updates the metadata tree, adding latency that a simpler filesystem at low queue depth avoids.</li>
+<li><strong>4K blocks don't stripe.</strong> RAIDZ1 spreads data across four drives for sequential I/O — producing 2,591 MB/s sequential reads. A single 4K random block touches one drive; there is nothing to stripe. The RAIDZ1 advantage evaporates at small block sizes.</li>
+<li><strong>OCuLink hop.</strong> The drives connect via PCIe 4.0 x4 through the Aoostar TB4S-OC enclosure. The tunnel adds a small but consistent baseline latency absent on onboard NVMe.</li>
+</ul>
+<p>The ARC benchmark refines the picture. Cold — with <code>--direct=1</code> forcing every read to NVMe — glacier delivers 16K IOPS at 7.6ms latency. That is the floor. With a warm ARC, glacier delivers 83K IOPS at 1.5ms latency — a 5× uplift that narrows the gap to Arctic-Storage from 14× to roughly <strong>2.5×</strong>. For workloads that re-read the same data, the NVMe characteristics of glacier become largely irrelevant; the ARC is the actual storage layer.</p>
+<p>The 2.5× warm gap that remains is real and appropriate to acknowledge. Immich's PostgreSQL engine performing random index lookups across 14,500 photos, or a Docker container reading configuration on every request, benefits from Arctic-Storage's 205K IOPS and 0.6ms latency in a way that no amount of ARC tuning will fully replicate on glacier. The correct response is not to close this gap — it is to route workloads by their I/O profile:</p>
+<table>
+<thead>
+<tr>
+<th>I/O profile</th>
+<th>Right pool</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Random, latency-sensitive (databases, containers)</td>
+<td>Arctic-Storage</td>
+<td>205K IOPS, 0.6ms — uncontested</td>
+</tr>
+<tr>
+<td>Sequential, large files, redundancy required</td>
+<td>glacier</td>
+<td>2,591 MB/s, RAIDZ1 integrity, ~5.5TB</td>
+</tr>
+<tr>
+<td>Repeated reads, warm working set</td>
+<td>glacier + ARC</td>
+<td>83K IOPS served from RAM</td>
+</tr>
+<tr>
+<td>Cold bulk / media library</td>
+<td>ironwolf (arriving)</td>
+<td>Capacity and cost; sequential access only</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h2 id="zfs-arc-tuning">ZFS ARC Tuning<a class="headerlink" href="#zfs-arc-tuning" title="Permanent link">&para;</a></h2>
 <h3 id="why-cap-c_max-now">Why cap c_max now?<a class="headerlink" href="#why-cap-c_max-now" title="Permanent link">&para;</a></h3>
