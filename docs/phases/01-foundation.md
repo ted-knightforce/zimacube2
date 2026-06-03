@@ -199,7 +199,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 | Network | 2× Intel i226 2.5GbE | 1 port active → Ubiquiti Flex Mini 2.5G 5-Port Managed Switch · 2nd port unused (no current use case — to explore in future) |
 | Thunderbolt | 2× Thunderbolt 4 ports (both free — eGPU or direct networking use) |
 | PCIe Slot 1 | Physical x16 slot · PCIe 4.0 x4 lanes → OCuLink SFF-8612 adapter |
-| PCIe Slot 2 | Physical x8 slot · PCIe 3.0 x2 lanes → available |
+| PCIe Slot 2 | Physical x8 slot · PCIe 3.0 x2 lanes → **available — reserved for future 10GbE NIC upgrade** |
 | 7th Bay | 4× M.2 NVMe slots (800 MB/s total bridge cap on Standard) |
 | Onboard M.2 | Additional slot available → planned P510 migration (Phase 1.5) |
 | SATA Bays | 6× 3.5"/2.5" SATA bays (empty — drives arriving soon) |
@@ -764,6 +764,16 @@ ZimaOS is **Buildroot-based** with an immutable read-only OS. Key implications f
 | P510 → onboard M.2 | Move Crucial P510 from 7th Bay to onboard slot | Unlock native PCIe Gen5 speeds — re-benchmark planned |
 | 4× Seagate IronWolf 4TB | SATA bays — `ironwolf` pool (~12TB btrfs RAID5) | Bulk media archive tier; unblocks Phase 2 · 1 received, 3 in transit |
 | eGPU dock (TBD) | Minisforum DEG2 (TB5+OCuLink) or TB4 eGPU enclosure | Phase 4b GPU inference — both TB4 ports now free |
+| **10GbE NIC — PCIe Slot 2** | Intel X550-T1 (RJ45) or Mellanox MCX311A (SFP+) | 4× network uplift: 2.5GbE (~312 MB/s) → 10GbE (~1,100 MB/s) — when ZimaCube 2 is under heavier workload demand |
+
+> 💡 **Future-proofing note — PCIe Slot 2:** The ZimaCube 2 Standard's PCIe 3.0 x2 slot (physical x8) has enough bandwidth (~2 GB/s) to run a 10GbE NIC at full line rate. Two viable card options:
+>
+> | Card | Interface | Cable to switch | Cost (used) |
+> |---|---|---|---|
+> | Intel X550-T1 | 10GBASE-T RJ45 | Cat6A → Port 9 RJ45 (10G COMBO) | ~$70–100 |
+> | Mellanox ConnectX-3 MCX311A | SFP+ | DAC cable → Port 9 SFP+ (10G COMBO) | ~$25–35 |
+>
+> Both connect directly to the **Ubiquiti UniFi Flex 2.5G PoE** Port 9 (**10G COMBO** — has both RJ45 and SFP+ slots) with no adapters needed. The existing `i226` 2.5GbE port stays connected to one of the 8× access ports as a management/fallback link. PCIe Slot 2 remains empty until the NAS workload justifies the upgrade.
 
 ### Planned Experiments
 
