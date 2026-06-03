@@ -346,7 +346,6 @@ For workloads like pulling raw photos from Immich, streaming high-bitrate media,
 | Redundancy | RAIDZ1 survives 1 drive failure across 4 drives |
 | Snapshots | Copy-on-write snapshots are instant — essential before Phase 4 experiments |
 | Compression | lz4 is near-zero CPU cost on i3-1215U with real savings on documents and logs |
-| btrfs RAID5 for ironwolf | SATA HDDs managed via ZimaOS Storage Manager — native UI integration, same approach as Arctic-Storage |
 
 ### Pool Creation
 
