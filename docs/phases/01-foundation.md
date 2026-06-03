@@ -3,7 +3,7 @@
 **Author:** ted-knight  
 **Status:** 🟡 In Progress  
 **Started:** May 21, 2026  
-**Updated:** June 03, 2026  
+**Updated:** June 04, 2026  
 **Program:** ZimaCube 2 Pioneer Program  
 
 ---
@@ -514,10 +514,13 @@ Files uploaded:
 - [`benchmark-glacier.sh`](../resources/scripts/benchmark-glacier.sh)
 - [`benchmark-arctic.sh`](../resources/scripts/benchmark-arctic.sh)
 - [`benchmark-compare.sh`](../resources/scripts/benchmark-compare.sh)
+- [`benchmark-arc.sh`](../resources/scripts/benchmark-arc.sh)
 
 ### Execution
 
-Scripts were run individually from the web terminal:
+#### Phase 1 — Initial cold benchmarks (May 23, 2026)
+
+`benchmark-glacier.sh` and `benchmark-arctic.sh` were run first to establish raw cold-cache throughput for both pools:
 
 ```bash
 sudo -i
@@ -529,15 +532,36 @@ chmod +x benchmark-glacier.sh benchmark-arctic.sh benchmark-compare.sh
 ./benchmark-arctic.sh
 ```
 
-Each script runs 4 sequential fio tests (seq write → seq read → rand 4K write → rand 4K read), captures filesystem-specific stats, cleans up its temp file, and saves results automatically:
+Each script runs 4 sequential fio tests (seq write → seq read → rand 4K write → rand 4K read) with `--direct=1` throughout, captures pool-specific stats, cleans up its temp file, and saves results automatically.
+
+#### Phase 2 — Expanded glacier testing: cold + warm ARC (June 3–4, 2026)
+
+After the initial cold baseline, `benchmark-arc.sh` was added to extend glacier testing across both cold and warm cache paths. It is the definitive glacier benchmark — runs cold write tests identically to `benchmark-glacier.sh`, then adds an ARC warm-up pass, a warm ARC read, and a cold `--direct=1` reference read side-by-side in a single run:
+
+```bash
+./benchmark-arc.sh
+```
+
+The script runs 7 steps automatically:
+
+1. Capture ARC state before (baseline hits, misses, cache size)
+2. Sequential write — `--direct=1`, 4 jobs, 1 M blocks, 60 s
+3. Random 4K write — `--direct=1`, 4 jobs, 4 K blocks, 60 s
+4. Warm-up pass — sequential read without `--direct=1` (populates ZFS ARC with the test file)
+5. Warm ARC read — random 4K without `--direct=1` (requests served from ARC in RAM)
+6. Capture ARC state after — session hit rate delta, `zpool iostat` (low physical read MB/s here confirms ARC served the requests, not the NVMe drives)
+7. Cold reference read — random 4K with `--direct=1` (bypasses ARC; direct NVMe for side-by-side comparison)
 
 | Script | Results saved to |
 |---|---|
 | `benchmark-glacier.sh` | `/media/glacier/benchmark-results-glacier.txt` |
 | `benchmark-arctic.sh` | `/media/Arctic-Storage/benchmark-results-arctic.txt` |
 | `benchmark-compare.sh` | `/root/benchmark-comparison-summary.txt` |
+| `benchmark-arc.sh` | `/media/glacier/benchmark-results-arc.txt` |
 
 ### Test Parameters
+
+**Cold fio tests** — `benchmark-glacier.sh` and `benchmark-arctic.sh`:
 
 | Test | Block size | Jobs | Queue depth | Size | Duration |
 |---|---|---|---|---|---|
@@ -546,7 +570,19 @@ Each script runs 4 sequential fio tests (seq write → seq read → rand 4K writ
 | Random 4K write | 4K | 4 | 32 | 4GB | 60s |
 | Random 4K read | 4K | 4 | 32 | 4GB | 60s |
 
-All tests: `--direct=1` (bypasses OS page cache) · `--ioengine=libaio`
+All cold tests: `--direct=1` (bypasses OS page cache) · `--ioengine=libaio`
+
+**ARC benchmark** — `benchmark-arc.sh` (glacier only):
+
+| Step | Test | Block size | Jobs | Queue depth | Size | Duration | Cache mode |
+|---|---|---|---|---|---|---|---|
+| 2 | Sequential write | 1M | 4 | 8 | 8GB | 60s | `--direct=1` |
+| 3 | Random 4K write | 4K | 4 | 32 | 8GB | 60s | `--direct=1` |
+| 4 | Warm-up (seq read) | 1M | 1 | 8 | 8GB | Single pass | Buffered — populates ARC |
+| 5 | Warm ARC rand read | 4K | 4 | 32 | 8GB | 60s | Buffered — served from ARC |
+| 7 | Cold rand read | 4K | 4 | 32 | 8GB | 60s | `--direct=1` — bypasses ARC |
+
+> Steps 2–3 produce results directly comparable to `benchmark-glacier.sh` write tests. Steps 5 and 7 deliver the warm vs cold read comparison in a single run.
 
 ### Monitoring
 
@@ -556,7 +592,9 @@ Real-time system metrics monitored via **btop** — installed from the ZimaOS Ap
 
 ## Benchmark Results
 
-### Glacier — ZFS RAIDZ1 (OCuLink) — May 23, 2026
+### Glacier — ZFS RAIDZ1 (OCuLink) — Cold Baseline — May 23, 2026
+
+All tests with `--direct=1` (bypasses OS page cache; raw pool throughput).
 
 | Test | Bandwidth | IOPS | Avg latency |
 |---|---|---|---|
@@ -564,6 +602,20 @@ Real-time system metrics monitored via **btop** — installed from the ZimaOS Ap
 | Sequential read | **2,591 MB/s** | 2,470 | 12.9ms |
 | Random 4K write | 56.5 MB/s | **13,795** | 9.3ms |
 | Random 4K read | 60.5 MB/s | **14,781** | 8.7ms |
+
+### Glacier — Warm ZFS ARC (June 3–4, 2026)
+
+Measured using `benchmark-arc.sh` across six runs. ZFS ARC does not cache write operations — warm ARC affects reads only. Write figures reflect steady-state `benchmark-glacier.sh` results with SLC cache intact.
+
+| Test | Bandwidth | IOPS | Avg latency | Notes |
+|---|---|---|---|---|
+| Sequential write | 1,685–1,752 MiB/s | — | — | Cold pool throughput; ARC not involved |
+| Random 4K write | — | 13,387–13,725 | — | Cold IOPS; ARC not involved |
+| Sequential read (warm-up) | 3,329–4,459 MiB/s | — | — | ARC-buffered prefetch pass |
+| **Random 4K read — Warm ARC** | **324–328 MiB/s** | **83,416–83,992** | **1.48–1.49 ms** | Served from RAM; 99.4–100% session hit rate |
+| Random 4K read — Cold | 63–72 MiB/s | 16,276–18,315 | 7.05–7.62 ms | `--direct=1`; raw NVMe baseline |
+
+> Warm ARC IOPS spans only **0.7% variance** across all six runs regardless of starting ARC state or preceding write load. Average latency locked at 1.48–1.49 ms every run.
 
 ### Arctic-Storage — btrfs PCIe 5.0 (7th Bay, 800 MB/s cap) — May 23, 2026
 
@@ -576,17 +628,19 @@ Real-time system metrics monitored via **btop** — installed from the ZimaOS Ap
 
 ### Head-to-Head Comparison
 
-| Test | Glacier ZFS RAIDZ1 | Arctic btrfs PCIe 5.0 | Winner |
-|---|---|---|---|
-| Sequential write | 1,726 MB/s | 788 MB/s | 🧊 Glacier +119% |
-| Sequential read | 2,591 MB/s | 874 MB/s | 🧊 Glacier +196% |
-| Random 4K write IOPS | 13,795 | 87,099 | 🌨️ Arctic 6.3× |
-| Random 4K read IOPS | 14,781 | 205,588 | 🌨️ Arctic 14× |
-| Random 4K write latency | 9.3ms | 1.5ms | 🌨️ Arctic 6× lower |
-| Random 4K read latency | 8.7ms | 0.6ms | 🌨️ Arctic 14× lower |
-| Usable capacity | 5.5TB | 1.8TB | 🧊 Glacier 3× |
-| Drive redundancy | 1 drive failure | None | 🧊 Glacier |
-| Data integrity | ZFS checksums + self-healing | btrfs checksums | 🧊 Glacier |
+| Test | Glacier Cold | Glacier Warm ARC | Arctic btrfs PCIe 5.0 | Winner |
+|---|---|---|---|---|
+| Sequential write | 1,726 MB/s | — | 788 MB/s | 🧊 Glacier +119% |
+| Sequential read | 2,591 MB/s | ~4,300–4,460 MiB/s | 874 MB/s | 🧊 Glacier (warm ARC) |
+| Random 4K write IOPS | 13,795 | — | 87,099 | 🌨️ Arctic 6.3× |
+| Random 4K read IOPS | 14,781 | **83,929** | 205,588 | 🌨️ Arctic — 14× cold · 2.5× warm |
+| Random 4K write latency | 9.3 ms | — | 1.5 ms | 🌨️ Arctic 6× lower |
+| Random 4K read latency | 8.7 ms | **1.48 ms** | 0.6 ms | 🌨️ Arctic — 14× lower cold · 2.5× lower warm |
+| Usable capacity | 5.5 TB | — | 1.8 TB | 🧊 Glacier 3× |
+| Drive redundancy | 1 drive failure | — | None | 🧊 Glacier |
+| Data integrity | ZFS checksums + self-healing | — | btrfs checksums | 🧊 Glacier |
+
+> `—` in the Glacier Warm ARC column indicates write operations and pool characteristics are unaffected by ARC — cold and warm results are identical for writes. Warm ARC IOPS (83,929) is the Run 4 representative value; six-run range is 83,416–83,992.
 
 ---
 
@@ -596,7 +650,9 @@ Real-time system metrics monitored via **btop** — installed from the ZimaOS Ap
 
 With 4 drives in RAIDZ1, ZFS stripes reads across all drives simultaneously. The 2,591 MB/s sequential read result is **approximately 81% of the theoretical 3,200 MB/s OCuLink ceiling** — demonstrating near-optimal read distribution across all 4 drives. The remaining ~19% gap is expected ZFS overhead: metadata management, checksum verification, and stripe coordination.
 
-Sequential write at 1,726 MB/s is strong given RAIDZ1 parity overhead, which adds one parity block per stripe across every write.
+With a warm ZFS ARC, sequential reads climb further to **3,329–4,459 MiB/s** across six `benchmark-arc.sh` runs — ARC's prefetch engine can stage the next sequential block before the application requests it, pulling data from RAM rather than waiting on NVMe I/O. This is approximately **1.5–1.7× the cold sequential read speed**.
+
+Sequential write at 1,726 MB/s is strong given RAIDZ1 parity overhead, which adds one parity block per stripe across every write. ARC does not cache write operations — warm ARC provides no write uplift.
 
 Arctic-Storage sequential results confirm the 800 MB/s Standard 7th Bay bridge cap — both read (874 MB/s) and write (788 MB/s) are bottlenecked by the ASMedia bridge hardware, not the PCIe 5.0 drive itself.
 
@@ -604,7 +660,7 @@ Arctic-Storage sequential results confirm the 800 MB/s Standard 7th Bay bridge c
 
 Arctic-Storage delivers **205,588 IOPS** random 4K read at **0.6ms average latency** — completely unimpeded by the 7th Bay sequential cap. This is genuine PCIe 5.0 NVMe random I/O performance, and exactly why this slot makes sense for Docker app databases and inference model loading.
 
-Glacier's 14,781 IOPS reflects ZFS RAIDZ1 copy-on-write overhead, parity calculation latency, and OCuLink tunnel baseline latency. These are **cold-cache numbers** — in practice, ZFS ARC (Adaptive Replacement Cache) will cache frequently accessed data in RAM, improving random read performance for real workloads over time.
+Glacier's 14,781 IOPS reflects ZFS RAIDZ1 copy-on-write overhead, parity calculation latency, and OCuLink tunnel baseline latency. These are **cold-cache floor numbers**. With a warm ZFS ARC, glacier delivers **83,416–83,992 IOPS at 1.48–1.49 ms** — a consistent **5.1–5.7× uplift** measured across six benchmark runs. The 14× gap to Arctic-Storage narrows to approximately **2.5×** under warm cache conditions. See [ZFS ARC — Warm Cache Benchmark Results](#zfs-arc--warm-cache-benchmark-results-june-3-4-2026) below for the full six-run analysis and CPU behaviour.
 
 ### ZFS ARC — Measured Behaviour (June 3, 2026)
 
