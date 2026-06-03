@@ -722,45 +722,51 @@ Runs 3 and 4 paired `benchmark-glacier.sh` immediately before `benchmark-arc.sh`
 | Random 4K write | 13,725 IOPS | 13,387 IOPS |
 | Random 4K read | 14,063 IOPS | 15,751 IOPS |
 
-**Five-run ARC benchmark summary:**
+**Six-run ARC benchmark summary:**
 
-| Metric | Run 1 | Run 2 | Run 3 | Run 4 | Run 5 |
-|---|---|---|---|---|---|
-| ARC size before | 9.32 GiB | 0.22 GiB | 0.23 GiB | 0.23 GiB | 0.23 GiB |
-| Warmup speed | 3,329 MiB/s | 4,298 MiB/s | 4,459 MiB/s | 4,328 MiB/s | 3,832 MiB/s² |
-| **Warm ARC IOPS (avg)** | **83,416** | **83,707** | **83,588** | **83,929** | **83,858** |
-| Warm ARC latency (avg) | 1.49 ms | 1.48 ms | 1.48 ms | 1.48 ms | 1.48 ms |
-| Session hit rate | 99.9% | 100.0% | 100.0% | 100.0% | 99.4%³ |
-| Misses during session | 9,037 | 2,603 | 2,001¹ | 2,001 | 67,392³ |
-| Cold rand read IOPS | 16,276 | 18,315 | ~14,063 | 17,577 | 16,497 |
-| Cold rand read latency | 7.62 ms | — | — | 7.05 ms | 7.52 ms |
+| Metric | Run 1 | Run 2 | Run 3 | Run 4 | Run 5 | Run 6 |
+|---|---|---|---|---|---|---|
+| ARC size before | 9.32 GiB | 0.22 GiB | 0.23 GiB | 0.23 GiB | 0.23 GiB | 0.23 GiB |
+| Warmup speed | 3,329 MiB/s | 4,298 MiB/s | 4,459 MiB/s | 4,328 MiB/s | 3,832 MiB/s² | 4,063 MiB/s² |
+| **Warm ARC IOPS (avg)** | **83,416** | **83,707** | **83,588** | **83,929** | **83,858** | **83,992** |
+| Warm ARC latency (avg) | 1.49 ms | 1.48 ms | 1.48 ms | 1.48 ms | 1.48 ms | 1.48 ms |
+| Session hit rate | 99.9% | 100.0% | 100.0% | 100.0% | 99.4%³ | 99.4%³ |
+| Misses during session | 9,037 | 2,603 | 2,001¹ | 2,001 | 67,392³ | 65,536³ |
+| Cold rand read IOPS | 16,276 | 18,315 | ~14,063 | 17,577 | 16,497 | 16,821 |
+| Cold rand read latency | 7.62 ms | — | — | 7.05 ms | 7.52 ms | 7.37 ms |
 
 ¹ Runs 3–4 share ARC size before (0.23 GiB) and similar miss counts — ARC started near-empty each night after the previous run's test file was deleted and evicted.
 
-² Run 5 warmup started with ARC already ~11.5 GiB (ZFS cached the sequentially written test file during the write tests). Evictions during the warmup pass produced lower throughput than a clean cold start.
+² Runs 5–6 warmup started with ARC already partially populated from the write tests. ZFS cached the sequentially written test file in ARC during the write phase; the warmup pass had to evict some of that data, producing lower or variable throughput versus a clean cold start.
 
-³ Run 5 session hit rate and miss count cover the entire 7-step benchmark including write phases. ZFS performed ARC lookups during the write tests and the warmup needed to evict ~3 GiB of write-cached data, accounting for the extra 67K misses. The warm ARC rand read itself was as consistent as all prior runs.
+³ Runs 5–6 session hit rate and miss counts cover the full 7-step benchmark including write phases. ZFS ARC lookups during writes account for the extra ~65–67K misses. The warm ARC rand read result was as consistent as all prior runs.
 
-Warm ARC IOPS spans **83,416–83,929 across five runs — under 0.6% variance**. Average latency is locked at 1.48–1.49 ms in every run. The ceiling is determined by kernel ARC lookup speed (hash table query + spinlock + DMA copy to userspace), not by NVMe or pool conditions.
+Warm ARC IOPS spans **83,416–83,992 across six runs — under 0.7% variance**. Average latency is locked at 1.48–1.49 ms in every run. The ceiling is determined by kernel ARC lookup speed (hash table query + spinlock + DMA copy to userspace), not by NVMe or pool conditions.
 
-Cold random IOPS spans 14K–18.3K across all runs — a wider band consistent with NVMe queue state, RAIDZ1 parity scheduling, and background system load varying between sessions. btop during warm ARC passes (Runs 1, 4, 5) consistently shows 58–64% overall CPU, multiple cores at 98–100%, Load AVG 4–5.5 — ARC serving 83K IOPS is CPU-intensive regardless of starting conditions.
+Cold random IOPS spans 14K–18.3K — a wider band consistent with NVMe queue state, RAIDZ1 parity scheduling, and background system load varying between sessions. btop during warm ARC passes consistently shows 58–64% overall CPU, multiple cores at 98–100%, Load AVG 4–5.5 — ARC serving 83K IOPS is CPU-intensive regardless of starting conditions.
 
-**Write benchmarks — benchmark-arc.sh Run 5 (June 4, 01:17):**
+**Write benchmarks — benchmark-arc.sh Runs 5 and 6 (June 4, 01:17 and 01:31):**
 
-Run 5 was the first run using the updated 7-step `benchmark-arc.sh` that includes sequential write and random 4K write tests (both `--direct=1`).
+Runs 5 and 6 used the updated 7-step `benchmark-arc.sh` with sequential write and random 4K write tests (both `--direct=1`), run back-to-back with approximately 10 minutes between them. The Quick Results summary fix (grep -A30 instead of -A4) was confirmed working in Run 6 — all five labelled results printed correctly.
 
-| Metric | Run 5 (`benchmark-arc.sh`) | Runs 3–4 (`benchmark-glacier.sh`) | Note |
+| Run | Seq write | Rand 4K write | Condition |
 |---|---|---|---|
-| Sequential write | **1,679 MiB/s** (1,760 MB/s) | 1,685–1,752 MiB/s | Consistent — ARC has no effect on writes |
-| Random 4K write | **9,883 IOPS** | 13,387–13,725 IOPS | **−26% lower** — see below |
+| **Runs 3–4** (`benchmark-glacier.sh`) | 1,685–1,752 MiB/s | 13,387–13,725 IOPS | Steady state — 60 s seq read between write tests |
+| **Run 5** (`benchmark-arc.sh`, 01:17) | 1,679 MiB/s | 9,883 IOPS | No recovery pause; first back-to-back run |
+| **Run 6** (`benchmark-arc.sh`, 01:31) | **1,568 MiB/s** | **7,375 IOPS** | Consecutive without SLC recovery; progressive degradation |
 
-Sequential write is consistent with `benchmark-glacier.sh` — as expected since ARC is not in the write path.
+**Sequential write** tracks `benchmark-glacier.sh` when the drives are rested (Run 5: 1,679 MiB/s ≈ steady-state). After a consecutive run without recovery, it drops to 1,568 MiB/s (−7%) — the drives' write queues have not fully drained.
 
-Random write IOPS is ~26% lower. The cause is **test sequencing with no recovery pause**: `benchmark-arc.sh` runs sequential write (4 jobs, 60 s, ~100 GiB total written looping over the 8 GiB file) immediately followed by random write. The NVMe drives' SLC write cache is still saturated when random write begins, depressing random IOPS. `benchmark-glacier.sh` runs a 60-second sequential read between its write tests, giving the SLC cache time to drain — its rand write figures are therefore more representative of sustained write performance.
+**Random write** shows progressive SLC saturation:
+- Steady state (`benchmark-glacier.sh`): **13,400–13,700 IOPS** — the 60-second sequential read between write tests lets the NVMe SLC cache drain
+- After one back-to-back seq write: **9,883 IOPS** (−26%)
+- After two consecutive back-to-back seq writes: **7,375 IOPS** (−45%)
 
-Additionally, ZFS cached the sequentially written 8 GiB file in ARC during the seq write pass (`--direct=1` prevents OS page-cache use but does not block ZFS ARC caching): btop confirmed ARC grew from 0.23 GiB → ~11.5 GiB during the write tests. The subsequent warmup pass had to evict ~3 GiB of that write-cached data before the random read benchmark.
+The cause is the same each time: `benchmark-arc.sh` runs ~100 GiB of sequential writes (4 jobs looping a 8 GiB file for 60 s) immediately before random write with no recovery pause. The NVMe SLC cache cannot drain between tests. Each consecutive run compounds the saturation.
 
-> Use `benchmark-glacier.sh` for the most representative standalone write numbers. The write tests in `benchmark-arc.sh` are included for completeness and are accurate for sequential write; the random write figures will be lower whenever they follow a heavy sequential write pass without a recovery period.
+Additionally, ZFS cached the written 8 GiB file in ARC during the seq write pass (`--direct=1` bypasses the OS page cache but not ZFS's own ARC): btop confirmed ARC grew from 0.23 GiB → ~11.5 GiB during the write tests, and the warmup pass had to evict some of that write-cached data.
+
+> **For write numbers:** use `benchmark-glacier.sh` — the interleaved seq-read pass provides a recovery window that gives representative sustained write performance. The write tests in `benchmark-arc.sh` are included for completeness; always allow **10–15 minutes** between consecutive runs to let the NVMe SLC cache drain before treating the figures as steady-state.
 
 **btop observations during Run 5 write tests:**
 
