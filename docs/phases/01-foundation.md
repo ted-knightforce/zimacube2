@@ -711,7 +711,23 @@ Cold NVMe results show more run-to-run variance (16,276 vs 18,315 IOPS) than ARC
 
 ### The 14× IOPS Gap — Architectural, Not a Flaw
 
-ZFS RAIDZ1 trades random I/O efficiency for sequential throughput, redundancy, and data integrity. The correct response is tiered workload routing — not trying to close the gap.
+The Phase 1 benchmark showed a 14× random 4K IOPS gap between glacier (14,781 IOPS) and Arctic-Storage (205,588 IOPS). That gap exists for structural reasons, not defective hardware:
+
+- **RAIDZ1 parity overhead.** Every random write to glacier triggers a full-stripe read-modify-write cycle — the existing parity block must be read and recalculated before the write can land. Arctic-Storage on a single btrfs drive has no parity to maintain.
+- **Copy-on-write.** ZFS never overwrites in place. Each write allocates new blocks and updates the metadata tree, adding latency that a simpler filesystem at low queue depth avoids.
+- **4K blocks don't stripe.** RAIDZ1 spreads data across four drives for sequential I/O — producing 2,591 MB/s sequential reads. A single 4K random block touches one drive; there is nothing to stripe. The RAIDZ1 advantage evaporates at small block sizes.
+- **OCuLink hop.** The drives connect via PCIe 4.0 x4 through the Aoostar TB4S-OC enclosure. The tunnel adds a small but consistent baseline latency absent on onboard NVMe.
+
+The ARC benchmark refines the picture. Cold — with `--direct=1` forcing every read to NVMe — glacier delivers 16K IOPS at 7.6ms latency. That is the floor. With a warm ARC, glacier delivers 83K IOPS at 1.5ms latency — a 5× uplift that narrows the gap to Arctic-Storage from 14× to roughly **2.5×**. For workloads that re-read the same data, the NVMe characteristics of glacier become largely irrelevant; the ARC is the actual storage layer.
+
+The 2.5× warm gap that remains is real and appropriate to acknowledge. Immich's PostgreSQL engine performing random index lookups across 14,500 photos, or a Docker container reading configuration on every request, benefits from Arctic-Storage's 205K IOPS and 0.6ms latency in a way that no amount of ARC tuning will fully replicate on glacier. The correct response is not to close this gap — it is to route workloads by their I/O profile:
+
+| I/O profile | Right pool | Reason |
+|---|---|---|
+| Random, latency-sensitive (databases, containers) | Arctic-Storage | 205K IOPS, 0.6ms — uncontested |
+| Sequential, large files, redundancy required | glacier | 2,591 MB/s, RAIDZ1 integrity, ~5.5TB |
+| Repeated reads, warm working set | glacier + ARC | 83K IOPS served from RAM |
+| Cold bulk / media library | ironwolf (arriving) | Capacity and cost; sequential access only |
 
 ---
 
