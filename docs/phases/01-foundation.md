@@ -660,7 +660,7 @@ Arctic-Storage sequential results confirm the 800 MB/s Standard 7th Bay bridge c
 
 Arctic-Storage delivers **205,588 IOPS** random 4K read at **0.6ms average latency** — completely unimpeded by the 7th Bay sequential cap. This is genuine PCIe 5.0 NVMe random I/O performance, and exactly why this slot makes sense for Docker app databases and inference model loading.
 
-Glacier's 14,781 IOPS reflects ZFS RAIDZ1 copy-on-write overhead, parity calculation latency, and OCuLink tunnel baseline latency. These are **cold-cache floor numbers**. With a warm ZFS ARC, glacier delivers **83,416–83,992 IOPS at 1.48–1.49 ms** — a consistent **5.1–5.7× uplift** measured across six benchmark runs. The 14× gap to Arctic-Storage narrows to approximately **2.5×** under warm cache conditions. See [ZFS ARC — Warm Cache Benchmark Results](#zfs-arc--warm-cache-benchmark-results-june-3-4-2026) below for the full six-run analysis and CPU behaviour.
+Glacier's 14,781 IOPS reflects ZFS RAIDZ1 copy-on-write overhead, parity calculation latency, and OCuLink tunnel baseline latency. These are **cold-cache floor numbers**. With a warm ZFS ARC, glacier delivers **83,416–83,992 IOPS at 1.48–1.49 ms** — a consistent **5.1–5.7× uplift** measured across six benchmark runs. The 14× gap to Arctic-Storage narrows to approximately **2.5×** under warm cache conditions. The full six-run analysis and CPU behaviour are documented in the ZFS ARC sections below.
 
 ### ZFS ARC — Measured Behaviour (June 3, 2026)
 
