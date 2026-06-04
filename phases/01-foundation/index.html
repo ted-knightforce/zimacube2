@@ -239,17 +239,18 @@
   
   
   
-    <li class="md-tabs__item">
-      <a href="../../benchmarks/results-visual.html" class="md-tabs__link">
-        
-  
-  
     
+    
+      <li class="md-tabs__item">
+        <a href="../01.5-benchmarks/" class="md-tabs__link">
+          
   
-  Phase 1.5 Results Visualisation
+  
+  Benchmarks
 
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
@@ -1365,15 +1366,67 @@
   
   
   
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Benchmarks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
-      <a href="../../benchmarks/results-visual.html" class="md-nav__link">
+      <a href="../01.5-benchmarks/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Phase 1.5 Results Visualisation
+    Phase 1.5: Storage Benchmarks
   
 
     
@@ -1382,6 +1435,42 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../benchmarks/results-visual.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Results Visualisation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -2264,7 +2353,7 @@
 <ul>
 <li>[ ] <strong>[Planned]</strong> ZimaOS dashboard currently shows ~78% RAM used — this reflects ZFS ARC holding up to its 14.37 GiB c_max ceiling, not actual application memory pressure. Observing whether ARC naturally yields memory as Phase 2 Jellyfin workloads ramp up. Will cap ZFS ARC at 8 GiB if memory contention becomes an issue.</li>
 <li>[ ] RAM → 32GB DDR5 (2× Corsair Vengeance 16GB DDR5 4800MHz CL40 SODIMM) → raise ARC cap to 16 GiB after upgrade</li>
-<li>[ ] Move Crucial P510 to onboard M.2 slot → Phase 1.5 re-benchmark</li>
+<li>[ ] Move Crucial P510 to onboard M.2 slot → Phase 1.8 re-benchmark</li>
 <li>[ ] <strong>[TBD]</strong> TB4 direct networking test — connect Mac/PC via TB4 cable, configure IP over Thunderbolt, benchmark vs 2.5GbE</li>
 <li>[ ] Phase 1 Reddit post</li>
 </ul>
@@ -2290,7 +2379,7 @@ Installed a Crucial P510 2TB Gen5 NVMe M.2 2280 into the ZimaCube 2's internal 7
 <img alt="ZimaCube 2 Interior - Seated new NVMe SSD" src="../../images/phase1.5/day02-nvme-ssd-install-seated-01.jpg" /></p>
 <blockquote>
 <p>⚠️ <strong>Note:</strong> The 7th Bay on the ZimaCube 2 Standard is capped at 800 MB/s total by the ASMedia bridge — the PCIe 5.0 speed of the Crucial P510 drive is completely wasted here sequentially. A cheaper PCIe 3.0 or 4.0 drive delivers identical sequential performance in this slot. However, random IOPS are unaffected by the bridge cap, making the 205K IOPS and 0.6ms latency of the P510 genuinely useful for Docker app workloads.</p>
-<p>🔬 <strong>Planned experiment — Phase 1.5:</strong> I'm moving the Cruial P510 from the ZimaCube 2's 7th bay to the onboard M.2 slot to test whether it can achieve native PCIe 5.0 speeds. Re-benchmark results will follow once complete.</p>
+<p>🔬 <strong>Planned experiment — Phase 1.8:</strong> I'm moving the Cruial P510 from the ZimaCube 2's 7th bay to the onboard M.2 slot to test whether it can achieve native PCIe 5.0 speeds. Re-benchmark results will follow once complete.</p>
 </blockquote>
 <p><strong>3. PCIe OCuLink Adapter</strong><br />
 Installed a <strong>PCIe x4 to SFF-8612 adapter</strong> into Slot 1 of ZimaCube 2. Slot 1 is a physical x16 slot wired at PCIe 4.0 x4 lanes (~8 GB/s) — the card fits a full-length x16 form factor but only uses four lanes electrically.</p>
@@ -2365,7 +2454,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </tr>
 <tr>
 <td>Onboard M.2</td>
-<td>Additional slot available → planned P510 migration (Phase 1.5)</td>
+<td>Additional slot available → planned P510 migration (Phase 1.8)</td>
 </tr>
 <tr>
 <td>SATA Bays</td>
@@ -2751,7 +2840,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <p>AppData was migrated from ZimaOS-HD to Arctic-Storage using <strong>Settings → Storage → Apps</strong> — ZimaOS handles the symlinks automatically, and all apps continued working immediately.</p>
 <blockquote>
 <p>⚠️ <strong>7th Bay bandwidth cap:</strong> The ZimaCube 2 Standard caps the 7th Bay at 800 MB/s total via its ASMedia bridge. The P510 is capable of 9,000+ MB/s natively but is bridge-limited here. Both sequential read (874 MB/s) and write (788 MB/s) hit this ceiling. Random IOPS are unaffected — the 205,588 IOPS and 0.6ms latency of the P510 are fully available for Docker workloads.</p>
-<p>🔬 <strong>Planned — Phase 1.5:</strong> Move P510 to the additional onboard M.2 slot to test native PCIe Gen5 sequential speed. Re-benchmark and compare.</p>
+<p>🔬 <strong>Planned — Phase 1.8:</strong> Move P510 to the additional onboard M.2 slot to test native PCIe Gen5 sequential speed. Re-benchmark and compare.</p>
 </blockquote>
 <hr />
 <h2 id="storage-benchmarks">Storage Benchmarks ✅<a class="headerlink" href="#storage-benchmarks" title="Permanent link">&para;</a></h2>
@@ -3110,7 +3199,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <h3 id="planned-experiments">Planned Experiments<a class="headerlink" href="#planned-experiments" title="Permanent link">&para;</a></h3>
 <ul>
 <li>
-<p><strong>Phase 1.5:</strong> Move Crucial P510 to onboard M.2 slot → re-run <code>benchmark-arctic.sh</code> → publish comparison. Expected: sequential speeds climb from ~800 MB/s to 9,000+ MB/s; random IOPS similar.</p>
+<p><strong>Phase 1.8:</strong> Move Crucial P510 to onboard M.2 slot → re-run <code>benchmark-arctic.sh</code> → publish comparison. Expected: sequential speeds climb from ~800 MB/s to 9,000+ MB/s; random IOPS similar.</p>
 </li>
 <li>
 <p><strong>TB4 direct networking:</strong> Connect a Mac/PC directly to ZimaCube 2 via TB4 cable → configure IP over Thunderbolt on both ends → benchmark file transfer speeds. Goal: determine whether TB4 networking can unlock the full glacier sequential read (2,591 MB/s) and Arctic-Storage random IOPS for directly-connected clients, bypassing the 2.5GbE ceiling (~312 MB/s). Will also verify <code>boltctl</code> authorization flow on ZimaOS and which TB4 port is functional.</p>
