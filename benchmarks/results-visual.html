@@ -125,6 +125,23 @@
     }
     .arc-callout strong { color: #38bdf8; }
 
+    /* ── Head-to-head comparison table ── */
+    .cmp-section { margin: 2.25rem 0 2rem; }
+    .cmp-scroll { overflow-x: auto; border: 1px solid #21262d; border-radius: 10px; }
+    .cmp-table { width: 100%; border-collapse: collapse; background: #161b22; font-size: 0.74rem; min-width: 620px; }
+    .cmp-table th, .cmp-table td { padding: 0.55rem 0.8rem; text-align: left; border-bottom: 1px solid #21262d; white-space: nowrap; }
+    .cmp-table thead th { font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; background: #0f141a; }
+    .cmp-table tbody tr:last-child td { border-bottom: none; }
+    .cmp-table tbody tr:hover { background: #1a2029; }
+    .cmp-table td.metric, .cmp-table th.metric { color: #c9d1d9; font-weight: 500; }
+    .col-cold   { color: #2dd4bf; }
+    .col-warm   { color: #38bdf8; }
+    .col-arctic { color: #818cf8; }
+    .cmp-table td.col-cold, .cmp-table td.col-warm, .cmp-table td.col-arctic { font-weight: 600; }
+    .cmp-na { color: #484f58; }
+    .win-g { color: #2dd4bf; font-weight: 600; }
+    .win-a { color: #818cf8; font-weight: 600; }
+
     @media (max-width: 620px) {
       .stat-grid    { grid-template-columns: 1fr 1fr; }
       .chart-row    { grid-template-columns: 1fr; }
@@ -181,13 +198,13 @@
   </div>
   <div class="stat-card">
     <div class="s-label">rand 4K write</div>
-    <div class="s-val" style="color:#818cf8">13,795 IOPS</div>
+    <div class="s-val" style="color:#2dd4bf">13,795 IOPS</div>
     <div class="s-vs">vs 87,099 IOPS</div>
     <span class="badge b-a">Arctic 6.3× faster</span>
   </div>
   <div class="stat-card">
     <div class="s-label">rand 4K read</div>
-    <div class="s-val" style="color:#818cf8; font-size:.95rem">14,781 IOPS</div>
+    <div class="s-val" style="color:#2dd4bf; font-size:.95rem">14,781 IOPS</div>
     <div class="s-warm">83,929 IOPS <small style="font-size:.6rem;color:#7d8590">warm ARC</small></div>
     <div class="s-vs">vs 205,588 IOPS</div>
     <span class="badge b-a">Arctic 2.5× faster (warm)</span>
@@ -401,6 +418,90 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- ═══════════════════ HEAD-TO-HEAD TABLE ═══════════════════════════ -->
+<div class="cmp-section">
+  <div class="section-head">Head-to-Head Summary — where each pool excels</div>
+  <div class="cmp-scroll">
+    <table class="cmp-table">
+      <thead>
+        <tr>
+          <th class="metric">Test</th>
+          <th class="col-cold">Glacier Cold</th>
+          <th class="col-warm">Glacier Warm ARC</th>
+          <th class="col-arctic">Arctic btrfs PCIe 5.0</th>
+          <th>Winner</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="metric">Sequential write</td>
+          <td class="col-cold">1,726 MB/s</td>
+          <td class="cmp-na">—</td>
+          <td class="col-arctic">788 MB/s</td>
+          <td class="win-g">🧊 Glacier +119%</td>
+        </tr>
+        <tr>
+          <td class="metric">Sequential read</td>
+          <td class="col-cold">2,591 MB/s</td>
+          <td class="col-warm">~4,300–4,460 MB/s</td>
+          <td class="col-arctic">874 MB/s</td>
+          <td class="win-g">🧊 Glacier (warm ARC)</td>
+        </tr>
+        <tr>
+          <td class="metric">Random 4K write IOPS</td>
+          <td class="col-cold">13,795</td>
+          <td class="cmp-na">—</td>
+          <td class="col-arctic">87,099</td>
+          <td class="win-a">🌨️ Arctic 6.3×</td>
+        </tr>
+        <tr>
+          <td class="metric">Random 4K read IOPS</td>
+          <td class="col-cold">14,781</td>
+          <td class="col-warm">83,929</td>
+          <td class="col-arctic">205,588</td>
+          <td class="win-a">🌨️ Arctic — 14× cold · 2.5× warm</td>
+        </tr>
+        <tr>
+          <td class="metric">Random 4K write latency</td>
+          <td class="col-cold">9.3 ms</td>
+          <td class="cmp-na">—</td>
+          <td class="col-arctic">1.5 ms</td>
+          <td class="win-a">🌨️ Arctic 6× lower</td>
+        </tr>
+        <tr>
+          <td class="metric">Random 4K read latency</td>
+          <td class="col-cold">8.7 ms</td>
+          <td class="col-warm">1.48 ms</td>
+          <td class="col-arctic">0.6 ms</td>
+          <td class="win-a">🌨️ Arctic — 14× lower cold · 2.5× lower warm</td>
+        </tr>
+        <tr>
+          <td class="metric">Usable capacity</td>
+          <td class="col-cold">5.5 TB</td>
+          <td class="cmp-na">—</td>
+          <td class="col-arctic">1.8 TB</td>
+          <td class="win-g">🧊 Glacier 3×</td>
+        </tr>
+        <tr>
+          <td class="metric">Drive redundancy</td>
+          <td class="col-cold">1 drive failure</td>
+          <td class="cmp-na">—</td>
+          <td class="col-arctic">None</td>
+          <td class="win-g">🧊 Glacier</td>
+        </tr>
+        <tr>
+          <td class="metric">Data integrity</td>
+          <td class="col-cold">ZFS checksums + self-healing</td>
+          <td class="cmp-na">—</td>
+          <td class="col-arctic">btrfs checksums</td>
+          <td class="win-g">🧊 Glacier</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="chart-note">Warm ARC affects reads only — <span class="cmp-na">—</span> marks metrics ARC does not influence (writes, capacity, redundancy, integrity).</div>
 </div>
 
 <!-- ═══════════════════ WINS ═════════════════════════════════════════ -->
