@@ -346,6 +346,9 @@ For workloads like pulling raw photos from Immich, streaming high-bitrate media,
 | Redundancy | RAIDZ1 survives 1 drive failure across 4 drives |
 | Snapshots | Copy-on-write snapshots are instant — essential before Phase 4 experiments |
 | Compression | lz4 is near-zero CPU cost on i3-1215U with real savings on documents and logs |
+| ARC read cache | Every read against `glacier` is served through the ZFS ARC — frequently-accessed data is served from RAM instead of NVMe, and the cache grows with installed memory |
+
+> 💡 **The biggest surprise — ZFS ARC.** This turned out to be the standout benefit of putting frequently-called data on `glacier`. Because ARC caches hot data in RAM, repeated reads bypass the NVMe entirely: warm random-4K reads measured **~83,929 IOPS vs ~14,781 IOPS cold — a ~5.7× uplift**, purely from ARC. Better still, it scales with memory — the more RAM in the box, the larger the cache and the more of glacier stays hot. That makes the planned 32GB RAM upgrade a direct read-performance investment for any workload living on glacier (Immich, AI model staging in Phase 5, document search). See the [warm-ARC benchmarks](01.5-benchmarks.md) for the full numbers. *(Note: ARC is a ZFS-only feature — btrfs pools like Arctic-Storage rely on the Linux page cache instead.)*
 
 ### Why btrfs for Arctic-Storage and ironwolf
 
