@@ -24,7 +24,7 @@
 12. [Recommended Workload Split](#recommended-workload-split)
 13. [Immich Migration](#immich-migration)
 14. [ZimaOS Observations](#zimaos-observations)
-15. [Honest Friction Log](#honest-friction-log)
+15. [Honest & Surprising Discoveries](#honest-surprising-discoveries)
 16. [What's Coming Next](#whats-coming-next)
 17. [Benchmark Scripts](#benchmark-scripts)
 18. [System Information](#system-information)
@@ -629,13 +629,13 @@ ZimaOS is **Buildroot-based** with an immutable read-only OS. Key implications f
 
 ---
 
-## Honest Friction Log
+## Honest & Surprising Discoveries
 
 - **TB4 failure** — biggest surprise. ZimaOS TB4 kernel config + ASMedia ASM2462PDX incompatibility = hours of troubleshooting. OCuLink was the right answer all along; skip straight to it on this hardware combination.
+- **ZFS ARC pays off on glacier** — the best surprise. Every read against the `glacier` ZFS RAIDZ1 pool is served through the ZFS ARC, so hot data comes straight from RAM instead of NVMe. Warm random-4K reads jumped from ~14,781 IOPS (cold) to ~83,929 IOPS — a ~5.7× uplift — purely from ARC. And it scales with memory: the more RAM in the box, the larger the cache and the more of glacier stays hot. This is the single biggest argument for the upcoming 32GB RAM upgrade. (btrfs pools like Arctic-Storage don't get ARC — they rely on the Linux page cache instead.)
 - **ZFS invisible to ZimaOS UI** — expected, but still a rough edge. The symlink workaround is functional but not elegant. Open feature request on ZimaOS GitHub.
 - **Immich database empty after file migration** — moving photo files without moving the database gives you photos but no albums, faces, or metadata. The fix: copy the entire `/DATA/AppData/immich` folder (including `pgdata`) alongside the photo library. Stop Immich on the source first. See [Phase 2.5](02.5-immich.md) for the full method.
 - **ZimaOS package manager missing** — `apt install fio` doesn't work. Discovering fio was already natively available saved the day; anything else requires Docker.
-- **`hostname -I` not supported** — Buildroot's hostname binary doesn't support the `-I` flag. Use `ip addr` instead in scripts.
 - **ZimaOS RAM widget shows 78% used** — alarming but misleading. ZimaOS counts ZFS ARC cache as "used" RAM. btop breaks it down correctly: 3.97 GiB actual app usage, 11.4 GiB ZFS ARC, 11.3 GiB available. ZFS will evict ARC immediately if applications need the memory. The fix is capping `c_max` to prevent ARC from ever growing past a sensible ceiling — see [ZFS ARC Tuning](#zfs-arc-tuning).
 
 ---
