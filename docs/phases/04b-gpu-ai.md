@@ -21,7 +21,7 @@ The original plan (ZimaSpace 800W OCuLink dock / Minisforum DEG1) is **no longer
 |---|---|---|---|---|
 | ZimaSpace 800W OCuLink dock | OCuLink → Slot 1 | Designed for ZimaCube | ❌ Slot 1 occupied | Ruled out |
 | Minisforum DEG1 | OCuLink-only | Compact | ❌ Same Slot 1 conflict | Ruled out |
-| **Minisforum DEG2** | **TB5 + OCuLink** | Uses free TB4 port; keeps PCIe slots free; dual connection options | TB5 port on ZimaCube 2 is TB4 — TB4 bandwidth only | **Under evaluation** |
+| **Minisforum DEG2** | **TB5 + OCuLink** | Uses free TB4 port; keeps PCIe slots free; dual connection options | ZimaCube 2 has only TB4 ports — the DEG2's TB5 bandwidth is capped at TB4 here | **Under evaluation** |
 | Generic TB4 eGPU enclosure | TB4 | Uses free TB4 port; many options | Varies by enclosure | Viable |
 
 > **Key insight:** For Ollama inference workloads, TB4 bandwidth (~40Gbps ≈ 5 GB/s) is not the bottleneck. PCIe x16 full bandwidth matters for gaming (Phase 6) but inference is VRAM-bound, not bandwidth-bound. TB4 eGPU is a valid path for Phase 4b.
