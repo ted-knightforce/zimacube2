@@ -1102,10 +1102,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#honest-friction-log" class="md-nav__link">
+  <a href="#honest-surprising-discoveries" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Honest Friction Log
+        Honest &amp; Surprising Discoveries
       
     </span>
   </a>
@@ -2181,10 +2181,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#honest-friction-log" class="md-nav__link">
+  <a href="#honest-surprising-discoveries" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Honest Friction Log
+        Honest &amp; Surprising Discoveries
       
     </span>
   </a>
@@ -2317,7 +2317,7 @@
 <li><a href="#recommended-workload-split">Recommended Workload Split</a></li>
 <li><a href="#immich-migration">Immich Migration</a></li>
 <li><a href="#zimaos-observations">ZimaOS Observations</a></li>
-<li><a href="#honest-friction-log">Honest Friction Log</a></li>
+<li><a href="#honest-surprising-discoveries">Honest &amp; Surprising Discoveries</a></li>
 <li><a href="#whats-coming-next">What's Coming Next</a></li>
 <li><a href="#benchmark-scripts">Benchmark Scripts</a></li>
 <li><a href="#system-information">System Information</a></li>
@@ -3166,13 +3166,13 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </tbody>
 </table>
 <hr />
-<h2 id="honest-friction-log">Honest Friction Log<a class="headerlink" href="#honest-friction-log" title="Permanent link">&para;</a></h2>
+<h2 id="honest-surprising-discoveries">Honest &amp; Surprising Discoveries<a class="headerlink" href="#honest-surprising-discoveries" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>TB4 failure</strong> — biggest surprise. ZimaOS TB4 kernel config + ASMedia ASM2462PDX incompatibility = hours of troubleshooting. OCuLink was the right answer all along; skip straight to it on this hardware combination.</li>
+<li><strong>ZFS ARC pays off on glacier</strong> — the best surprise. Every read against the <code>glacier</code> ZFS RAIDZ1 pool is served through the ZFS ARC, so hot data comes straight from RAM instead of NVMe. Warm random-4K reads jumped from ~14,781 IOPS (cold) to ~83,929 IOPS — a ~5.7× uplift — purely from ARC. And it scales with memory: the more RAM in the box, the larger the cache and the more of glacier stays hot. This is the single biggest argument for the upcoming 32GB RAM upgrade. (btrfs pools like Arctic-Storage don't get ARC — they rely on the Linux page cache instead.)</li>
 <li><strong>ZFS invisible to ZimaOS UI</strong> — expected, but still a rough edge. The symlink workaround is functional but not elegant. Open feature request on ZimaOS GitHub.</li>
 <li><strong>Immich database empty after file migration</strong> — moving photo files without moving the database gives you photos but no albums, faces, or metadata. The fix: copy the entire <code>/DATA/AppData/immich</code> folder (including <code>pgdata</code>) alongside the photo library. Stop Immich on the source first. See <a href="../02.5-immich/">Phase 2.5</a> for the full method.</li>
 <li><strong>ZimaOS package manager missing</strong> — <code>apt install fio</code> doesn't work. Discovering fio was already natively available saved the day; anything else requires Docker.</li>
-<li><strong><code>hostname -I</code> not supported</strong> — Buildroot's hostname binary doesn't support the <code>-I</code> flag. Use <code>ip addr</code> instead in scripts.</li>
 <li><strong>ZimaOS RAM widget shows 78% used</strong> — alarming but misleading. ZimaOS counts ZFS ARC cache as "used" RAM. btop breaks it down correctly: 3.97 GiB actual app usage, 11.4 GiB ZFS ARC, 11.3 GiB available. ZFS will evict ARC immediately if applications need the memory. The fix is capping <code>c_max</code> to prevent ARC from ever growing past a sensible ceiling — see <a href="#zfs-arc-tuning">ZFS ARC Tuning</a>.</li>
 </ul>
 <hr />
