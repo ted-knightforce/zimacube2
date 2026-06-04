@@ -13,16 +13,14 @@ Add an RTX 4090 to ZimaCube 2, install NVIDIA drivers on ZimaOS, and benchmark G
 
 ## ⚠️ eGPU Dock Decision — Pending
 
-The original plan (ZimaSpace 800W OCuLink dock / Minisforum DEG1) is **no longer viable** because PCIe Slot 1 is occupied by the OCuLink adapter for the Aoostar NVMe enclosure.
+The original plan (Minisforum DEG1, OCuLink) is **no longer viable** because PCIe Slot 1 is occupied by the OCuLink adapter for the Aoostar TB4S-OC NVMe enclosure.
 
 ### Decision Matrix
 
 | Option | Connection | Pros | Cons | Status |
 |---|---|---|---|---|
-| ZimaSpace 800W OCuLink dock | OCuLink → Slot 1 | Designed for ZimaCube | ❌ Slot 1 occupied | Ruled out |
-| Minisforum DEG1 | OCuLink-only | Compact | ❌ Same Slot 1 conflict | Ruled out |
-| **Minisforum DEG2** | **TB5 + OCuLink** | Uses free TB4 port; keeps PCIe slots free; dual connection options | ZimaCube 2 has only TB4 ports — the DEG2's TB5 bandwidth is capped at TB4 here | **Under evaluation** |
-| Generic TB4 eGPU enclosure | TB4 | Uses free TB4 port; many options | Varies by enclosure | Viable |
+| Minisforum DEG1 | OCuLink → Slot 1 | Hosts a full-size GPU (e.g. RTX 4090) on ZimaCube 2 via OCuLink — direct PCIe with no Thunderbolt protocol/tunnelling overhead, and sidesteps the TB4/TB5 eGPU hardware-compatibility issues seen with my Aoostar TB4S-OC TB4 DAS | ❌ Cannot use the Slot 1 OCuLink connection — it's already taken by the Aoostar TB4S-OC NVMe SSD enclosure hosting the ultra-fast NVMe ZFS RAIDZ1 `glacier` pool | Ruled out |
+| **Minisforum DEG2 · Aoostar EG02 / EG03** | **TB4** | Uses a free TB4 port; keeps the PCIe slots free | ZimaCube 2 has only TB4 ports → bandwidth capped at TB4 (~40 Gbps); Thunderbolt protocol/tunnelling overhead | **Top choice — under evaluation** |
 
 > **Key insight:** For Ollama inference workloads, TB4 bandwidth (~40Gbps ≈ 5 GB/s) is not the bottleneck. PCIe x16 full bandwidth matters for gaming (Phase 6) but inference is VRAM-bound, not bandwidth-bound. TB4 eGPU is a valid path for Phase 4b.
 
