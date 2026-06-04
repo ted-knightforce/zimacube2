@@ -2908,7 +2908,7 @@
 </tbody>
 </table>
 <h3 id="glacier-warm-zfs-arc-june-34-2026">Glacier — Warm ZFS ARC (June 3–4, 2026)<a class="headerlink" href="#glacier-warm-zfs-arc-june-34-2026" title="Permanent link">&para;</a></h3>
-<p>Measured using <code>benchmark-arc.sh</code> across six runs. ZFS ARC does not cache write operations — warm ARC affects reads only. Write figures reflect steady-state <code>benchmark-glacier.sh</code> results with SLC cache intact.</p>
+<p>Measured using <code>benchmark-arc.sh</code> across seven runs. ZFS ARC does not cache write operations — warm ARC affects reads only. Write figures reflect steady-state <code>benchmark-glacier.sh</code> results with SLC cache intact.</p>
 <table>
 <thead>
 <tr>
@@ -2922,7 +2922,7 @@
 <tbody>
 <tr>
 <td>Sequential write</td>
-<td>1,685–1,752 MiB/s</td>
+<td>1,681–1,752 MiB/s</td>
 <td>—</td>
 <td>—</td>
 <td>Cold pool throughput; ARC not involved</td>
@@ -2930,7 +2930,7 @@
 <tr>
 <td>Random 4K write</td>
 <td>—</td>
-<td>13,387–13,725</td>
+<td>12,560–13,725</td>
 <td>—</td>
 <td>Cold IOPS; ARC not involved</td>
 </tr>
@@ -2943,22 +2943,22 @@
 </tr>
 <tr>
 <td><strong>Random 4K read — Warm ARC</strong></td>
-<td><strong>324–328 MiB/s</strong></td>
-<td><strong>83,416–83,992</strong></td>
-<td><strong>1.48–1.49 ms</strong></td>
-<td>Served from RAM; 99.4–100% session hit rate</td>
+<td><strong>324–329 MiB/s</strong></td>
+<td><strong>83,416–84,113</strong></td>
+<td><strong>1.47–1.49 ms</strong></td>
+<td>Served from RAM; 99.3–100% session hit rate</td>
 </tr>
 <tr>
 <td>Random 4K read — Cold</td>
 <td>63–72 MiB/s</td>
-<td>16,276–18,315</td>
-<td>7.05–7.62 ms</td>
+<td>16,062–18,315</td>
+<td>7.05–7.72 ms</td>
 <td><code>--direct=1</code>; raw NVMe baseline</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p>Warm ARC IOPS spans only <strong>0.7% variance</strong> across all six runs regardless of starting ARC state or preceding write load. Average latency locked at 1.48–1.49 ms every run.</p>
+<p>Warm ARC IOPS spans only <strong>0.8% variance</strong> across all seven runs regardless of starting ARC state or preceding write load. Average latency locked at 1.47–1.49 ms every run.</p>
 </blockquote>
 <h3 id="arctic-storage-btrfs-pcie-50-7th-bay-800-mbs-cap">Arctic-Storage — btrfs PCIe 5.0 (7th Bay, 800 MB/s cap)<a class="headerlink" href="#arctic-storage-btrfs-pcie-50-7th-bay-800-mbs-cap" title="Permanent link">&para;</a></h3>
 <table>
@@ -3076,22 +3076,22 @@
 </tbody>
 </table>
 <blockquote>
-<p><code>—</code> in the Glacier Warm ARC column indicates write operations and pool characteristics are unaffected by ARC. Warm ARC IOPS (83,929) is the Run 4 representative value; six-run range is 83,416–83,992.</p>
+<p><code>—</code> in the Glacier Warm ARC column indicates write operations and pool characteristics are unaffected by ARC. Warm ARC IOPS (83,929) is the Run 4 representative value; seven-run range is 83,416–84,113.</p>
 </blockquote>
 <hr />
 <h2 id="analysis">Analysis<a class="headerlink" href="#analysis" title="Permanent link">&para;</a></h2>
 <h3 id="why-glacier-wins-sequential-performance">Why Glacier Wins Sequential Performance<a class="headerlink" href="#why-glacier-wins-sequential-performance" title="Permanent link">&para;</a></h3>
 <p>With 4 drives in RAIDZ1, ZFS stripes reads across all drives simultaneously. The 2,591 MB/s sequential read result is <strong>approximately 81% of the theoretical 3,200 MB/s OCuLink ceiling</strong> — demonstrating strong, near-optimal read distribution across all 4 drives. The ~19% gap below theoretical maximum is normal ZFS overhead: metadata management, checksum verification, and stripe coordination.</p>
-<p>With a warm ZFS ARC, sequential reads climb further to <strong>3,329–4,459 MiB/s</strong> across six <code>benchmark-arc.sh</code> runs — ARC's prefetch engine stages the next sequential block before the application requests it, pulling data from RAM rather than waiting on NVMe I/O. This is approximately <strong>1.5–1.7× the cold sequential read speed</strong>.</p>
+<p>With a warm ZFS ARC, sequential reads climb further to <strong>3,329–4,459 MiB/s</strong> across seven <code>benchmark-arc.sh</code> runs — ARC's prefetch engine stages the next sequential block before the application requests it, pulling data from RAM rather than waiting on NVMe I/O. This is approximately <strong>1.5–1.7× the cold sequential read speed</strong>.</p>
 <p>Sequential write at 1,726 MB/s is excellent given RAIDZ1 parity overhead, which adds one parity block per stripe on every write operation. ARC does not cache write operations — warm ARC provides no write uplift.</p>
 <p>The Arctic-Storage sequential results confirm the 7th Bay 800 MB/s bridge cap — both read (874 MB/s) and write (788 MB/s) are capped by the ASMedia bridge hardware, not the PCIe 5.0 drive itself. The Crucial P510 is capable of ~10,000 MB/s natively but the 7th Bay limits it to ~800 MB/s sequentially.</p>
 <h3 id="why-arctic-storage-wins-random-iops">Why Arctic-Storage Wins Random IOPS<a class="headerlink" href="#why-arctic-storage-wins-random-iops" title="Permanent link">&para;</a></h3>
 <p>The 205,588 random 4K read IOPS and 0.6ms average latency from Arctic-Storage is a remarkable result, revealing a fundamental architectural difference between ZFS RAIDZ1 and a single btrfs drive.</p>
 <p>ZFS RAIDZ1 introduces copy-on-write overhead on every write, requires parity calculation, and has higher baseline latency (7–9ms) due to the OCuLink tunnel and RAIDZ stripe management. For small random I/O, this overhead dominates.</p>
 <p>The Crucial P510 PCIe 5.0 drive, despite being capped at 800 MB/s sequentially, delivers its native NVMe random I/O performance completely unimpeded — resulting in a 14× random read IOPS advantage over the cold RAIDZ1 baseline.</p>
-<p>With a warm ZFS ARC, glacier delivers <strong>83,416–83,992 IOPS at 1.48–1.49 ms</strong> — a consistent <strong>5.1–5.7× uplift</strong> over cold measured across six benchmark runs. The 14× gap narrows to approximately <strong>2.5×</strong> under warm cache conditions. For workloads with repeated read patterns (Immich metadata, Jellyfin library scans, Docker databases), warm ARC is the operating reality, not the cold-cache floor.</p>
+<p>With a warm ZFS ARC, glacier delivers <strong>83,416–84,113 IOPS at 1.47–1.49 ms</strong> — a consistent <strong>5.1–5.7× uplift</strong> over cold measured across seven benchmark runs. The 14× gap narrows to approximately <strong>2.5×</strong> under warm cache conditions. For workloads with repeated read patterns (Immich metadata, Jellyfin library scans, Docker databases), warm ARC is the operating reality, not the cold-cache floor.</p>
 <h3 id="zfs-arc-measured-warm-cache-performance-june-34-2026">ZFS ARC — Measured Warm Cache Performance (June 3–4, 2026)<a class="headerlink" href="#zfs-arc-measured-warm-cache-performance-june-34-2026" title="Permanent link">&para;</a></h3>
-<p>The glacier cold baseline numbers represent <code>--direct=1</code> — intentionally bypassing the ZFS ARC (Adaptive Replacement Cache). This is the floor. <code>benchmark-arc.sh</code> measured actual warm ARC behaviour empirically across six runs:</p>
+<p>The glacier cold baseline numbers represent <code>--direct=1</code> — intentionally bypassing the ZFS ARC (Adaptive Replacement Cache). This is the floor. <code>benchmark-arc.sh</code> measured actual warm ARC behaviour empirically across seven runs:</p>
 <table>
 <thead>
 <tr>
@@ -3105,13 +3105,13 @@
 <tr>
 <td>Random 4K read IOPS</td>
 <td>14,781–18,315</td>
-<td>83,416–83,992</td>
+<td>83,416–84,113</td>
 <td><strong>5.1–5.7×</strong></td>
 </tr>
 <tr>
 <td>Random 4K read latency</td>
-<td>7.05–7.62 ms</td>
-<td>1.48–1.49 ms</td>
+<td>7.05–7.72 ms</td>
+<td>1.47–1.49 ms</td>
 <td><strong>4.8–5.1× lower</strong></td>
 </tr>
 <tr>
@@ -3123,14 +3123,101 @@
 <tr>
 <td>Session ARC hit rate</td>
 <td>—</td>
-<td>99.4–100.0%</td>
+<td>99.3–100.0%</td>
 <td>—</td>
 </tr>
 </tbody>
 </table>
-<p>Warm ARC IOPS spans only <strong>0.7% variance</strong> across all six runs — the ceiling is determined by kernel ARC hash lookup speed (hash table query + spinlock + data copy to userspace), not NVMe hardware or pool conditions. Latency is locked at 1.48–1.49 ms in every run regardless of starting ARC state.</p>
+<p>Warm ARC IOPS spans only <strong>0.8% variance</strong> across all seven runs — the ceiling is determined by kernel ARC hash lookup speed (hash table query + spinlock + data copy to userspace), not NVMe hardware or pool conditions. Latency is locked at 1.47–1.49 ms in every run regardless of starting ARC state.</p>
+<p>Per-run detail:</p>
+<table>
+<thead>
+<tr>
+<th>Run</th>
+<th>ARC before</th>
+<th>Warm-up seq read</th>
+<th>Warm ARC IOPS</th>
+<th>Warm latency</th>
+<th>Session hit rate</th>
+<th>Cold IOPS</th>
+<th>Cold latency</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>9.32 GiB</td>
+<td>3,329 MiB/s</td>
+<td>83,416</td>
+<td>1.49 ms</td>
+<td>99.9%</td>
+<td>16,276</td>
+<td>7.62 ms</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0.22 GiB</td>
+<td>4,298 MiB/s</td>
+<td>83,707</td>
+<td>1.48 ms</td>
+<td>100.0%</td>
+<td>18,315</td>
+<td>—</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0.23 GiB</td>
+<td>4,459 MiB/s</td>
+<td>83,588</td>
+<td>1.48 ms</td>
+<td>100.0%</td>
+<td>14,063</td>
+<td>—</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0.23 GiB</td>
+<td>4,328 MiB/s</td>
+<td>83,929</td>
+<td>1.48 ms</td>
+<td>100.0%</td>
+<td>17,577</td>
+<td>7.05 ms</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0.23 GiB</td>
+<td>3,832 MiB/s</td>
+<td>83,858</td>
+<td>1.48 ms</td>
+<td>99.4%</td>
+<td>16,497</td>
+<td>7.52 ms</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0.23 GiB</td>
+<td>4,063 MiB/s</td>
+<td>83,992</td>
+<td>1.48 ms</td>
+<td>99.4%</td>
+<td>16,821</td>
+<td>7.37 ms</td>
+</tr>
+<tr>
+<td>7</td>
+<td>0.24 GiB</td>
+<td>4,098 MiB/s</td>
+<td>84,113</td>
+<td>1.47 ms</td>
+<td>99.3%</td>
+<td>16,062</td>
+<td>7.72 ms</td>
+</tr>
+</tbody>
+</table>
 <p><strong>ARC does not cache write operations.</strong> Write performance is completely unaffected by ARC state — the write results in this document represent direct hardware throughput, whether the ARC is cold or warm.</p>
-<p>After 11 days of uptime, the operational cumulative ARC hit rate was <strong>93.7%</strong> — nearly 19 out of 20 glacier reads served from RAM without touching NVMe. The warm ARC benchmark sessions achieved 99.4–100.0% session hit rates against an 8 GiB working set.</p>
+<p>After 11 days of uptime, the operational cumulative ARC hit rate was <strong>93.7%</strong> — nearly 19 out of 20 glacier reads served from RAM without touching NVMe. The warm ARC benchmark sessions achieved 99.3–100.0% session hit rates against an 8 GiB working set.</p>
 <table>
 <thead>
 <tr>

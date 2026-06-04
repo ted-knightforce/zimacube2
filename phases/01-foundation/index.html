@@ -2324,7 +2324,7 @@
 <li><a href="#resources">Resources</a></li>
 </ol>
 <blockquote>
-<p>🔬 <strong>Full storage benchmarks</strong> — cold baselines, the six-run warm ZFS ARC study, write-side SLC behaviour, and the per-phase workload split — now live in their own deep-dive: <strong><a href="../01.5-benchmarks/">Phase 1.5 — Storage Benchmarks</a></strong>.</p>
+<p>🔬 <strong>Full storage benchmarks</strong> — cold baselines, the seven-run warm ZFS ARC study, write-side SLC behaviour, and the per-phase workload split — now live in their own deep-dive: <strong><a href="../01.5-benchmarks/">Phase 1.5 — Storage Benchmarks</a></strong>.</p>
 </blockquote>
 <hr />
 <h2 id="goal">Goal<a class="headerlink" href="#goal" title="Permanent link">&para;</a></h2>
@@ -2890,7 +2890,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </blockquote>
 <hr />
 <h2 id="storage-benchmarks">Storage Benchmarks ✅<a class="headerlink" href="#storage-benchmarks" title="Permanent link">&para;</a></h2>
-<p>Both storage tiers were fully benchmarked with <code>fio</code> — cold <code>--direct=1</code> baselines for glacier and Arctic-Storage, plus a six-run warm ZFS ARC study on glacier. The complete methodology, per-test result tables, six-run ARC variance analysis, write-side SLC-cache behaviour, and the full per-phase workload split now live in their own deep-dive document: <strong><a href="../01.5-benchmarks/">Phase 1.5 — Storage Benchmarks</a></strong>.</p>
+<p>Both storage tiers were fully benchmarked with <code>fio</code> — cold <code>--direct=1</code> baselines for glacier and Arctic-Storage, plus a seven-run warm ZFS ARC study on glacier. The complete methodology, per-test result tables, seven-run ARC variance analysis, write-side SLC-cache behaviour, and the full per-phase workload split now live in their own deep-dive document: <strong><a href="../01.5-benchmarks/">Phase 1.5 — Storage Benchmarks</a></strong>.</p>
 <p>📊 <strong><a href="../../benchmarks/results-visual.html">Interactive results visualisation →</a></strong> — bar charts comparing Glacier cold, Glacier warm ARC, and Arctic btrfs across all four tests.</p>
 <p><img alt="Storage Benchmarks" src="../../benchmarks/images/day02-zimacube2-benchmarking-storage.jpg" /></p>
 <h3 id="headline-results">Headline Results<a class="headerlink" href="#headline-results" title="Permanent link">&para;</a></h3>
@@ -2950,7 +2950,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </tbody>
 </table>
 <blockquote>
-<p>Warm ARC IOPS (83,929) is the Run 4 representative value; the six-run range is 83,416–83,992 at 0.7% variance. <code>—</code> indicates writes and pool characteristics are unaffected by ARC.</p>
+<p>Warm ARC IOPS (83,929) is the Run 4 representative value; the seven-run range is 83,416–84,113 at 0.8% variance. <code>—</code> indicates writes and pool characteristics are unaffected by ARC.</p>
 </blockquote>
 <p><strong>Three findings that shaped the architecture:</strong></p>
 <ul>
@@ -2958,7 +2958,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <li><strong>Arctic-Storage owns random IOPS.</strong> The PCIe 5.0 Crucial P510 delivers 205,588 IOPS at 0.6 ms — completely unaffected by the 7th Bay's 800 MB/s sequential cap. This is why Docker databases and model loading belong here.</li>
 <li><strong>ZFS ARC closes the IOPS gap.</strong> Warm, glacier serves 83,929 IOPS at 1.48 ms from RAM — a 5× uplift over the cold floor that narrows the random-read gap to Arctic from 14× to roughly 2.5×. Workloads that re-read the same data — Immich metadata lookups, Jellyfin library scans, Nextcloud indexing — experience this warm tier, not the cold-cache floor.</li>
 </ul>
-<p>Full per-test tables, the six-run warm ARC study, write-side SLC saturation behaviour, and CPU/thermal observations are documented in <strong><a href="../01.5-benchmarks/">Phase 1.5 — Storage Benchmarks</a></strong>.</p>
+<p>Full per-test tables, the seven-run warm ARC study, write-side SLC saturation behaviour, and CPU/thermal observations are documented in <strong><a href="../01.5-benchmarks/">Phase 1.5 — Storage Benchmarks</a></strong>.</p>
 <hr />
 <h2 id="zfs-arc-tuning">ZFS ARC Tuning<a class="headerlink" href="#zfs-arc-tuning" title="Permanent link">&para;</a></h2>
 <h3 id="why-cap-c_max-now">Why cap c_max now?<a class="headerlink" href="#why-cap-c_max-now" title="Permanent link">&para;</a></h3>
@@ -3020,7 +3020,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </tbody>
 </table>
 <h3 id="benchmarking-arc-performance">Benchmarking ARC performance<a class="headerlink" href="#benchmarking-arc-performance" title="Permanent link">&para;</a></h3>
-<p>The standard fio suite uses <code>--direct=1</code> to measure raw NVMe speed — cold-cache floor numbers. The real-world warm ARC uplift was measured with the dedicated <code>benchmark-arc.sh</code> 7-step suite (cold write → ARC warm-up → warm ARC read → cold reference read). The full six-run methodology, results, and CPU/thermal analysis are in <strong><a href="../01.5-benchmarks/">Phase 1.5 — Storage Benchmarks</a></strong>.</p>
+<p>The standard fio suite uses <code>--direct=1</code> to measure raw NVMe speed — cold-cache floor numbers. The real-world warm ARC uplift was measured with the dedicated <code>benchmark-arc.sh</code> 7-step suite (cold write → ARC warm-up → warm ARC read → cold reference read). The full seven-run methodology, results, and CPU/thermal analysis are in <strong><a href="../01.5-benchmarks/">Phase 1.5 — Storage Benchmarks</a></strong>.</p>
 <hr />
 <h2 id="recommended-workload-split">Recommended Workload Split<a class="headerlink" href="#recommended-workload-split" title="Permanent link">&para;</a></h2>
 <blockquote>
