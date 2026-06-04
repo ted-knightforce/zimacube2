@@ -16,7 +16,8 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 | Phase | Description | Status |
 |---|---|---|
 | **Phase 1** | Foundation — Storage, ZFS, Core Services | 🟡 In Progress |
-| **Phase 1.5** | P510 Onboard M.2 Migration + Re-benchmark | ⏳ Planned |
+| **Phase 1.5** | Storage Benchmarks — cold baseline + warm ZFS ARC | ✅ Complete |
+| **Phase 1.8** | P510 Onboard M.2 Migration + Re-benchmark | ⏳ Planned |
 | **Phase 2** | Media Stack — Jellyfin, *arr, IronWolf pool | ⏸️ On Hold (drives arriving) |
 | **Phase 2.5** | Immich Migration — 14,505 photos + 925 videos (134 GiB) from DIY ZimaOS to ZimaCube 2 | ✅ Complete |
 | **Phase 3** | Data Management — Backup, Nextcloud | ⏳ Planned |
@@ -105,7 +106,7 @@ ZimaCube 2 Standard — Storage Tiers
 
 ## 📊 Day 1–3 Benchmark Summary
 
-Full benchmark details: [Phase 1 — Storage Benchmark](https://ted-knightforce.github.io/zimacube2/benchmarks/PHASE1-BENCHMARK/)
+Full benchmark details: [Phase 1.5 — Storage Benchmarks](https://ted-knightforce.github.io/zimacube2/phases/01.5-benchmarks/)
 
 | Test | Glacier ZFS RAIDZ1 | Arctic btrfs PCIe 5.0 | Winner |
 |---|---|---|---|
@@ -125,13 +126,14 @@ Full documentation with navigation, search, and dark mode is available at the do
 
 | Phase | Doc |
 |---|---|
-| **Phase 1** | [ZimaCube 2 Build — Phase 1: Foundation, Storage & Benchmarks](https://ted-knightforce.github.io/zimacube2/phases/01-foundation/) |
+| **Phase 1** | [ZimaCube 2 Build — Phase 1: Foundation & Storage](https://ted-knightforce.github.io/zimacube2/phases/01-foundation/) |
+| **Phase 1.5** | [Phase 1.5 — Storage Benchmarks](https://ted-knightforce.github.io/zimacube2/phases/01.5-benchmarks/) |
 | **Phase 2** | [Phase 2 — Media Stack: Jellyfin, *arr, IronWolf Pool](https://ted-knightforce.github.io/zimacube2/phases/02-media/) |
 | **Phase 2.5** | [Phase 2.5 — Immich: ZimaOS-to-ZimaCube 2 Migration](https://ted-knightforce.github.io/zimacube2/phases/02.5-immich/) |
 | **Phase 3** | [Phase 3 — Data Management: Backup, Nextcloud & 3-2-1 Strategy](https://ted-knightforce.github.io/zimacube2/phases/03-data/) |
 | **Phase 4a** | [Phase 4a — CPU-Only Local AI Baseline](https://ted-knightforce.github.io/zimacube2/phases/04a-cpu-ai/) |
 | **Phase 4b** | [Phase 4b — GPU Integration: RTX 4090 + eGPU Dock](https://ted-knightforce.github.io/zimacube2/phases/04b-gpu-ai/) |
-| **Benchmarks** | [ZimaCube 2 — Phase 1: Storage Benchmark](https://ted-knightforce.github.io/zimacube2/benchmarks/PHASE1-BENCHMARK/) |
+| **Benchmarks** | [ZimaCube 2 — Phase 1.5: Storage Benchmarks](https://ted-knightforce.github.io/zimacube2/phases/01.5-benchmarks/) · [Results Visualisation](https://ted-knightforce.github.io/zimacube2/benchmarks/results-visual.html) |
 
 ---
 
