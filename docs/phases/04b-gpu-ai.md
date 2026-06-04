@@ -33,8 +33,8 @@ The original plan (ZimaSpace 800W OCuLink dock / Minisforum DEG1) is **no longer
 | Item | Specification | Notes |
 |---|---|---|
 | RTX 4090 24GB | Used market | ~AU$1,800–2,500 · Best VRAM/$ for LLM |
-| eGPU dock (TBD) | Minisforum DEG2 or TB4 enclosure | Decision pending |
-| UPS | 1500VA+ | RTX 4090 ≈ 450W board power; size UPS for ~550W system peak |
+| eGPU dock (TBD) | Minisforum DEG2, Aoostar EG02/EG03, or TB4 enclosure | Decision pending |
+| Power supply (for the dock) | SFX or ATX, 700W minimum · 850W recommended | The eGPU dock needs its own PSU — most docks ship without one. RTX 4090 board power ≈ 450W plus transient spikes, so 700W+ is the floor; 850W is the safe bet. Using an **EVGA SuperNOVA 850W ATX** |
 
 ---
 
