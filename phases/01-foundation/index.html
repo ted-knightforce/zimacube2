@@ -2768,8 +2768,15 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <td>Compression</td>
 <td>lz4 is near-zero CPU cost on i3-1215U with real savings on documents and logs</td>
 </tr>
+<tr>
+<td>ARC read cache</td>
+<td>Every read against <code>glacier</code> is served through the ZFS ARC — frequently-accessed data is served from RAM instead of NVMe, and the cache grows with installed memory</td>
+</tr>
 </tbody>
 </table>
+<blockquote>
+<p>💡 <strong>The biggest surprise — ZFS ARC.</strong> This turned out to be the standout benefit of putting frequently-called data on <code>glacier</code>. Because ARC caches hot data in RAM, repeated reads bypass the NVMe entirely: warm random-4K reads measured <strong>~83,929 IOPS vs ~14,781 IOPS cold — a ~5.7× uplift</strong>, purely from ARC. Better still, it scales with memory — the more RAM in the box, the larger the cache and the more of glacier stays hot. That makes the planned 32GB RAM upgrade a direct read-performance investment for any workload living on glacier (Immich, AI model staging in Phase 5, document search). See the <a href="../01.5-benchmarks/">warm-ARC benchmarks</a> for the full numbers. <em>(Note: ARC is a ZFS-only feature — btrfs pools like Arctic-Storage rely on the Linux page cache instead.)</em></p>
+</blockquote>
 <h3 id="why-btrfs-for-arctic-storage-and-ironwolf">Why btrfs for Arctic-Storage and ironwolf<a class="headerlink" href="#why-btrfs-for-arctic-storage-and-ironwolf" title="Permanent link">&para;</a></h3>
 <p>Both <code>Arctic-Storage</code> and <code>ironwolf</code> are formatted as <strong>btrfs</strong> — ZimaOS's native filesystem. This is a deliberate choice to stay within the ZimaOS ecosystem for these two pools, prioritising seamless UI integration over the advanced features ZFS offers.</p>
 <table>
