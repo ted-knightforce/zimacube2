@@ -1058,7 +1058,7 @@
 <p>Add an RTX 4090 to ZimaCube 2, install NVIDIA drivers on ZimaOS, and benchmark GPU-accelerated Ollama inference against the Phase 4a CPU baseline. The 24GB VRAM unlocks large models impossible to run on CPU alone.</p>
 <hr />
 <h2 id="egpu-dock-decision-pending">⚠️ eGPU Dock Decision — Pending<a class="headerlink" href="#egpu-dock-decision-pending" title="Permanent link">&para;</a></h2>
-<p>The original plan (ZimaSpace 800W OCuLink dock / Minisforum DEG1) is <strong>no longer viable</strong> because PCIe Slot 1 is occupied by the OCuLink adapter for the Aoostar NVMe enclosure.</p>
+<p>The original plan (Minisforum DEG1, OCuLink) is <strong>no longer viable</strong> because PCIe Slot 1 is occupied by the OCuLink adapter for the Aoostar TB4S-OC NVMe enclosure.</p>
 <h3 id="decision-matrix">Decision Matrix<a class="headerlink" href="#decision-matrix" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -1072,32 +1072,18 @@
 </thead>
 <tbody>
 <tr>
-<td>ZimaSpace 800W OCuLink dock</td>
-<td>OCuLink → Slot 1</td>
-<td>Designed for ZimaCube</td>
-<td>❌ Slot 1 occupied</td>
-<td>Ruled out</td>
-</tr>
-<tr>
 <td>Minisforum DEG1</td>
-<td>OCuLink-only</td>
-<td>Compact</td>
-<td>❌ Same Slot 1 conflict</td>
+<td>OCuLink → Slot 1</td>
+<td>Hosts a full-size GPU (e.g. RTX 4090) on ZimaCube 2 via OCuLink — direct PCIe with no Thunderbolt protocol/tunnelling overhead, and sidesteps the TB4/TB5 eGPU hardware-compatibility issues seen with my Aoostar TB4S-OC TB4 DAS</td>
+<td>❌ Cannot use the Slot 1 OCuLink connection — it's already taken by the Aoostar TB4S-OC NVMe SSD enclosure hosting the ultra-fast NVMe ZFS RAIDZ1 <code>glacier</code> pool</td>
 <td>Ruled out</td>
 </tr>
 <tr>
-<td><strong>Minisforum DEG2</strong></td>
-<td><strong>TB5 + OCuLink</strong></td>
-<td>Uses free TB4 port; keeps PCIe slots free; dual connection options</td>
-<td>ZimaCube 2 has only TB4 ports — the DEG2's TB5 bandwidth is capped at TB4 here</td>
-<td><strong>Under evaluation</strong></td>
-</tr>
-<tr>
-<td>Generic TB4 eGPU enclosure</td>
-<td>TB4</td>
-<td>Uses free TB4 port; many options</td>
-<td>Varies by enclosure</td>
-<td>Viable</td>
+<td><strong>Minisforum DEG2 · Aoostar EG02 / EG03</strong></td>
+<td><strong>TB4</strong></td>
+<td>Uses a free TB4 port; keeps the PCIe slots free</td>
+<td>ZimaCube 2 has only TB4 ports → bandwidth capped at TB4 (~40 Gbps); Thunderbolt protocol/tunnelling overhead</td>
+<td><strong>Top choice — under evaluation</strong></td>
 </tr>
 </tbody>
 </table>
