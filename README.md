@@ -5,7 +5,7 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 **Author:** ted-knight  
 **Program:** ZimaCube 2 Pioneer Program  
 **Started:** May 21, 2026  
-**Last updated:** June 3, 2026
+**Last updated:** June 4, 2026
 
 📖 **[Full documentation site →](https://ted-knightforce.github.io/zimacube2)**
 
@@ -142,8 +142,9 @@ Full documentation with navigation, search, and dark mode is available at the do
 | Week | Phase | Post Title | Reddit |
 |---|---|---|---|
 | 2 | 1 | "ZimaCube 2 Pioneer — Day 1: ZFS RAIDZ1 via OCuLink, Tiered Storage & a TB4 Rabbit Hole" | r/ZimaCube + r/homelab |
-| 1.5 | 1.5 | "PCIe 5.0 NVMe in the 7th Bay vs Onboard Slot — Does It Matter?" | r/ZimaCube |
+| 3 | 1.5 | "ZFS RAIDZ1 vs PCIe 5.0 btrfs on a $799 NAS — Cold Benchmarks & the Warm ARC Reality" | r/ZimaCube + r/homelab |
 | 4 | 2.5 | "Setting Up Immich on ZimaCube 2 — Migrating 14,505 Photos from DIY ZimaOS (Zero Data Loss)" | r/selfhosted |
+| 5 | 1.8 | "PCIe 5.0 NVMe in the 7th Bay vs Onboard M.2 Slot — Does It Matter?" | r/ZimaCube |
 | 6 | 2 | "*arr Stack on ZimaOS — App Store First, Compose Where Needed" | r/selfhosted |
 | 8 | 4a | "Local AI on a $799 NAS Before the GPU — Honest CPU-Only Benchmarks" | r/LocalLLaMA |
 | 11 | 4b | "Adding an RTX 4090 to ZimaCube 2 — What 24GB VRAM Actually Buys You" | r/LocalLLaMA + r/eGPU |
