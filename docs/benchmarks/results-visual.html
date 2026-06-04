@@ -136,7 +136,7 @@
 <body>
 
 <h1>Results</h1>
-<p class="subtitle">ZimaCube 2 · Phase 1 Storage Benchmark · ZimaOS · fio 3.38 · benchmark-glacier.sh + benchmark-arc.sh · June 3–4, 2026 (Run 4)</p>
+<p class="subtitle">ZimaCube 2 · Phase 1.5 Storage Benchmark · ZimaOS · fio 3.38 · benchmark-glacier.sh + benchmark-arc.sh · cold baseline May 23 · warm ARC June 3–4, 2026</p>
 
 <!-- Legend -->
 <div class="legend">
@@ -158,36 +158,36 @@
 </div>
 
 <!-- Stat summary cards
-     Cold values from benchmark-glacier.sh Run 4 (June 4, 00:55):
-       seq write 1,685 MB/s · seq read 2,375 MB/s · rand write 13,387 IOPS · rand read 15,751 IOPS
-     Warm ARC values from benchmark-arc.sh Run 4 (June 4, 01:00):
-       seq read warm 4,328 MB/s · rand read warm 83,929 IOPS
-     Arctic values from Phase 1 baseline:
-       seq write 788 MB/s · seq read 874 MB/s · rand write 87,099 IOPS · rand read 205,588 IOPS
+     Cold values from benchmark-glacier.sh cold baseline (May 23, 2026) — matches Phase 1.5 doc Cold Baseline table:
+       seq write 1,726 MB/s · seq read 2,591 MB/s · rand write 13,795 IOPS · rand read 14,781 IOPS · rand read latency 8.7 ms
+     Warm ARC values from benchmark-arc.sh Run 4 (June 4) — representative of the 7-run study:
+       seq read warm 4,328 MB/s · rand read warm 83,929 IOPS · rand read latency 1.48 ms
+     Arctic values from Phase 1.5 baseline:
+       seq write 788 MB/s · seq read 874 MB/s · rand write 87,099 IOPS · rand read 205,588 IOPS · rand read latency 0.6 ms
 -->
 <div class="stat-grid">
   <div class="stat-card">
     <div class="s-label">seq write</div>
-    <div class="s-val" style="color:#2dd4bf">1,685 MB/s</div>
+    <div class="s-val" style="color:#2dd4bf">1,726 MB/s</div>
     <div class="s-vs">vs 788 MB/s</div>
-    <span class="badge b-g">+114% faster</span>
+    <span class="badge b-g">+119% faster</span>
   </div>
   <div class="stat-card">
     <div class="s-label">seq read</div>
-    <div class="s-val" style="color:#2dd4bf">2,375 MB/s</div>
+    <div class="s-val" style="color:#2dd4bf">2,591 MB/s</div>
     <div class="s-warm">4,328 MB/s <small style="font-size:.6rem;color:#7d8590">warm ARC</small></div>
     <div class="s-vs">vs 874 MB/s</div>
-    <span class="badge b-w">+172% cold · +395% warm</span>
+    <span class="badge b-w">+196% cold · +395% warm</span>
   </div>
   <div class="stat-card">
     <div class="s-label">rand 4K write</div>
-    <div class="s-val" style="color:#818cf8">13,387 IOPS</div>
+    <div class="s-val" style="color:#818cf8">13,795 IOPS</div>
     <div class="s-vs">vs 87,099 IOPS</div>
-    <span class="badge b-a">Arctic 6.5× faster</span>
+    <span class="badge b-a">Arctic 6.3× faster</span>
   </div>
   <div class="stat-card">
     <div class="s-label">rand 4K read</div>
-    <div class="s-val" style="color:#818cf8; font-size:.95rem">15,751 IOPS</div>
+    <div class="s-val" style="color:#818cf8; font-size:.95rem">14,781 IOPS</div>
     <div class="s-warm">83,929 IOPS <small style="font-size:.6rem;color:#7d8590">warm ARC</small></div>
     <div class="s-vs">vs 205,588 IOPS</div>
     <span class="badge b-a">Arctic 2.5× faster (warm)</span>
@@ -200,7 +200,7 @@
   <div class="chart-row">
 
     <!-- ── Sequential Write  cold only: max=1800, h=200px
-         Glacier cold 1,685 → (1685/1800)×200 = 187.2 → 187px
+         Glacier cold 1,726 → (1726/1800)×200 = 191.8 → 192px
          Arctic      788   → (788/1800)×200  =  87.6 →  88px
          NO warm ARC bar — ARC does not cache write operations ── -->
     <div class="chart-wrap">
@@ -217,8 +217,8 @@
           <div class="gridlines"></div>
           <div class="bars-row two-bar">
             <div class="bc">
-              <span class="bv">1,685</span>
-              <div class="b b-cold" style="height:187px"></div>
+              <span class="bv">1,726</span>
+              <div class="b b-cold" style="height:192px"></div>
             </div>
             <div class="bc">
               <span class="bv">788</span>
@@ -235,7 +235,7 @@
     </div>
 
     <!-- ── Sequential Read  3 bars: max=5000, h=200px
-         Glacier cold 2,375 → (2375/5000)×200 =  95.0 →  95px
+         Glacier cold 2,591 → (2591/5000)×200 = 103.6 → 104px
          Glacier warm 4,328 → (4328/5000)×200 = 173.1 → 173px
          Arctic       874   → (874/5000)×200  =  35.0 →  35px ── -->
     <div class="chart-wrap">
@@ -252,8 +252,8 @@
           <div class="gridlines"></div>
           <div class="bars-row">
             <div class="bc">
-              <span class="bv">2,375</span>
-              <div class="b b-cold" style="height:95px"></div>
+              <span class="bv">2,591</span>
+              <div class="b b-cold" style="height:104px"></div>
             </div>
             <div class="bc">
               <span class="bv">4,328</span>
@@ -282,7 +282,7 @@
   <div class="chart-row">
 
     <!-- ── Random 4K Write  cold only: max=100000, h=200px
-         Glacier cold 13,387 → (13387/100000)×200 =  26.8 →  27px
+         Glacier cold 13,795 → (13795/100000)×200 =  27.6 →  28px
          Arctic      87,099  → (87099/100000)×200 = 174.2 → 174px
          NO warm ARC bar — ARC does not cache write operations ── -->
     <div class="chart-wrap">
@@ -299,8 +299,8 @@
           <div class="gridlines"></div>
           <div class="bars-row two-bar">
             <div class="bc">
-              <span class="bv">13,387</span>
-              <div class="b b-cold" style="height:27px"></div>
+              <span class="bv">13,795</span>
+              <div class="b b-cold" style="height:28px"></div>
             </div>
             <div class="bc">
               <span class="bv">87,099</span>
@@ -317,7 +317,7 @@
     </div>
 
     <!-- ── Random 4K Read  3 bars: max=250000, h=200px
-         Glacier cold 15,751  → (15751/250000)×200  =  12.6 →  13px
+         Glacier cold 14,781  → (14781/250000)×200  =  11.8 →  12px
          Glacier warm 83,929  → (83929/250000)×200  =  67.1 →  67px
          Arctic      205,588  → (205588/250000)×200 = 164.5 → 165px ── -->
     <div class="chart-wrap">
@@ -334,8 +334,8 @@
           <div class="gridlines"></div>
           <div class="bars-row">
             <div class="bc">
-              <span class="bv">15,751</span>
-              <div class="b b-cold" style="height:13px"></div>
+              <span class="bv">14,781</span>
+              <div class="b b-cold" style="height:12px"></div>
             </div>
             <div class="bc">
               <span class="bv">83,929</span>
@@ -363,7 +363,7 @@
   <div class="section-head">Random 4K Read Latency — avg completion latency · ms (lower is better)</div>
   <div style="max-width: 460px">
     <!-- max=10ms, h=200px
-         Glacier cold 7.05ms → (7.05/10)×200 = 141.0 → 141px  (benchmark-arc.sh cold pass, Run 4)
+         Glacier cold 8.7ms  → (8.7/10)×200  = 174.0 → 174px  (cold baseline, pairs with 14,781 IOPS)
          Glacier warm 1.48ms → (1.48/10)×200 =  29.6 →  30px
          Arctic       0.6ms  → (0.6/10)×200  =  12.0 →  12px -->
     <div class="chart-wrap">
@@ -380,8 +380,8 @@
           <div class="gridlines"></div>
           <div class="bars-row">
             <div class="bc">
-              <span class="bv">7.05 ms</span>
-              <div class="b b-cold" style="height:141px"></div>
+              <span class="bv">8.7 ms</span>
+              <div class="b b-cold" style="height:174px"></div>
             </div>
             <div class="bc">
               <span class="bv">1.48 ms</span>
@@ -407,19 +407,19 @@
 <div class="wins-row">
   <div class="wins-card">
     <div class="wins-title wt-g">Glacier ZFS RAIDZ1 wins</div>
-    <div class="wi wi-g">Sequential read: <strong>2.7× faster</strong> than Arctic (cold)</div>
+    <div class="wi wi-g">Sequential read: <strong>3.0× faster</strong> than Arctic (cold)</div>
     <div class="wi wi-g">Sequential read: <strong>5.0× faster</strong> warm ARC</div>
-    <div class="wi wi-g">Sequential write: <strong>2.1× faster</strong> than Arctic</div>
+    <div class="wi wi-g">Sequential write: <strong>2.2× faster</strong> than Arctic</div>
     <div class="wi wi-g">Redundancy: survives 1 drive failure</div>
     <div class="wi wi-g">5.5 TB usable vs 1.8 TB</div>
     <div class="wi wi-g">ZFS checksums + self-healing</div>
   </div>
   <div class="wins-card">
     <div class="wins-title wt-a">Arctic btrfs PCIe 5.0 wins</div>
-    <div class="wi wi-a">Rand 4K read: <strong>13× IOPS</strong> vs Glacier cold</div>
+    <div class="wi wi-a">Rand 4K read: <strong>14× IOPS</strong> vs Glacier cold</div>
     <div class="wi wi-a">Rand 4K read: <strong>2.5× IOPS</strong> vs Glacier warm ARC</div>
-    <div class="wi wi-a">Rand 4K write: <strong>6.5× faster IOPS</strong></div>
-    <div class="wi wi-a">Latency: <strong>0.6 ms</strong> vs 1.48 ms (warm) / 7.05 ms (cold)</div>
+    <div class="wi wi-a">Rand 4K write: <strong>6.3× faster IOPS</strong></div>
+    <div class="wi wi-a">Latency: <strong>0.6 ms</strong> vs 1.48 ms (warm) / 8.7 ms (cold)</div>
     <div class="wi wi-a">Native ZimaOS UI recognition</div>
     <div class="wi wi-a">Best for Docker / AppData workloads</div>
   </div>
@@ -428,9 +428,9 @@
 <!-- ═══════════════════ ARC CALLOUT ══════════════════════════════════ -->
 <div class="arc-callout">
   <strong>ZFS ARC — Warm Cache Effect:</strong> With a warm ARC, glacier random 4K read IOPS climb from
-  <strong>15,751 → 83,929</strong> — a <strong>5.3× uplift</strong> at <strong>1.48 ms avg latency</strong>.
-  Session hit rate: <strong>100.0%</strong>. The 13× cold IOPS gap narrows to <strong>~2.5×</strong>
-  for workloads with repeated read patterns. Cumulative ARC hit rate: <strong>97.5%</strong>.
+  <strong>14,781 → 83,929</strong> — a <strong>5.7× uplift</strong> at <strong>1.48 ms avg latency</strong>.
+  Session hit rate: <strong>100.0%</strong>. The 14× cold IOPS gap narrows to <strong>~2.5×</strong>
+  for workloads with repeated read patterns. Cumulative ARC hit rate: <strong>93.7%</strong>.
   ARC does not affect write operations — write charts show direct hardware throughput only.
 </div>
 
