@@ -30,7 +30,7 @@
 18. [System Information](#system-information)
 19. [Resources](#resources)
 
-> 🔬 **Full storage benchmarks** — cold baselines, the six-run warm ZFS ARC study, write-side SLC behaviour, and the per-phase workload split — now live in their own deep-dive: **[Phase 1.5 — Storage Benchmarks](01.5-benchmarks.md)**.
+> 🔬 **Full storage benchmarks** — cold baselines, the seven-run warm ZFS ARC study, write-side SLC behaviour, and the per-phase workload split — now live in their own deep-dive: **[Phase 1.5 — Storage Benchmarks](01.5-benchmarks.md)**.
 
 ---
 
@@ -478,7 +478,7 @@ AppData was migrated from ZimaOS-HD to Arctic-Storage using **Settings → Stora
 
 ## Storage Benchmarks ✅
 
-Both storage tiers were fully benchmarked with `fio` — cold `--direct=1` baselines for glacier and Arctic-Storage, plus a six-run warm ZFS ARC study on glacier. The complete methodology, per-test result tables, six-run ARC variance analysis, write-side SLC-cache behaviour, and the full per-phase workload split now live in their own deep-dive document: **[Phase 1.5 — Storage Benchmarks](01.5-benchmarks.md)**.
+Both storage tiers were fully benchmarked with `fio` — cold `--direct=1` baselines for glacier and Arctic-Storage, plus a seven-run warm ZFS ARC study on glacier. The complete methodology, per-test result tables, seven-run ARC variance analysis, write-side SLC-cache behaviour, and the full per-phase workload split now live in their own deep-dive document: **[Phase 1.5 — Storage Benchmarks](01.5-benchmarks.md)**.
 
 📊 **[Interactive results visualisation →](../benchmarks/results-visual.html)** — bar charts comparing Glacier cold, Glacier warm ARC, and Arctic btrfs across all four tests.
 
@@ -495,7 +495,7 @@ Both storage tiers were fully benchmarked with `fio` — cold `--direct=1` basel
 | Usable capacity | 5.5 TB | — | 1.8 TB | 🧊 Glacier 3× |
 | Drive redundancy | 1 drive failure | — | None | 🧊 Glacier |
 
-> Warm ARC IOPS (83,929) is the Run 4 representative value; the six-run range is 83,416–83,992 at 0.7% variance. `—` indicates writes and pool characteristics are unaffected by ARC.
+> Warm ARC IOPS (83,929) is the Run 4 representative value; the seven-run range is 83,416–84,113 at 0.8% variance. `—` indicates writes and pool characteristics are unaffected by ARC.
 
 **Three findings that shaped the architecture:**
 
@@ -503,7 +503,7 @@ Both storage tiers were fully benchmarked with `fio` — cold `--direct=1` basel
 - **Arctic-Storage owns random IOPS.** The PCIe 5.0 Crucial P510 delivers 205,588 IOPS at 0.6 ms — completely unaffected by the 7th Bay's 800 MB/s sequential cap. This is why Docker databases and model loading belong here.
 - **ZFS ARC closes the IOPS gap.** Warm, glacier serves 83,929 IOPS at 1.48 ms from RAM — a 5× uplift over the cold floor that narrows the random-read gap to Arctic from 14× to roughly 2.5×. Workloads that re-read the same data — Immich metadata lookups, Jellyfin library scans, Nextcloud indexing — experience this warm tier, not the cold-cache floor.
 
-Full per-test tables, the six-run warm ARC study, write-side SLC saturation behaviour, and CPU/thermal observations are documented in **[Phase 1.5 — Storage Benchmarks](01.5-benchmarks.md)**.
+Full per-test tables, the seven-run warm ARC study, write-side SLC saturation behaviour, and CPU/thermal observations are documented in **[Phase 1.5 — Storage Benchmarks](01.5-benchmarks.md)**.
 
 ---
 
@@ -565,7 +565,7 @@ echo 17179869184 | sudo tee /sys/module/zfs/parameters/zfs_arc_max
 
 ### Benchmarking ARC performance
 
-The standard fio suite uses `--direct=1` to measure raw NVMe speed — cold-cache floor numbers. The real-world warm ARC uplift was measured with the dedicated `benchmark-arc.sh` 7-step suite (cold write → ARC warm-up → warm ARC read → cold reference read). The full six-run methodology, results, and CPU/thermal analysis are in **[Phase 1.5 — Storage Benchmarks](01.5-benchmarks.md)**.
+The standard fio suite uses `--direct=1` to measure raw NVMe speed — cold-cache floor numbers. The real-world warm ARC uplift was measured with the dedicated `benchmark-arc.sh` 7-step suite (cold write → ARC warm-up → warm ARC read → cold reference read). The full seven-run methodology, results, and CPU/thermal analysis are in **[Phase 1.5 — Storage Benchmarks](01.5-benchmarks.md)**.
 
 ---
 
