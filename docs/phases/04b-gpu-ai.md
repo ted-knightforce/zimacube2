@@ -58,7 +58,7 @@ Run identical model/prompt set from Phase 4a. Compare directly:
 | llama3.1:8b tokens/sec | baseline | target | 20–50× faster |
 | Time to first token | baseline | target | Much lower |
 | Largest runnable model | ~8B (32GB RAM) | ~32–34B at Q4 fully on GPU · 70B with GPU+CPU offload (24GB VRAM) | Major jump |
-| Power consumption | ~25W | ~400–550W | Significant |
+| Power consumption (whole system) | ~45–65W under inference (idle ~20–30W) | ~400–550W peak | Significant |
 
 ---
 
