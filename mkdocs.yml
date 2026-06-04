@@ -38,6 +38,7 @@ nav:
   - Benchmarks:
     - "Phase 1.5: Storage Benchmark Findings": phases/01.5-benchmarks.md
     - "Results Visualisation": benchmarks/results-visual.html
+  - "Phase 1.5 Results Visualisation": benchmarks/results-visual.html
 
 markdown_extensions:
   - tables
