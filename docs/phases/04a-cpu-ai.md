@@ -18,9 +18,11 @@ Establish a CPU-only inference baseline on the i3-1215U before the GPU arrives. 
 | CPU | Intel Core i3-1215U (6-core, 12th Gen) |
 | RAM | 32GB DDR5 4800MHz (Corsair Vengeance 2× 16GB; board supports up to 64GB) |
 | Model storage | Arctic-Storage (`/media/Arctic-Storage/AppData/ollama`) |
-| ZFS ARC | ~20–24GB available for cache at 32GB RAM |
+| RAM for cache | ~20GB+ free for the Linux page cache and model residency at 32GB RAM |
 
-> **Why Arctic-Storage for models?** Random 4K read at 0.6ms latency vs glacier's 8.7ms. Faster model loading = better time-to-first-token.
+> **Why Arctic-Storage for models?** Random 4K read at 0.6ms latency vs glacier's 8.7ms — a raw NVMe advantage, faster model loading = better time-to-first-token.
+>
+> **Note on caching:** Arctic-Storage is **btrfs**, so it is **not** served by the ZFS ARC (ARC caches glacier reads only). btrfs reads are absorbed by the Linux page cache, and once Ollama loads a model it stays resident in RAM, so storage latency mainly affects the first load and model switches.
 
 ---
 
@@ -51,9 +53,9 @@ For each model:
 - Time to first token (TTFT)
 - RAM usage (peak)
 - CPU utilisation (%)
-- ZFS ARC hit rate during inference (via `arcstats`)
+- Model load time — cold (first read from Arctic-Storage) vs warm (already resident in RAM)
 
-Capture via Netdata dashboard + `zpool iostat glacier 1` during inference.
+Capture via Netdata dashboard during inference. For model-load I/O, watch the Arctic-Storage NVMe with `iostat -x 1` (ZFS `arcstats`/`zpool iostat` are not relevant here — models live on btrfs, not glacier).
 
 ---
 

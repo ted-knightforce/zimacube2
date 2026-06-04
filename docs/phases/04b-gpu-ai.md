@@ -34,7 +34,7 @@ The original plan (ZimaSpace 800W OCuLink dock / Minisforum DEG1) is **no longer
 |---|---|---|
 | RTX 4090 24GB | Used market | ~AU$1,800–2,500 · Best VRAM/$ for LLM |
 | eGPU dock (TBD) | Minisforum DEG2 or TB4 enclosure | Decision pending |
-| UPS | 1500VA+ | RTX 4090 ≈ 550W sustained |
+| UPS | 1500VA+ | RTX 4090 ≈ 450W board power; size UPS for ~550W system peak |
 
 ---
 
@@ -57,7 +57,7 @@ Run identical model/prompt set from Phase 4a. Compare directly:
 |---|---|---|---|
 | llama3.1:8b tokens/sec | baseline | target | 20–50× faster |
 | Time to first token | baseline | target | Much lower |
-| Largest runnable model | ~8B (32GB RAM) | 70B+ (24GB VRAM) | Major jump |
+| Largest runnable model | ~8B (32GB RAM) | ~32–34B at Q4 fully on GPU · 70B with GPU+CPU offload (24GB VRAM) | Major jump |
 | Power consumption | ~25W | ~400–550W | Significant |
 
 ---

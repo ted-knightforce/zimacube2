@@ -25,7 +25,7 @@ Unified data protection with a proper 3-2-1 backup strategy: local ZFS snapshots
 
 ```
 3 copies of data
-  ├── Copy 1: glacier ZFS RAIDZ1 (primary)
+  ├── Copy 1: live data — glacier (ZFS RAIDZ1) + Arctic-Storage (btrfs, Immich + AppData)
   ├── Copy 2: On-site backup → external USB drive or ironwolf
   └── Copy 3: Offsite → Backblaze B2 (~AU$2–5/month for 200–500GB)
 
@@ -45,7 +45,7 @@ Unified data protection with a proper 3-2-1 backup strategy: local ZFS snapshots
 # Daily snapshot — glacier pool
 echo "0 2 * * * root zfs snapshot -r glacier@daily-\$(date +%Y%m%d)" >> /etc/crontab
 
-# Weekly scrub for data integrity
+# Monthly scrub for data integrity (1st of month, 03:00)
 echo "0 3 1 * * root zpool scrub glacier" >> /etc/crontab
 
 # Key manual snapshots before major changes
