@@ -5,7 +5,7 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 **Author:** ted-knight  
 **Program:** ZimaCube 2 Pioneer Program  
 **Started:** May 21, 2026  
-**Last updated:** June 4, 2026
+**Last updated:** June 20, 2026
 
 📖 **[Full documentation site →](https://ted-knightforce.github.io/zimacube2)**
 
