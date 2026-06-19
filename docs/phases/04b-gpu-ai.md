@@ -1,4 +1,4 @@
-# Phase 4b — GPU Integration: RTX 4090 + eGPU Dock
+# Phase 4b — Adding an RTX 4090: What 24GB of VRAM Changes
 
 **Status:** ⏳ Planned — eGPU dock decision pending  
 **Prerequisite:** Phase 4a complete · eGPU dock selected and purchased
@@ -7,13 +7,13 @@
 
 ## 🎯 Goal
 
-Add an RTX 4090 to ZimaCube 2, install NVIDIA drivers on ZimaOS, and benchmark GPU-accelerated Ollama inference against the Phase 4a CPU baseline. The 24GB VRAM unlocks large models impossible to run on CPU alone.
+Phase 4a showed me what the i3-1215U can do on its own. Phase 4b is the other end of that comparison. An RTX 4090 with 24GB of VRAM doesn't just speed up inference — it changes which models are even possible to run. At Q4 quantisation, a 33B model fits entirely on the card. That's a model the CPU simply can't touch. This phase is about measuring that gap with real numbers and seeing what 24GB of VRAM actually buys you in practice.
 
 ---
 
 ## ⚠️ eGPU Dock Decision — Pending
 
-The original plan (Minisforum DEG1, OCuLink) is **no longer viable** because PCIe Slot 1 is occupied by the OCuLink adapter for the Aoostar TB4S-OC NVMe enclosure.
+Getting an RTX 4090 into a NAS-sized box turned out to be more constrained than it first looked. My original eGPU plan was the Minisforum DEG1, which connects via OCuLink — but Slot 1 is already taken by the OCuLink adapter running the entire glacier pool. I can't pull that without taking down my primary storage. So the plan changed, and the options came down to two:
 
 ### Decision Matrix
 
@@ -60,9 +60,11 @@ Run identical model/prompt set from Phase 4a. Compare directly:
 
 ---
 
-## 🔧 NVIDIA on ZimaOS
+## 🔧 Installing NVIDIA Drivers on ZimaOS — What to Watch Out For
 
-> ⚠️ ZimaOS uses RAUC A/B kernel updates. Pin the kernel version after NVIDIA driver install. DKMS modules must survive each ZimaOS update — verify after every update.
+ZimaOS uses RAUC A/B kernel updates, which means a ZimaOS update can silently swap your running kernel and leave the NVIDIA driver without a matching module. I'll be taking a ZFS snapshot before touching any of this and pinning the kernel version after install. The exact driver method changes with each OS version — check the ZimaOS community forum for the current recommended approach at the time you're doing this.
+
+> ⚠️ DKMS modules must survive each ZimaOS update — verify after every update.
 
 ```bash
 # Take snapshot before NVIDIA install
