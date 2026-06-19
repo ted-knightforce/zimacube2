@@ -835,6 +835,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#dont-delete-anything-from-icloud-until-these-three-things-are-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Don't Delete Anything From iCloud Until These Three Things Are True
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1452,6 +1463,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#dont-delete-anything-from-icloud-until-these-three-things-are-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Don't Delete Anything From iCloud Until These Three Things Are True
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1544,6 +1566,7 @@
 <strong>Updated:</strong> June 20, 2026  </p>
 <hr />
 <h2 id="goal">🎯 Goal<a class="headerlink" href="#goal" title="Permanent link">&para;</a></h2>
+<p>Phase 2.5 turned into more than I originally planned. What started as moving my existing Immich library from my old DIY ZimaOS server to the ZimaCube 2 became the moment I finally stopped relying on iCloud to hold my photos. By the time this phase was done, 63,665 photos and videos — 725 GiB — were sitting on my NAS instead of Apple's servers. Here's how both of those things happened, and everything I learned along the way.</p>
 <p>Two milestones in one phase:</p>
 <ol>
 <li><strong>ZimaOS → ZimaCube 2 migration</strong> — move an existing Immich library (14,505 photos + 925 videos, 134 GiB) from a DIY ZimaOS server to ZimaCube 2, preserving all albums, face tags, memories, shared links, and metadata with zero data loss.</li>
@@ -1973,7 +1996,7 @@
 <hr />
 <h2 id="icloud-photos-immich">📱 iCloud Photos → Immich<a class="headerlink" href="#icloud-photos-immich" title="Permanent link">&para;</a></h2>
 <h3 id="what-was-transferred">What was transferred<a class="headerlink" href="#what-was-transferred" title="Permanent link">&para;</a></h3>
-<p>The full iCloud Photos library was migrated to Immich by installing the <strong>Immich iOS app</strong> on an iPhone 13 Pro Max and enabling automatic background upload. The iPhone downloaded originals from iCloud and the Immich app synced them directly to ZimaCube 2 at <code>http://192.168.x.x:2283</code>.</p>
+<p>The plan was simple enough in theory: install the Immich app on my iPhone 13 Pro Max, point it at the ZimaCube 2, and let it run. The iPhone downloaded originals from iCloud while the Immich app synced them straight to <code>http://192.168.x.x:2283</code>. What I didn't fully appreciate until I watched it go was just how much was sitting in iCloud — 655 GB, and 86% of it was 4K video. Days later, this was the final tally:</p>
 <p><strong>Immich Server Stats — post-migration (June 2026):</strong></p>
 <table>
 <thead>
@@ -2043,7 +2066,8 @@
 </tbody>
 </table>
 <h3 id="before-deleting-from-icloud-checklist">Before deleting from iCloud — checklist<a class="headerlink" href="#before-deleting-from-icloud-checklist" title="Permanent link">&para;</a></h3>
-<p>Do not delete iCloud Photos until all three conditions are met:</p>
+<h3 id="dont-delete-anything-from-icloud-until-these-three-things-are-true">Don't Delete Anything From iCloud Until These Three Things Are True<a class="headerlink" href="#dont-delete-anything-from-icloud-until-these-three-things-are-true" title="Permanent link">&para;</a></h3>
+<p>Don't delete iCloud Photos until all three conditions are met:</p>
 <ul>
 <li>[ ] Immich asset count matches iCloud (63,665 assets confirmed ✅)</li>
 <li>[ ] TrueNAS backup of Immich is running and verified (see next section)</li>

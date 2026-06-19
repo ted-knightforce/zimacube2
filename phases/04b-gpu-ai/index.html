@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#phase-4b-gpu-integration-rtx-4090-egpu-dock" class="md-skip">
+        <a href="#phase-4b-adding-an-rtx-4090-what-24gb-of-vram-changes" class="md-skip">
           Skip to content
         </a>
       
@@ -709,10 +709,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#nvidia-on-zimaos" class="md-nav__link">
+  <a href="#installing-nvidia-drivers-on-zimaos-what-to-watch-out-for" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🔧 NVIDIA on ZimaOS
+        🔧 Installing NVIDIA Drivers on ZimaOS — What to Watch Out For
       
     </span>
   </a>
@@ -998,10 +998,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#nvidia-on-zimaos" class="md-nav__link">
+  <a href="#installing-nvidia-drivers-on-zimaos-what-to-watch-out-for" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🔧 NVIDIA on ZimaOS
+        🔧 Installing NVIDIA Drivers on ZimaOS — What to Watch Out For
       
     </span>
   </a>
@@ -1050,15 +1050,15 @@
   
 
 
-<h1 id="phase-4b-gpu-integration-rtx-4090-egpu-dock">Phase 4b — GPU Integration: RTX 4090 + eGPU Dock<a class="headerlink" href="#phase-4b-gpu-integration-rtx-4090-egpu-dock" title="Permanent link">&para;</a></h1>
+<h1 id="phase-4b-adding-an-rtx-4090-what-24gb-of-vram-changes">Phase 4b — Adding an RTX 4090: What 24GB of VRAM Changes<a class="headerlink" href="#phase-4b-adding-an-rtx-4090-what-24gb-of-vram-changes" title="Permanent link">&para;</a></h1>
 <p><strong>Status:</strong> ⏳ Planned — eGPU dock decision pending<br />
 <strong>Prerequisite:</strong> Phase 4a complete · eGPU dock selected and purchased</p>
 <hr />
 <h2 id="goal">🎯 Goal<a class="headerlink" href="#goal" title="Permanent link">&para;</a></h2>
-<p>Add an RTX 4090 to ZimaCube 2, install NVIDIA drivers on ZimaOS, and benchmark GPU-accelerated Ollama inference against the Phase 4a CPU baseline. The 24GB VRAM unlocks large models impossible to run on CPU alone.</p>
+<p>Phase 4a showed me what the i3-1215U can do on its own. Phase 4b is the other end of that comparison. An RTX 4090 with 24GB of VRAM doesn't just speed up inference — it changes which models are even possible to run. At Q4 quantisation, a 33B model fits entirely on the card. That's a model the CPU simply can't touch. This phase is about measuring that gap with real numbers and seeing what 24GB of VRAM actually buys you in practice.</p>
 <hr />
 <h2 id="egpu-dock-decision-pending">⚠️ eGPU Dock Decision — Pending<a class="headerlink" href="#egpu-dock-decision-pending" title="Permanent link">&para;</a></h2>
-<p>The original plan (Minisforum DEG1, OCuLink) is <strong>no longer viable</strong> because PCIe Slot 1 is occupied by the OCuLink adapter for the Aoostar TB4S-OC NVMe enclosure.</p>
+<p>Getting an RTX 4090 into a NAS-sized box turned out to be more constrained than it first looked. My original eGPU plan was the Minisforum DEG1, which connects via OCuLink — but Slot 1 is already taken by the OCuLink adapter running the entire glacier pool. I can't pull that without taking down my primary storage. So the plan changed, and the options came down to two:</p>
 <h3 id="decision-matrix">Decision Matrix<a class="headerlink" href="#decision-matrix" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -1186,9 +1186,10 @@
 </tbody>
 </table>
 <hr />
-<h2 id="nvidia-on-zimaos">🔧 NVIDIA on ZimaOS<a class="headerlink" href="#nvidia-on-zimaos" title="Permanent link">&para;</a></h2>
+<h2 id="installing-nvidia-drivers-on-zimaos-what-to-watch-out-for">🔧 Installing NVIDIA Drivers on ZimaOS — What to Watch Out For<a class="headerlink" href="#installing-nvidia-drivers-on-zimaos-what-to-watch-out-for" title="Permanent link">&para;</a></h2>
+<p>ZimaOS uses RAUC A/B kernel updates, which means a ZimaOS update can silently swap your running kernel and leave the NVIDIA driver without a matching module. I'll be taking a ZFS snapshot before touching any of this and pinning the kernel version after install. The exact driver method changes with each OS version — check the ZimaOS community forum for the current recommended approach at the time you're doing this.</p>
 <blockquote>
-<p>⚠️ ZimaOS uses RAUC A/B kernel updates. Pin the kernel version after NVIDIA driver install. DKMS modules must survive each ZimaOS update — verify after every update.</p>
+<p>⚠️ DKMS modules must survive each ZimaOS update — verify after every update.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Take snapshot before NVIDIA install</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>zfs<span class="w"> </span>snapshot<span class="w"> </span>-r<span class="w"> </span>glacier@pre-nvidia

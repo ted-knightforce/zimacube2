@@ -592,10 +592,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-were-building" class="md-nav__link">
+  <a href="#what-im-setting-up" class="md-nav__link">
     <span class="md-ellipsis">
       
-        📦 What We're Building
+        📦 What I'm Setting Up
       
     </span>
   </a>
@@ -603,10 +603,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-2-1-backup-strategy" class="md-nav__link">
+  <a href="#the-3-2-1-plan" class="md-nav__link">
     <span class="md-ellipsis">
       
-        💾 3-2-1 Backup Strategy
+        💾 The 3-2-1 Plan
       
     </span>
   </a>
@@ -625,10 +625,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-to-back-up" class="md-nav__link">
+  <a href="#what-gets-backed-up-and-what-doesnt" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🗒️ What to Back Up
+        🗒️ What Gets Backed Up — and What Doesn't
       
     </span>
   </a>
@@ -898,10 +898,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-were-building" class="md-nav__link">
+  <a href="#what-im-setting-up" class="md-nav__link">
     <span class="md-ellipsis">
       
-        📦 What We're Building
+        📦 What I'm Setting Up
       
     </span>
   </a>
@@ -909,10 +909,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-2-1-backup-strategy" class="md-nav__link">
+  <a href="#the-3-2-1-plan" class="md-nav__link">
     <span class="md-ellipsis">
       
-        💾 3-2-1 Backup Strategy
+        💾 The 3-2-1 Plan
       
     </span>
   </a>
@@ -931,10 +931,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-to-back-up" class="md-nav__link">
+  <a href="#what-gets-backed-up-and-what-doesnt" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🗒️ What to Back Up
+        🗒️ What Gets Backed Up — and What Doesn't
       
     </span>
   </a>
@@ -976,9 +976,9 @@
 <p><strong>Status:</strong> ⏳ Planned — after Phase 2 SATA pool complete</p>
 <hr />
 <h2 id="goal">🎯 Goal<a class="headerlink" href="#goal" title="Permanent link">&para;</a></h2>
-<p>Unified data protection with a proper 3-2-1 backup strategy: local ZFS snapshots, on-site backup to external drive, and offsite backup to Backblaze B2.</p>
+<p>I will never forgive myself if I can't recover these photos and videos. They're priceless — years of family memories that no amount of money or hardware could ever replace. Phase 3 is about making absolutely sure that never happens. The plan is a classic 3-2-1: three copies of everything that matters, across two different types of storage, with one copy kept offsite. Straightforward to describe, a bit of work to actually build — but non-negotiable.</p>
 <hr />
-<h2 id="what-were-building">📦 What We're Building<a class="headerlink" href="#what-were-building" title="Permanent link">&para;</a></h2>
+<h2 id="what-im-setting-up">📦 What I'm Setting Up<a class="headerlink" href="#what-im-setting-up" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -1011,7 +1011,7 @@
 </tbody>
 </table>
 <hr />
-<h2 id="3-2-1-backup-strategy">💾 3-2-1 Backup Strategy<a class="headerlink" href="#3-2-1-backup-strategy" title="Permanent link">&para;</a></h2>
+<h2 id="the-3-2-1-plan">💾 The 3-2-1 Plan<a class="headerlink" href="#the-3-2-1-plan" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>3 copies of data
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  ├── Copy 1: live data — glacier (ZFS RAIDZ1) + Arctic-Storage (btrfs, Immich + AppData)
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  ├── Copy 2: On-site backup → external USB drive or ironwolf
@@ -1038,7 +1038,8 @@
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>zfs<span class="w"> </span>snapshot<span class="w"> </span>-r<span class="w"> </span>glacier@pre-p510-move<span class="w">      </span><span class="c1"># Before moving P510 to onboard slot</span>
 </code></pre></div>
 <hr />
-<h2 id="what-to-back-up">🗒️ What to Back Up<a class="headerlink" href="#what-to-back-up" title="Permanent link">&para;</a></h2>
+<h2 id="what-gets-backed-up-and-what-doesnt">🗒️ What Gets Backed Up — and What Doesn't<a class="headerlink" href="#what-gets-backed-up-and-what-doesnt" title="Permanent link">&para;</a></h2>
+<p>Not everything deserves a backup. Movies and TV shows are re-downloadable — wasting offsite bandwidth on them makes no sense. Ollama models are the same story. What's genuinely irreplaceable gets backed up. Everything else doesn't.</p>
 <p><strong>Include:</strong>
 - <code>glacier/documents</code> — personal documents
 - <code>/DATA/Gallery/immich</code> (<code>Arctic-Storage</code>) — Immich photo library (irreplaceable)

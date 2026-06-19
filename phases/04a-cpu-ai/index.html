@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#phase-4a-cpu-only-local-ai-baseline" class="md-skip">
+        <a href="#phase-4a-running-local-ai-on-a-nas-before-the-gpu-arrives" class="md-skip">
           Skip to content
         </a>
       
@@ -653,10 +653,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#metrics-to-capture" class="md-nav__link">
+  <a href="#what-im-measuring-and-why" class="md-nav__link">
     <span class="md-ellipsis">
       
-        📊 Metrics to Capture
+        📊 What I'm Measuring — and Why
       
     </span>
   </a>
@@ -942,10 +942,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#metrics-to-capture" class="md-nav__link">
+  <a href="#what-im-measuring-and-why" class="md-nav__link">
     <span class="md-ellipsis">
       
-        📊 Metrics to Capture
+        📊 What I'm Measuring — and Why
       
     </span>
   </a>
@@ -994,14 +994,15 @@
   
 
 
-<h1 id="phase-4a-cpu-only-local-ai-baseline">Phase 4a — CPU-Only Local AI Baseline<a class="headerlink" href="#phase-4a-cpu-only-local-ai-baseline" title="Permanent link">&para;</a></h1>
+<h1 id="phase-4a-running-local-ai-on-a-nas-before-the-gpu-arrives">Phase 4a — Running Local AI on a NAS Before the GPU Arrives<a class="headerlink" href="#phase-4a-running-local-ai-on-a-nas-before-the-gpu-arrives" title="Permanent link">&para;</a></h1>
 <p><strong>Status:</strong> ⏳ Planned — after Phase 1 complete and RAM upgraded to 32GB<br />
 <strong>Prerequisite:</strong> 2× Corsair Vengeance 16GB DDR5 4800MHz installed</p>
 <hr />
 <h2 id="goal">🎯 Goal<a class="headerlink" href="#goal" title="Permanent link">&para;</a></h2>
-<p>Establish a CPU-only inference baseline on the i3-1215U before the GPU arrives. Document honest real-world performance — tokens/sec, time-to-first-token, RAM usage — as a reference point for Phase 4b GPU comparison.</p>
+<p>The RTX 4090 isn't here yet — so why not find out how far an i3-1215U can actually take you with local LLMs? Instead of waiting for the GPU, I wanted honest numbers first: not "it works" but actual tokens per second, actual time to first response, actual RAM usage under load. Phase 4b will run the exact same tests once the GPU arrives. Then we'll see what 24GB of VRAM actually buys you.</p>
 <hr />
 <h2 id="hardware-at-this-phase">🛠️ Hardware at This Phase<a class="headerlink" href="#hardware-at-this-phase" title="Permanent link">&para;</a></h2>
+<p>The 32GB RAM upgrade is the prerequisite here — not because the CPU needs it for inference, but because ZFS ARC and Docker workloads eat into headroom quickly. With 32GB, Ollama isn't competing with the rest of the system for memory.</p>
 <table>
 <thead>
 <tr>
@@ -1057,6 +1058,7 @@
 </table>
 <hr />
 <h2 id="benchmark-models">🧪 Benchmark Models<a class="headerlink" href="#benchmark-models" title="Permanent link">&para;</a></h2>
+<p>I picked these four to cover a range of sizes and quantisation levels. The 3B model is the sanity check — if even that's sluggish on the i3, the CPU path isn't viable for daily use. The 8B models are where it gets interesting, since that's the size most people actually want to run.</p>
 <table>
 <thead>
 <tr>
@@ -1094,7 +1096,8 @@
 </tbody>
 </table>
 <hr />
-<h2 id="metrics-to-capture">📊 Metrics to Capture<a class="headerlink" href="#metrics-to-capture" title="Permanent link">&para;</a></h2>
+<h2 id="what-im-measuring-and-why">📊 What I'm Measuring — and Why<a class="headerlink" href="#what-im-measuring-and-why" title="Permanent link">&para;</a></h2>
+<p>Tokens per second is the headline number but it doesn't tell the whole story. Time to first token matters a lot for how a model <em>feels</em> to use — a model that starts responding in two seconds feels snappy even if generation is slower. Model load time separates "first run of the day" from "already warm in RAM" performance. Both matter.</p>
 <p>For each model:
 - Tokens/second (generation speed)
 - Time to first token (TTFT)
