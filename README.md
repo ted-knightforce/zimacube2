@@ -120,20 +120,20 @@ Full benchmark details: [Phase 1.5 — Storage Benchmarks](https://ted-knightfor
 
 ## 📂 Documentation
 
-Full documentation with navigation, search, and dark mode is available at the docs site:
+Browse the source files directly below, or visit the full docs site for navigation, search, and dark mode:
 
-📖 **[ted-knightforce.github.io/zimacube2](https://ted-knightforce.github.io/zimacube2)**
+📖 **[Full documentation site → ted-knightforce.github.io/zimacube2](https://ted-knightforce.github.io/zimacube2)**
 
 | Phase | Doc |
 |---|---|
-| **Phase 1** | [ZimaCube 2 Build — Phase 1: Foundation & Storage](https://ted-knightforce.github.io/zimacube2/phases/01-foundation/) |
-| **Phase 1.5** | [Phase 1.5 — Storage Benchmarks](https://ted-knightforce.github.io/zimacube2/phases/01.5-benchmarks/) |
-| **Phase 2** | [Phase 2 — Media Stack: Jellyfin, *arr, IronWolf Pool](https://ted-knightforce.github.io/zimacube2/phases/02-media/) |
-| **Phase 2.5** | [Phase 2.5 — Immich: ZimaOS-to-ZimaCube 2 Migration](https://ted-knightforce.github.io/zimacube2/phases/02.5-immich/) |
-| **Phase 3** | [Phase 3 — Data Management: Backup, Nextcloud & 3-2-1 Strategy](https://ted-knightforce.github.io/zimacube2/phases/03-data/) |
-| **Phase 4a** | [Phase 4a — CPU-Only Local AI Baseline](https://ted-knightforce.github.io/zimacube2/phases/04a-cpu-ai/) |
-| **Phase 4b** | [Phase 4b — GPU Integration: RTX 4090 + eGPU Dock](https://ted-knightforce.github.io/zimacube2/phases/04b-gpu-ai/) |
-| **Benchmarks** | [ZimaCube 2 — Phase 1.5: Storage Benchmarks](https://ted-knightforce.github.io/zimacube2/phases/01.5-benchmarks/) · [Results Visualisation](https://ted-knightforce.github.io/zimacube2/benchmarks/results-visual.html) |
+| **Phase 1** | [ZimaCube 2 Build — Phase 1: Foundation & Storage](docs/phases/01-foundation.md) |
+| **Phase 1.5** | [Phase 1.5 — Storage Benchmarks](docs/phases/01.5-benchmarks.md) |
+| **Phase 2** | [Phase 2 — Media Stack: Jellyfin, *arr, IronWolf Pool](docs/phases/02-media.md) |
+| **Phase 2.5** | [Phase 2.5 — Immich: Migration & iCloud Photos Consolidation](docs/phases/02.5-immich.md) |
+| **Phase 3** | [Phase 3 — Data Management: Backup, Nextcloud & 3-2-1 Strategy](docs/phases/03-data.md) |
+| **Phase 4a** | [Phase 4a — Running Local AI on a NAS Before the GPU Arrives](docs/phases/04a-cpu-ai.md) |
+| **Phase 4b** | [Phase 4b — Adding an RTX 4090: What 24GB of VRAM Changes](docs/phases/04b-gpu-ai.md) |
+| **Benchmarks** | [Phase 1.5: Storage Benchmarks](docs/phases/01.5-benchmarks.md) · [Results Visualisation ↗](https://ted-knightforce.github.io/zimacube2/benchmarks/results-visual.html) |
 
 ---
 
