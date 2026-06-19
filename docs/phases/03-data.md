@@ -6,11 +6,11 @@
 
 ## 🎯 Goal
 
-Unified data protection with a proper 3-2-1 backup strategy: local ZFS snapshots, on-site backup to external drive, and offsite backup to Backblaze B2.
+I will never forgive myself if I can't recover these photos and videos. They're priceless — years of family memories that no amount of money or hardware could ever replace. Phase 3 is about making absolutely sure that never happens. The plan is a classic 3-2-1: three copies of everything that matters, across two different types of storage, with one copy kept offsite. Straightforward to describe, a bit of work to actually build — but non-negotiable.
 
 ---
 
-## 📦 What We're Building
+## 📦 What I'm Setting Up
 
 | Service | Purpose | Install Method |
 |---|---|---|
@@ -21,7 +21,7 @@ Unified data protection with a proper 3-2-1 backup strategy: local ZFS snapshots
 
 ---
 
-## 💾 3-2-1 Backup Strategy
+## 💾 The 3-2-1 Plan
 
 ```
 3 copies of data
@@ -56,7 +56,9 @@ zfs snapshot -r glacier@pre-p510-move      # Before moving P510 to onboard slot
 
 ---
 
-## 🗒️ What to Back Up
+## 🗒️ What Gets Backed Up — and What Doesn't
+
+Not everything deserves a backup. Movies and TV shows are re-downloadable — wasting offsite bandwidth on them makes no sense. Ollama models are the same story. What's genuinely irreplaceable gets backed up. Everything else doesn't.
 
 **Include:**
 - `glacier/documents` — personal documents
