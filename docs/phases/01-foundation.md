@@ -35,7 +35,7 @@
 ---
 
 ## Goal
-*Build a stable and power efficient NAS; tiered storage foundation with redundancy, snapshots, and core services running on ZimaOS. Document the journey — including new discovery and what went wrong — from Phase 1 through Phase 6. After much deliberation, the choice of consumer NAS is the [ZimaCube 2 Standard NAS](https://shop.zimaspace.com/products/zimacube-2-personal-cloud-nas).*
+*I wanted a NAS I could actually trust — something I could build on top of, phase by phase, without waking up one day to find my photo library gone or a Docker app quietly corrupted. After a lot of deliberation, the [ZimaCube 2 Standard NAS](https://shop.zimaspace.com/products/zimacube-2-personal-cloud-nas) was the one. This is the story of Phase 1: getting the foundation set up, what surprised me along the way, and what I'd do differently. Spoiler: Thunderbolt 4 was not my friend.*
 
 ---
 
@@ -281,7 +281,7 @@ ZimaCube 2 Standard — Storage Tiers
 
 ## Thunderbolt 4 Issue and OCuLink Resolution
 
-### What Happened
+### The Day Thunderbolt 4 Gave Up on Me
 
 The Aoostar TB4S-OC was originally intended to connect via Thunderbolt 4. After extensive troubleshooting across multiple sessions — two 40GBps 240W USB-C cables, both ports tested, external power confirmed — the connection failed consistently with the following kernel errors:
 
@@ -293,7 +293,7 @@ thunderbolt 1-1: failed to initialize port 1
 [endless retimer connect/disconnect loop in dmesg]
 ```
 
-### Possible Root Causes
+### What Was Actually Going On Under the Hood
 
 | Issue | Detail |
 |---|---|
@@ -302,7 +302,7 @@ thunderbolt 1-1: failed to initialize port 1
 | `DROM failed: -107 (ENOTCONN)` | ASMedia ASM2462PDX inside Aoostar can't complete DROM handshake with ZimaCube 2 TB controller |
 | One TB port dead at boot | `0000:00:0d.3: 0:1: failed to reach state TB_PORT_UP. Ignoring port` |
 
-### Resolution
+### What Finally Fixed It
 
 Installed a **PCIe x4 → SFF-8612 OCuLink adapter** in Slot 1. All 4 drives detected on first boot. Zero configuration needed.
 
@@ -312,15 +312,13 @@ With PCIe Slot 1 occupied by the OCuLink adapter:
 - Unable to use ~~Minisforum DEG1~~ (OCuLink-only) → ruled out as Slot 1 OCuLink connection is occupied by Aoostar TB4S-OC DAS
 - Both TB4 ports now free → exploring to purchase **Minisforum DEG2** (TB5 + OCuLink) or an Aoostar AG02/AG03 TB4/TB5 eGPU dock as the viable paths for Phase 4b
 
-### Troubleshooting Takeaway (To be verified with other enclosures)
+### If You're Hitting the Same Wall
 
 If connecting an Aoostar TB4S-OC (or any ASM2462PDX-based NVMe enclosure) to a ZimaCube 2 — **use OCuLink, not Thunderbolt 4**. Direct PCIe via OCuLink means no tunneling protocol, no authorization requirements, no firmware handshake. It also delivers lower latency than TB4 tunneling.
 
-### TB4 Peer-to-Peer Networking — Planned Experiment
+### One Thing TB4 Might Actually Be Good For
 
-The TB4 failure above was specific to PCIe tunneling to an external NVMe enclosure. A completely separate TB4 capability — **IP over Thunderbolt (TB4 direct connection)** — remains available and untested.
-
-By connecting a Mac or PC directly to one of ZimaCube 2's TB4 ports with a single cable, the OS on both ends creates a high-speed point-to-point network link. This bypasses the 2.5GbE bottleneck entirely:
+The TB4 failure was specific to PCIe tunnelling to an external NVMe enclosure — a particular firmware incompatibility with this hardware combination. But there's something completely different TB4 can do that I haven't tested yet: point-to-point networking. Plug a Mac or PC directly into the ZimaCube 2 with a single cable and both ends negotiate a high-speed network link, bypassing the 2.5GbE ceiling entirely. Here's what that could mean in practice:
 
 | Link | Effective bandwidth | Glacier seq. read accessible | Arctic seq. read accessible |
 |---|---|---|---|
@@ -339,6 +337,8 @@ For workloads like pulling raw photos from Immich, streaming high-bitrate media,
 ## ZFS Pool Setup
 
 ### Why ZFS RAIDZ1
+
+Choosing ZFS for the NVMe pool wasn't a complicated decision once I knew what I was protecting. Photos, documents, family videos — stuff that doesn't come back if it goes wrong. ZFS checksums catch silent data corruption, which is the kind of failure you'd never notice until you tried to open a file. RAIDZ1 gives me a drive-failure buffer. And the ARC cache turned out to be a bigger deal than I expected. Here's how the rest fell into place:
 
 | Factor | Decision |
 |---|---|
@@ -634,8 +634,8 @@ ZimaOS is **Buildroot-based** with an immutable read-only OS. Key implications f
 
 ## Honest & Surprising Discoveries
 
-- **TB4 failure** — biggest surprise. ZimaOS TB4 kernel config + ASMedia ASM2462PDX incompatibility = hours of troubleshooting. OCuLink was the right answer all along; skip straight to it on this hardware combination.
-- **ZFS ARC pays off on glacier** — the best surprise. Every read against the `glacier` ZFS RAIDZ1 pool is served through the ZFS ARC, so hot data comes straight from RAM instead of NVMe. Warm random-4K reads jumped from ~14,781 IOPS (cold) to ~83,929 IOPS — a ~5.7× uplift — purely from ARC. And it scales with memory: the more RAM in the box, the larger the cache and the more of glacier stays hot. This is the single biggest argument for the upcoming 32GB RAM upgrade. (btrfs pools like Arctic-Storage don't get ARC — they rely on the Linux page cache instead.)
+- **TB4 failure** — I spent hours troubleshooting across two cable swaps and both ports before accepting it wasn't going to work. Turned out to be a ZimaOS kernel config + ASMedia ASM2462PDX incompatibility. OCuLink fixed it on first boot. If you're running an Aoostar TB4S-OC with a ZimaCube 2, skip Thunderbolt entirely and go straight to OCuLink — full story in [Thunderbolt 4 Issue and OCuLink Resolution](#thunderbolt-4-issue-and-oculink-resolution).
+- **ZFS ARC was the biggest surprise of this build** — I honestly didn't expect it to matter this much. Once your frequently-accessed data warms up in the cache, reads stop hitting the NVMe entirely and come straight from RAM. My random-4K reads went from ~14,781 IOPS cold to ~83,929 IOPS warm — a 5.7× jump without changing a single piece of hardware. And it scales: more RAM means a larger cache, which means more of glacier stays hot. That single discovery changed how I think about the 32GB upgrade — it's not just a headroom upgrade, it's a direct read-performance investment for anything that lives on glacier. (Worth noting: btrfs pools like Arctic-Storage don't get ARC — they rely on the Linux page cache instead.)
 - **ZFS invisible to ZimaOS UI** — expected, but still a rough edge. The symlink workaround is functional but not elegant. Open feature request on ZimaOS GitHub.
 - **Immich database empty after file migration** — moving photo files without moving the database gives you photos but no albums, faces, or metadata. The fix: copy the entire `/DATA/AppData/immich` folder (including `pgdata`) alongside the photo library. Stop Immich on the source first. See [Phase 2.5](02.5-immich.md) for the full method.
 - **ZimaOS package manager missing** — `apt install fio` doesn't work. Discovering fio was already natively available saved the day; anything else requires Docker.
