@@ -1,4 +1,4 @@
-# Phase 4a — CPU-Only Local AI Baseline
+# Phase 4a — Running Local AI on a NAS Before the GPU Arrives
 
 **Status:** ⏳ Planned — after Phase 1 complete and RAM upgraded to 32GB  
 **Prerequisite:** 2× Corsair Vengeance 16GB DDR5 4800MHz installed
@@ -7,11 +7,13 @@
 
 ## 🎯 Goal
 
-Establish a CPU-only inference baseline on the i3-1215U before the GPU arrives. Document honest real-world performance — tokens/sec, time-to-first-token, RAM usage — as a reference point for Phase 4b GPU comparison.
+The RTX 4090 isn't here yet — so why not find out how far an i3-1215U can actually take you with local LLMs? Instead of waiting for the GPU, I wanted honest numbers first: not "it works" but actual tokens per second, actual time to first response, actual RAM usage under load. Phase 4b will run the exact same tests once the GPU arrives. Then we'll see what 24GB of VRAM actually buys you.
 
 ---
 
 ## 🛠️ Hardware at This Phase
+
+The 32GB RAM upgrade is the prerequisite here — not because the CPU needs it for inference, but because ZFS ARC and Docker workloads eat into headroom quickly. With 32GB, Ollama isn't competing with the rest of the system for memory.
 
 | Component | Specification |
 |---|---|
@@ -37,6 +39,8 @@ Establish a CPU-only inference baseline on the i3-1215U before the GPU arrives. 
 
 ## 🧪 Benchmark Models
 
+I picked these four to cover a range of sizes and quantisation levels. The 3B model is the sanity check — if even that's sluggish on the i3, the CPU path isn't viable for daily use. The 8B models are where it gets interesting, since that's the size most people actually want to run.
+
 | Model | Size | RAM Required | Expected CPU Performance |
 |---|---|---|---|
 | llama3.2:3b | ~2GB | ~4GB | Usable — fast enough for daily tasks |
@@ -46,7 +50,9 @@ Establish a CPU-only inference baseline on the i3-1215U before the GPU arrives. 
 
 ---
 
-## 📊 Metrics to Capture
+## 📊 What I'm Measuring — and Why
+
+Tokens per second is the headline number but it doesn't tell the whole story. Time to first token matters a lot for how a model *feels* to use — a model that starts responding in two seconds feels snappy even if generation is slower. Model load time separates "first run of the day" from "already warm in RAM" performance. Both matter.
 
 For each model:
 - Tokens/second (generation speed)
