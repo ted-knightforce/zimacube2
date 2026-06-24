@@ -1,7 +1,7 @@
 # ZimaCube 2 Build — Phase 1: Foundation & Storage
 
 **Author:** ted-knight  
-**Status:** 🟡 In Progress  
+**Status:** ✅ Complete (foundation built · Phase 1.8 upgrades done)  
 **Started:** May 21, 2026  
 **Updated:** June 25, 2026  
 **Program:** ZimaCube 2 Pioneer Program  
@@ -123,10 +123,12 @@
 - [x] **Phase 1.8 — Crucial P510 moved to onboard M.2 slot** → re-benchmarked. Onboard slot is **PCIe 3.0 x2** (~2× the 7th Bay's 800 MB/s); see [Phase 1.5 — Phase 1.8 results](01.5-benchmarks.md#phase-18-p510-onboard-migration-june-25-2026)
 - [x] 32GB dual-channel RAM delivered a measured **+51% warm ARC random read** (83,929 → 126,816 IOPS)
 
-### ⏳ Pending
+### 📌 Optional Follow-ups (not blocking — foundation is complete)
 
-- [ ] **[Planned]** ZimaOS dashboard shows high RAM "used" — this reflects ZFS ARC holding toward its ~30 GiB c_max ceiling, not actual application memory pressure. Observing whether ARC naturally yields memory as Phase 2 Jellyfin workloads ramp up.
-- [ ] **[TBD]** TB4 direct networking test — connect Mac/PC via TB4 cable, configure IP over Thunderbolt, benchmark vs 2.5GbE
+These are nice-to-haves and ongoing observations, not outstanding foundation work:
+
+- [ ] **[Observation]** ZimaOS dashboard shows high RAM "used" — this reflects ZFS ARC holding toward its ~30 GiB c_max ceiling, not actual application memory pressure. Watching whether ARC naturally yields memory as Phase 2 Jellyfin workloads ramp up.
+- [ ] **[Optional experiment]** TB4 direct networking test — connect Mac/PC via TB4 cable, configure IP over Thunderbolt, benchmark vs 2.5GbE
 - [ ] Phase 1 Reddit post
 
 ---

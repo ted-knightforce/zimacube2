@@ -15,7 +15,7 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 
 | Phase | Description | Status |
 |---|---|---|
-| **Phase 1** | Foundation — Storage, ZFS, Core Services | 🟡 In Progress |
+| **Phase 1** | Foundation — Storage, ZFS, Core Services | ✅ Complete |
 | **Phase 1.5** | Storage Benchmarks — cold baseline + warm ZFS ARC | ✅ Complete |
 | **Phase 1.8** | P510 Onboard M.2 Migration + Re-benchmark · 32GB dual-channel RAM | ✅ Complete |
 | **Phase 2** | Media Stack — Jellyfin, *arr, IronWolf pool | 🟡 In Progress — `ironwolf` RAID5 created; media stack next |
