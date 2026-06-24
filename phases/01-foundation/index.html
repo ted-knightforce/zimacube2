@@ -653,10 +653,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#incoming-hardware" class="md-nav__link">
+  <a href="#recently-installed-hardware" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Incoming Hardware
+        Recently Installed Hardware ✅
       
     </span>
   </a>
@@ -1732,10 +1732,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#incoming-hardware" class="md-nav__link">
+  <a href="#recently-installed-hardware" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Incoming Hardware
+        Recently Installed Hardware ✅
       
     </span>
   </a>
@@ -2447,7 +2447,7 @@ Connected the <strong>Aoostar TB4S-OC</strong> (USB4/Thunderbolt 4 + OCuLink NVM
 Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 - <strong>Transcend ESD310C 1TB</strong> — USB 10Gbps, dual Type-C/Type-A (<code>sda</code>)
 - <strong>SanDisk Portable SSD SDSSDE30 1TB</strong> — USB 3.2 Gen 2, up to 800 MB/s (<code>sdb</code>)</p>
-<p><strong>Coming soon:</strong> 4× Seagate IronWolf 4TB 3.5" SATA NAS drives (5,400 RPM, CMR, 256MB cache) for the <code>ironwolf</code> btrfs RAID5 pool (~12TB usable) in the 6 SATA bays — bulk media files, movies, TV shows, photos archive. 1 drive received; 3 in transit.</p>
+<p><strong>✅ Installed (June 24, 2026):</strong> 4× Seagate IronWolf 4TB 3.5" SATA NAS drives (ST4000VN006, 5,400 RPM, CMR, 256MB cache) in bays 1–4, configured as the <code>ironwolf</code> btrfs RAID5 pool (<strong>12TB usable</strong>) via the ZimaOS Storage Manager — bulk media files, movies, TV shows, photos archive. All four disks Healthy. This unblocks Phase 2.</p>
 <hr />
 <h2 id="final-hardware-configuration">Final Hardware Configuration<a class="headerlink" href="#final-hardware-configuration" title="Permanent link">&para;</a></h2>
 <h3 id="zimacube-2-standard-complete-spec">ZimaCube 2 Standard — Complete Spec<a class="headerlink" href="#zimacube-2-standard-complete-spec" title="Permanent link">&para;</a></h3>
@@ -2501,7 +2501,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </tr>
 <tr>
 <td>SATA Bays</td>
-<td>6× 3.5"/2.5" SATA bays (empty — drives arriving soon)</td>
+<td>6× 3.5"/2.5" SATA bays — <strong>bays 1–4 populated with IronWolf 4TB (<code>ironwolf</code> btrfs RAID5, 12TB usable)</strong>; 2 bays free</td>
 </tr>
 </tbody>
 </table>
@@ -2616,7 +2616,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </tr>
 </tbody>
 </table>
-<h3 id="incoming-hardware">Incoming Hardware<a class="headerlink" href="#incoming-hardware" title="Permanent link">&para;</a></h3>
+<h3 id="recently-installed-hardware">Recently Installed Hardware ✅<a class="headerlink" href="#recently-installed-hardware" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2627,17 +2627,20 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </thead>
 <tbody>
 <tr>
-<td>Seagate IronWolf × 4</td>
+<td>Seagate IronWolf × 4 ✅</td>
 <td>4TB, 3.5", SATA 6Gb/s, 5,400 RPM, CMR, 256MB cache</td>
-<td>Cold storage RAID5—ideal for bulk media. I chose the non-Pro Ironwolf model specifically for lower power consumption and quieter operation at 5,400 RPM</td>
+<td>Cold storage RAID5 — ideal for bulk media. Installed June 24, 2026 as the <code>ironwolf</code> btrfs RAID5 pool (12TB usable). I chose the non-Pro IronWolf model specifically for lower power consumption and quieter operation at 5,400 RPM</td>
 </tr>
 <tr>
-<td>~~Corsair Vengeance × 2~~ ✅ installed</td>
+<td>Corsair Vengeance × 2 ✅</td>
 <td>16GB DDR5 4800MHz CL40 SODIMM</td>
 <td>RAM upgrade 16GB → 32GB dual-channel — installed in Phase 1.8 (ahead of Phase 4), delivered +51% warm ARC read</td>
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p>The RTX 4090 and eGPU dock are still upcoming — both arrive in Phase 4b (see <a href="#whats-coming-next">What's Coming Next</a>).</p>
+</blockquote>
 <hr />
 <h2 id="storage-architecture">Storage Architecture<a class="headerlink" href="#storage-architecture" title="Permanent link">&para;</a></h2>
 <h3 id="current-storage-tiers">Current Storage Tiers<a class="headerlink" href="#current-storage-tiers" title="Permanent link">&para;</a></h3>
@@ -2660,12 +2663,13 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>│                └── Immich gallery, media, backup, VM, documents
 <a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>│                └── Via OCuLink (Aoostar TB4S-OC, Slot 1)
 <a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>│
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>├── TIER 3 — USB Portable (Temporary)
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>│   └── sda      Transcend ESD310C 1TB USB    Temporary
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>│   └── sdb      SanDisk Portable SSD 1TB     Temporary
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>├── TIER 3 — USB Portable (being retired)
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>│   └── sda      Transcend ESD310C 1TB USB    Overflow — superseded by ironwolf
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>│   └── sdb      SanDisk Portable SSD 1TB     Overflow — superseded by ironwolf
 <a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>│
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>└── TIER 4 — Cold Storage (Arriving soon)
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>    └── 4× Seagate IronWolf 4TB 3.5&quot; SATA     ironwolf (btrfs RAID5, ~12TB usable)
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>└── TIER 4 — Cold Storage (active · created June 24, 2026)
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>    └── 4× Seagate IronWolf 4TB 3.5&quot; SATA     ironwolf (btrfs RAID5, 12TB usable)
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>                                              └── bays 1–4 · bulk media archive
 </code></pre></div>
 <hr />
 <h2 id="thunderbolt-4-issue-and-oculink-resolution">Thunderbolt 4 Issue and OCuLink Resolution<a class="headerlink" href="#thunderbolt-4-issue-and-oculink-resolution" title="Permanent link">&para;</a></h2>
@@ -3087,7 +3091,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <td>ZFS checksums + snapshots for integrity</td>
 </tr>
 <tr>
-<td>Cold media (arriving)</td>
+<td>Cold media</td>
 <td><code>ironwolf</code></td>
 <td>Capacity and cost-per-TB; sequential access only</td>
 </tr>
@@ -3203,19 +3207,19 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 </thead>
 <tbody>
 <tr>
-<td>~~RAM → 32GB DDR5~~ ✅ done (Phase 1.8)</td>
+<td>RAM → 32GB DDR5 ✅ done (Phase 1.8)</td>
 <td>2× Corsair Vengeance 16GB DDR5 4800MHz CL40 (dual-channel)</td>
 <td>Raised ARC headroom <strong>and</strong> delivered +51% warm ARC read from dual-channel bandwidth</td>
 </tr>
 <tr>
-<td>~~P510 → onboard M.2~~ ✅ done (Phase 1.8)</td>
+<td>P510 → onboard M.2 ✅ done (Phase 1.8)</td>
 <td>Moved Crucial P510 from 7th Bay to onboard slot</td>
 <td>Onboard is PCIe 3.0 x2 (~2× the 7th Bay) — not Gen5; no Standard slot exposes the P510's full speed</td>
 </tr>
 <tr>
-<td>4× Seagate IronWolf 4TB</td>
-<td>SATA bays — <code>ironwolf</code> pool (~12TB btrfs RAID5)</td>
-<td>Bulk media archive tier; unblocks Phase 2 · 1 received, 3 in transit</td>
+<td>4× Seagate IronWolf 4TB ✅ done (June 24)</td>
+<td>SATA bays — <code>ironwolf</code> pool (12TB btrfs RAID5)</td>
+<td>Bulk media archive tier; unblocks Phase 2 · all 4 installed, pool created</td>
 </tr>
 <tr>
 <td>eGPU dock (TBD)</td>
@@ -3277,7 +3281,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 <tbody>
 <tr>
 <td><strong>Phase 2</strong></td>
-<td>Jellyfin media server — Intel QuickSync transcoding, <code>ironwolf</code> media library (on hold — SATA drives arriving)</td>
+<td>Jellyfin media server — Intel QuickSync transcoding, <code>ironwolf</code> media library (<code>ironwolf</code> RAID5 created June 24 ✅ — media stack next)</td>
 </tr>
 <tr>
 <td><strong>Phase 2.5</strong></td>
