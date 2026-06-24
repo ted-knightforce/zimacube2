@@ -182,7 +182,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 - **Transcend ESD310C 1TB** — USB 10Gbps, dual Type-C/Type-A (`sda`)
 - **SanDisk Portable SSD SDSSDE30 1TB** — USB 3.2 Gen 2, up to 800 MB/s (`sdb`)
 
-**Coming soon:** 4× Seagate IronWolf 4TB 3.5" SATA NAS drives (5,400 RPM, CMR, 256MB cache) for the `ironwolf` btrfs RAID5 pool (~12TB usable) in the 6 SATA bays — bulk media files, movies, TV shows, photos archive. 1 drive received; 3 in transit.
+**✅ Installed (June 24, 2026):** 4× Seagate IronWolf 4TB 3.5" SATA NAS drives (ST4000VN006, 5,400 RPM, CMR, 256MB cache) in bays 1–4, configured as the `ironwolf` btrfs RAID5 pool (**12TB usable**) via the ZimaOS Storage Manager — bulk media files, movies, TV shows, photos archive. All four disks Healthy. This unblocks Phase 2.
 
 ---
 
@@ -202,7 +202,7 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 | PCIe Slot 2 | Physical x8 slot · PCIe 3.0 x2 lanes → **available — reserved for future 10GbE NIC upgrade** |
 | 7th Bay | 4× M.2 NVMe slots (800 MB/s total bridge cap on Standard) — now empty after P510 moved onboard |
 | Onboard M.2 | **Crucial P510 2TB (Arctic-Storage) — moved here in Phase 1.8.** Slot runs at PCIe 3.0 x2 (~1,970 MB/s) — ~2× the 7th Bay, but not full Gen5 |
-| SATA Bays | 6× 3.5"/2.5" SATA bays (empty — drives arriving soon) |
+| SATA Bays | 6× 3.5"/2.5" SATA bays — **bays 1–4 populated with IronWolf 4TB (`ironwolf` btrfs RAID5, 12TB usable)**; 2 bays free |
 
 > **Standard vs Pro:** The ZimaCube 2 Standard uses the same 7th Bay physical layout as the Pro, but the ASMedia bridge limits total 7th Bay bandwidth to 800 MB/s (vs 3,200 MB/s on Pro/Creator). Standard has 2.5GbE-only network (no 10GbE) and an i3-1215U vs the Pro's i5-1235U.
 
@@ -243,12 +243,14 @@ Node             SN                   Model                    Namespace Usage  
 | `sda` | Transcend ESD310C | 1TB | USB 10Gbps (Type-C + Type-A) | Temporary media/backup |
 | `sdb` | SanDisk SDSSDE30 Portable SSD | 1TB | USB 3.2 Gen 2, up to 800 MB/s | Temporary overflow storage |
 
-### Incoming Hardware
+### Recently Installed Hardware ✅
 
 | Item | Specification | Purpose |
 |---|---|---|
-| Seagate IronWolf × 4 | 4TB, 3.5", SATA 6Gb/s, 5,400 RPM, CMR, 256MB cache | Cold storage RAID5—ideal for bulk media. I chose the non-Pro Ironwolf model specifically for lower power consumption and quieter operation at 5,400 RPM |
-| ~~Corsair Vengeance × 2~~ ✅ installed | 16GB DDR5 4800MHz CL40 SODIMM | RAM upgrade 16GB → 32GB dual-channel — installed in Phase 1.8 (ahead of Phase 4), delivered +51% warm ARC read |
+| Seagate IronWolf × 4 ✅ | 4TB, 3.5", SATA 6Gb/s, 5,400 RPM, CMR, 256MB cache | Cold storage RAID5 — ideal for bulk media. Installed June 24, 2026 as the `ironwolf` btrfs RAID5 pool (12TB usable). I chose the non-Pro IronWolf model specifically for lower power consumption and quieter operation at 5,400 RPM |
+| Corsair Vengeance × 2 ✅ | 16GB DDR5 4800MHz CL40 SODIMM | RAM upgrade 16GB → 32GB dual-channel — installed in Phase 1.8 (ahead of Phase 4), delivered +51% warm ARC read |
+
+> The RTX 4090 and eGPU dock are still upcoming — both arrive in Phase 4b (see [What's Coming Next](#whats-coming-next)).
 
 ---
 
@@ -276,12 +278,13 @@ ZimaCube 2 Standard — Storage Tiers
 │                └── Immich gallery, media, backup, VM, documents
 │                └── Via OCuLink (Aoostar TB4S-OC, Slot 1)
 │
-├── TIER 3 — USB Portable (Temporary)
-│   └── sda      Transcend ESD310C 1TB USB    Temporary
-│   └── sdb      SanDisk Portable SSD 1TB     Temporary
+├── TIER 3 — USB Portable (being retired)
+│   └── sda      Transcend ESD310C 1TB USB    Overflow — superseded by ironwolf
+│   └── sdb      SanDisk Portable SSD 1TB     Overflow — superseded by ironwolf
 │
-└── TIER 4 — Cold Storage (Arriving soon)
-    └── 4× Seagate IronWolf 4TB 3.5" SATA     ironwolf (btrfs RAID5, ~12TB usable)
+└── TIER 4 — Cold Storage (active · created June 24, 2026)
+    └── 4× Seagate IronWolf 4TB 3.5" SATA     ironwolf (btrfs RAID5, 12TB usable)
+                                              └── bays 1–4 · bulk media archive
 ```
 
 ---
@@ -596,7 +599,7 @@ The standard fio suite uses `--direct=1` to measure raw NVMe speed — cold-cach
 | Immich ML model cache | Arctic-Storage | Low latency random reads for inference |
 | VM disk images | glacier | Large sequential I/O, RAIDZ1 redundancy |
 | Documents | glacier | ZFS checksums + snapshots for integrity |
-| Cold media (arriving) | `ironwolf` | Capacity and cost-per-TB; sequential access only |
+| Cold media | `ironwolf` | Capacity and cost-per-TB; sequential access only |
 
 ---
 
@@ -658,9 +661,9 @@ ZimaOS is **Buildroot-based** with an immutable read-only OS. Key implications f
 
 | Upgrade | Detail | Impact |
 |---|---|---|
-| ~~RAM → 32GB DDR5~~ ✅ done (Phase 1.8) | 2× Corsair Vengeance 16GB DDR5 4800MHz CL40 (dual-channel) | Raised ARC headroom **and** delivered +51% warm ARC read from dual-channel bandwidth |
-| ~~P510 → onboard M.2~~ ✅ done (Phase 1.8) | Moved Crucial P510 from 7th Bay to onboard slot | Onboard is PCIe 3.0 x2 (~2× the 7th Bay) — not Gen5; no Standard slot exposes the P510's full speed |
-| 4× Seagate IronWolf 4TB | SATA bays — `ironwolf` pool (~12TB btrfs RAID5) | Bulk media archive tier; unblocks Phase 2 · 1 received, 3 in transit |
+| RAM → 32GB DDR5 ✅ done (Phase 1.8) | 2× Corsair Vengeance 16GB DDR5 4800MHz CL40 (dual-channel) | Raised ARC headroom **and** delivered +51% warm ARC read from dual-channel bandwidth |
+| P510 → onboard M.2 ✅ done (Phase 1.8) | Moved Crucial P510 from 7th Bay to onboard slot | Onboard is PCIe 3.0 x2 (~2× the 7th Bay) — not Gen5; no Standard slot exposes the P510's full speed |
+| 4× Seagate IronWolf 4TB ✅ done (June 24) | SATA bays — `ironwolf` pool (12TB btrfs RAID5) | Bulk media archive tier; unblocks Phase 2 · all 4 installed, pool created |
 | eGPU dock (TBD) | Minisforum DEG2 (TB5+OCuLink) or TB4 eGPU enclosure | Phase 4b GPU inference — both TB4 ports now free |
 | **10GbE NIC — PCIe Slot 2** | Intel X550-T1 (RJ45) or Mellanox MCX311A (SFP+) | 4× network uplift: 2.5GbE (~312 MB/s) → 10GbE (~1,100 MB/s) — when ZimaCube 2 is under heavier workload demand |
 
@@ -683,7 +686,7 @@ ZimaOS is **Buildroot-based** with an immutable read-only OS. Key implications f
 
 | Phase | Description |
 |---|---|
-| **Phase 2** | Jellyfin media server — Intel QuickSync transcoding, `ironwolf` media library (on hold — SATA drives arriving) |
+| **Phase 2** | Jellyfin media server — Intel QuickSync transcoding, `ironwolf` media library (`ironwolf` RAID5 created June 24 ✅ — media stack next) |
 | **Phase 2.5** | Immich migration — 14,505 photos + 925 videos (134 GiB) from DIY ZimaOS to ZimaCube 2 via Arctic-Storage (`/DATA/Gallery/immich`) — ✅ complete |
 | **Phase 3** | Personal cloud, Nextcloud, 3-2-1 backup strategy |
 | **Phase 4a** | Ollama CPU-only AI baseline — i3-1215U inference benchmarks |

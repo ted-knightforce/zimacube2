@@ -18,7 +18,7 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 | **Phase 1** | Foundation — Storage, ZFS, Core Services | 🟡 In Progress |
 | **Phase 1.5** | Storage Benchmarks — cold baseline + warm ZFS ARC | ✅ Complete |
 | **Phase 1.8** | P510 Onboard M.2 Migration + Re-benchmark · 32GB dual-channel RAM | ✅ Complete |
-| **Phase 2** | Media Stack — Jellyfin, *arr, IronWolf pool | ⏸️ On Hold (drives arriving) |
+| **Phase 2** | Media Stack — Jellyfin, *arr, IronWolf pool | 🟡 In Progress — `ironwolf` RAID5 created; media stack next |
 | **Phase 2.5** | Immich Migration — 14,505 photos + 925 videos (134 GiB) from DIY ZimaOS to ZimaCube 2 | ✅ Complete |
 | **Phase 3** | Data Management — Backup, Nextcloud | ⏳ Planned |
 | **Phase 4a** | CPU-Only Local AI Baseline (Ollama) | ⏳ Planned |
@@ -40,8 +40,9 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 | **OS drive** | Kingston 256GB PCIe Gen4 NVMe | nvme4n1 — ZimaOS boot only |
 | **Fast NVMe tier** | Crucial P510 2TB PCIe Gen5 | nvme5n1 — Arctic-Storage (btrfs) — **onboard M.2 (PCIe 3.0 x2) since Phase 1.8** — App Data, Docker |
 | **NVMe RAID pool** | 4× 2TB PCIe Gen4 NVMe via Aoostar TB4S-OC | nvme0–3n1 — glacier (ZFS RAIDZ1) ~5.5TB |
+| **SATA HDD pool** | 4× Seagate IronWolf 4TB (ST4000VN006, CMR) | **ironwolf — btrfs RAID5, 12TB usable** — bulk media cold tier (created June 24, 2026) |
 | **Connection** | OCuLink via PCIe 4.0 x4 adapter (Slot 1, physical x16) | ⚠️ TB4 abandoned — see Phase 1 notes |
-| **USB storage (temp)** | Transcend ESD310C 1TB + SanDisk 1TB | Temporary until SATA drives arrive |
+| **USB storage (temp)** | Transcend ESD310C 1TB + SanDisk 1TB | Temporary overflow — superseded by ironwolf; being retired |
 | **Network** | 2× Intel i226 2.5GbE | 1 port connected to Ubiquiti Flex Mini 2.5G 5-Port Managed Switch · 2nd port unused (future use) |
 
 ### Key Hardware Decisions & Changes from Original Plan
@@ -54,10 +55,10 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 
 | Item | Purpose | ETA |
 |---|---|---|
-| 4× Seagate IronWolf 4TB (SATA, CMR) | Cold storage RAID for bulk media (`ironwolf` pool) | 1 in hand · 3 in transit |
-| ~~2× Corsair Vengeance 16GB DDR5 4800MHz CL40~~ ✅ installed | RAM upgrade 16GB → 32GB dual-channel | Done in Phase 1.8 |
 | RTX 4090 (used) | GPU inference + Phase 6 gaming | Phase 4b |
 | eGPU dock (TBD) | Minisforum DEG2 or TB4 enclosure | Phase 4b |
+
+*Recently installed: 32GB DDR5 dual-channel RAM (Phase 1.8) · 4× Seagate IronWolf 4TB → `ironwolf` btrfs RAID5 (June 24, 2026).*
 
 ---
 
@@ -82,11 +83,12 @@ ZimaCube 2 Standard — Storage Tiers
 │                  └── Media, documents, VM, backup
 │                  └── Via OCuLink (Aoostar TB4S-OC, Slot 1)
 │
-├── TIER 3 — USB Portable (temporary)
-│   └── sda/sdb  Transcend + SanDisk 1TB      Overflow until SATA arrives
+├── TIER 3 — USB Portable (being retired)
+│   └── sda/sdb  Transcend + SanDisk 1TB      Overflow — superseded by ironwolf
 │
-└── TIER 4 — Cold Storage (arriving)
-    └── 4× Seagate IronWolf 4TB SATA           ironwolf (btrfs RAID5, ~12TB usable)
+└── TIER 4 — Cold Storage (active · created June 24, 2026)
+    └── 4× Seagate IronWolf 4TB SATA           ironwolf (btrfs RAID5, 12TB usable)
+                                               └── bays 1–4 · bulk media archive
 ```
 
 ### Pool & Path Quick Reference
@@ -100,9 +102,9 @@ ZimaCube 2 Standard — Storage Tiers
 | Backup destination | `glacier` | `/media/glacier/backup` |
 | App Data (Docker) | `Arctic-Storage` | `/media/Arctic-Storage/AppData` |
 | Ollama AI models | `Arctic-Storage` | `/media/Arctic-Storage/AppData/ollama` |
-| Movies (arriving) | `ironwolf` | `/media/ironwolf/media/movies` |
-| TV shows (arriving) | `ironwolf` | `/media/ironwolf/media/tv` |
-| Music (arriving) | `ironwolf` | `/media/ironwolf/media/music` |
+| Movies | `ironwolf` | `/media/ironwolf/media/movies` |
+| TV shows | `ironwolf` | `/media/ironwolf/media/tv` |
+| Music | `ironwolf` | `/media/ironwolf/media/music` |
 
 ---
 
