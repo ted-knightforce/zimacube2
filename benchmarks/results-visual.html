@@ -142,6 +142,26 @@
     .win-g { color: #2dd4bf; font-weight: 600; }
     .win-a { color: #818cf8; font-weight: 600; }
 
+    /* ── Phase 1.8 before/after ── */
+    .phase-divider {
+      margin: 3rem 0 0.4rem; padding-top: 1.9rem;
+      border-top: 2px solid #21262d;
+      font-size: 1.2rem; font-weight: 700; color: #e6edf3;
+    }
+    .phase-sub { color: #7d8590; font-size: 0.78rem; margin-bottom: 1.5rem; line-height: 1.55; }
+    .s-after      { font-size: 1.15rem; font-weight: 700; color: #34d399; line-height: 1.2; }
+    .s-before-lbl { font-size: 0.6rem; color: #555d69; text-transform: uppercase; letter-spacing: .04em; }
+    .col-before { color: #7d8590; }
+    .col-after  { color: #34d399; }
+    .cmp-table td.col-after { font-weight: 600; }
+    .win-up   { color: #34d399; font-weight: 600; }
+    .win-down { color: #f0883e; font-weight: 600; }
+    .win-flat { color: #7d8590; font-weight: 600; }
+    .b-up   { background: rgba(52,211,153,.13); color: #34d399; }
+    .b-down { background: rgba(240,136,62,.13);  color: #f0883e; }
+    .arc-callout.dc { background: rgba(52,211,153,.07); border-color: rgba(52,211,153,.22); }
+    .arc-callout.dc strong { color: #34d399; }
+
     @media (max-width: 620px) {
       .stat-grid    { grid-template-columns: 1fr 1fr; }
       .chart-row    { grid-template-columns: 1fr; }
@@ -153,7 +173,7 @@
 <body>
 
 <h1>Results</h1>
-<p class="subtitle">ZimaCube 2 · Phase 1.5 Storage Benchmark · ZimaOS · fio 3.38 · benchmark-glacier.sh + benchmark-arc.sh · cold baseline May 23 · warm ARC June 3–4, 2026</p>
+<p class="subtitle">ZimaCube 2 · Phase 1.5 Storage Benchmark · ZimaOS · fio 3.38 · benchmark-glacier.sh + benchmark-arc.sh · cold baseline May 23 · warm ARC June 3–4 · <strong style="color:#34d399">Phase 1.8 onboard migration + 32GB dual-channel ARC — June 25, 2026</strong></p>
 
 <!-- Legend -->
 <div class="legend">
@@ -533,6 +553,188 @@
   Session hit rate: <strong>100.0%</strong>. The 14× cold IOPS gap narrows to <strong>~2.5×</strong>
   for workloads with repeated read patterns. Cumulative ARC hit rate: <strong>93.7%</strong>.
   ARC does not affect write operations — write charts show direct hardware throughput only.
+</div>
+
+<!-- ═══════════════ PHASE 1.8 — ONBOARD MIGRATION + 32GB DUAL-CHANNEL ARC ═══════════════ -->
+<div class="phase-divider">Phase 1.8 — Onboard Migration &amp; 32GB Dual-Channel ARC</div>
+<p class="phase-sub">
+  June 25, 2026 · Two upgrades landed together. The Crucial P510 moved from the 7th Bay to the onboard M.2 slot,
+  and RAM went from <strong style="color:#7d8590">16GB single-channel</strong> to <strong style="color:#34d399">32GB dual-channel</strong>.
+  Below, <span class="col-before">grey = before</span> and <span class="col-after">green = after</span>. fio MiB/s relabelled MB/s by doc convention.
+</p>
+
+<!-- ── Block A: Arctic-Storage onboard migration ── -->
+<div class="section-head">① Arctic-Storage btrfs — 7th Bay → Onboard M.2</div>
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="s-label">seq write</div>
+    <div class="s-after">1,231 MB/s</div>
+    <div class="s-vs"><span class="s-before-lbl">7th Bay</span> 788 MB/s</div>
+    <span class="badge b-up">+56%</span>
+  </div>
+  <div class="stat-card">
+    <div class="s-label">seq read</div>
+    <div class="s-after">1,677 MB/s</div>
+    <div class="s-vs"><span class="s-before-lbl">7th Bay</span> 874 MB/s</div>
+    <span class="badge b-up">+92%</span>
+  </div>
+  <div class="stat-card">
+    <div class="s-label">rand 4K read</div>
+    <div class="s-after">403,078 IOPS</div>
+    <div class="s-vs"><span class="s-before-lbl">7th Bay</span> 205,588 IOPS</div>
+    <span class="badge b-up">+96%</span>
+  </div>
+  <div class="stat-card">
+    <div class="s-label">rand 4K read latency</div>
+    <div class="s-after">0.32 ms</div>
+    <div class="s-vs"><span class="s-before-lbl">7th Bay</span> 0.6 ms</div>
+    <span class="badge b-up">−47% lower</span>
+  </div>
+</div>
+
+<div class="cmp-section">
+  <div class="cmp-scroll">
+    <table class="cmp-table">
+      <thead>
+        <tr>
+          <th class="metric">Metric</th>
+          <th class="col-before">7th Bay (before)</th>
+          <th class="col-after">Onboard M.2 (after)</th>
+          <th>Change</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="metric">Sequential write</td>
+          <td class="col-before">788 MB/s</td>
+          <td class="col-after">1,231 MB/s</td>
+          <td class="win-up">+56%</td>
+        </tr>
+        <tr>
+          <td class="metric">Sequential read</td>
+          <td class="col-before">874 MB/s</td>
+          <td class="col-after">1,677 MB/s</td>
+          <td class="win-up">+92%</td>
+        </tr>
+        <tr>
+          <td class="metric">Random 4K write IOPS</td>
+          <td class="col-before">87,099</td>
+          <td class="col-after">59,682</td>
+          <td class="win-down">−31% *</td>
+        </tr>
+        <tr>
+          <td class="metric">Random 4K read IOPS</td>
+          <td class="col-before">205,588</td>
+          <td class="col-after">403,078</td>
+          <td class="win-up">+96%</td>
+        </tr>
+        <tr>
+          <td class="metric">Random 4K read latency</td>
+          <td class="col-before">0.6 ms</td>
+          <td class="col-after">0.32 ms</td>
+          <td class="win-up">−47%</td>
+        </tr>
+        <tr>
+          <td class="metric">PCIe link</td>
+          <td class="col-before">ASMedia bridge · ~Gen3 x1 (800 MB/s cap)</td>
+          <td class="col-after">PCIe 3.0 x2 (~1,970 MB/s)</td>
+          <td class="win-up">2 lanes</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="chart-note">
+    * Random-write drop is <strong>not</strong> apples-to-apples: the original ran on a near-empty drive, while the P510 now holds ~853 GB (43% full), shrinking the dynamic SLC cache.
+    The P510 is a PCIe 5.0 x4 drive (~10,000 MB/s) — but the onboard slot routes only <strong>2 lanes at Gen3</strong>. No slot in the ZimaCube 2 Standard exposes its full speed; onboard is still ~2× the 7th Bay.
+  </div>
+</div>
+
+<!-- ── Block B: Glacier 32GB dual-channel ARC ── -->
+<div class="section-head">② Glacier ZFS RAIDZ1 — Hot ARC: 16GB single-channel → 32GB dual-channel</div>
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="s-label">warm ARC rand read</div>
+    <div class="s-after">126,816 IOPS</div>
+    <div class="s-vs"><span class="s-before-lbl">16GB SC</span> 83,929 IOPS</div>
+    <span class="badge b-up">+51%</span>
+  </div>
+  <div class="stat-card">
+    <div class="s-label">warm ARC read latency</div>
+    <div class="s-after">1.01 ms</div>
+    <div class="s-vs"><span class="s-before-lbl">16GB SC</span> 1.48 ms</div>
+    <span class="badge b-up">−32% lower</span>
+  </div>
+  <div class="stat-card">
+    <div class="s-label">warm-up seq read</div>
+    <div class="s-after">4,711 MB/s</div>
+    <div class="s-vs"><span class="s-before-lbl">16GB SC</span> 4,328 MB/s</div>
+    <span class="badge b-up">+9%</span>
+  </div>
+  <div class="stat-card">
+    <div class="s-label">ARC ceiling (c_max)</div>
+    <div class="s-after">~30 GiB</div>
+    <div class="s-vs"><span class="s-before-lbl">16GB SC</span> 14.37 GiB</div>
+    <span class="badge b-up">2× headroom</span>
+  </div>
+</div>
+
+<div class="cmp-section">
+  <div class="cmp-scroll">
+    <table class="cmp-table">
+      <thead>
+        <tr>
+          <th class="metric">Metric</th>
+          <th class="col-before">16GB single-channel</th>
+          <th class="col-after">32GB dual-channel</th>
+          <th>Change</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="metric">Warm ARC random 4K read</td>
+          <td class="col-before">83,929 IOPS</td>
+          <td class="col-after">126,816 IOPS</td>
+          <td class="win-up">+51%</td>
+        </tr>
+        <tr>
+          <td class="metric">Warm ARC read latency</td>
+          <td class="col-before">1.48 ms</td>
+          <td class="col-after">1.01 ms</td>
+          <td class="win-up">−32%</td>
+        </tr>
+        <tr>
+          <td class="metric">Warm-up sequential read</td>
+          <td class="col-before">4,328 MB/s</td>
+          <td class="col-after">4,711 MB/s</td>
+          <td class="win-up">+9%</td>
+        </tr>
+        <tr>
+          <td class="metric">Cold random read (disk)</td>
+          <td class="col-before">~15,900 IOPS</td>
+          <td class="col-after">~15,900 IOPS</td>
+          <td class="win-flat">flat</td>
+        </tr>
+        <tr>
+          <td class="metric">Sequential write (pool)</td>
+          <td class="col-before">1,726 MB/s</td>
+          <td class="col-after">1,710 MB/s</td>
+          <td class="win-flat">flat</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="chart-note">
+    Everything that touches the disk stayed flat — cold reads bypass ARC, writes hit the unchanged glacier pool. Only the RAM-served warm path moved. That pins the +51% on memory bandwidth, not the SSDs.
+  </div>
+</div>
+
+<div class="arc-callout dc">
+  <strong>32GB dual-channel — the ARC payoff:</strong> warm glacier reads jumped
+  <strong>83,929 → 126,816 IOPS (+51%)</strong> at <strong>1.01 ms</strong>, confirmed across two runs.
+  ARC random reads are memory-bandwidth-bound (95% sys CPU, zero disk I/O), so going single-channel → dual-channel
+  roughly doubled the bandwidth feeding the cache. The lesson: for ZFS ARC it's not just <em>how much</em> RAM —
+  it's <strong>dual-channel</strong> RAM that matters. This is the measured proof that the 32GB upgrade was a
+  read-performance investment, not just a headroom one.
 </div>
 
 </body>
