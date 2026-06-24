@@ -122,6 +122,34 @@ Full benchmark details: [Phase 1.5 — Storage Benchmarks](https://ted-knightfor
 
 ---
 
+## 📈 Post-Upgrade Benchmark Summary (June 24–25, 2026)
+
+After **Phase 1.8** — the Crucial P510 moved from the 7th Bay to the **onboard M.2 slot**, and RAM went from **16GB single-channel → 32GB dual-channel**. Two re-benchmarks captured what changed. Full analysis + the PCIe link investigation: [Phase 1.5 — Phase 1.8 results](https://ted-knightforce.github.io/zimacube2/phases/01.5-benchmarks/#phase-18-p510-onboard-migration-june-25-2026) · [interactive comparison chart](https://ted-knightforce.github.io/zimacube2/benchmarks/results-visual.html).
+
+**① Arctic-Storage (P510) — 7th Bay → Onboard M.2**
+
+| Test | 7th Bay (before) | Onboard M.2 (after) | Change |
+|---|---|---|---|
+| Sequential write | 788 MB/s | 1,231 MB/s | 🟢 +56% |
+| Sequential read | 874 MB/s | 1,677 MB/s | 🟢 +92% |
+| Random 4K write IOPS | 87,099 | 59,682 | 🔴 −31% * |
+| Random 4K read IOPS | 205,588 | 403,078 | 🟢 +96% |
+| Random 4K read latency | 0.6 ms | 0.32 ms | 🟢 −47% |
+
+> The onboard slot is **PCIe 3.0 x2** (~1,970 MB/s) — roughly 2× the old 7th Bay (800 MB/s cap), but not the P510's full Gen5. No slot in the Standard chassis exposes it.
+> \* The random-write dip isn't the slot — the drive is now ~43% full vs near-empty originally, which shrinks the SLC cache.
+
+**② Glacier (ZFS RAIDZ1) warm ARC — 16GB single-channel → 32GB dual-channel**
+
+| Test | 16GB single-channel | 32GB dual-channel | Change |
+|---|---|---|---|
+| Warm ARC random 4K read | 83,929 IOPS @ 1.48 ms | 126,816 IOPS @ 1.01 ms | 🟢 +51% IOPS · −32% latency |
+| Warm-up sequential read | 4,328 MB/s | 4,711 MB/s | 🟢 +9% |
+
+> Disk-bound numbers (writes, cold reads) stayed flat — only the RAM-served ARC path moved. The +51% is pure **dual-channel memory bandwidth**, confirmed across two runs. ZFS ARC scales with *dual-channel* RAM, not just capacity.
+
+---
+
 ## 📂 Documentation
 
 Browse the source files directly below, or visit the full docs site for navigation, search, and dark mode:
