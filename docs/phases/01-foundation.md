@@ -3,7 +3,7 @@
 **Author:** ted-knight  
 **Status:** 🟡 In Progress  
 **Started:** May 21, 2026  
-**Updated:** June 20, 2026  
+**Updated:** June 25, 2026  
 **Program:** ZimaCube 2 Pioneer Program  
 
 ---
@@ -111,20 +111,21 @@
 - [x] AppData + User Database migrated from ZimaOS-HD to Arctic-Storage via ZimaOS GUI migration tool
 - [x] PCIe x4 → SFF-8612 OCuLink adapter installed in Slot 1
 - [x] Aoostar TB4S-OC connected via OCuLink (TB4 abandoned — see [Thunderbolt 4 Issue](#thunderbolt-4-issue-and-oculink-resolution))
-- [x] All 4× 2TB NVMe drives detected (nvme1n1–nvme4n1)
+- [x] All 4× 2TB NVMe drives detected (now `nvme0n1`–`nvme3n1` after the Phase 1.8 reshuffle)
 - [x] Glacier ZFS RAIDZ1 pool created at `/media/glacier`
 - [x] 7 ZFS datasets created (VM, appdata, backup, documents, downloads, gallery, media)
 - [x] ZimaOS symlinks created: `/DATA/glacier-*` → `/media/glacier/*`
 - [x] Autotrim enabled on glacier pool
 - [x] Full storage benchmarks completed (glacier vs Arctic-Storage)
 - [x] Immich migrated from DIY ZimaOS — 14,505 photos + 925 videos (134 GiB), all memories/metadata intact (see [Phase 2.5](02.5-immich.md))
-- [x] ZFS ARC behaviour verified: **93.7% hit rate**, c_max auto-set to 14.37 GiB
+- [x] ZFS ARC behaviour verified: **93.7% hit rate**, c_max auto-set to 14.37 GiB (16GB era)
+- [x] **RAM → 32GB DDR5** (2× Corsair Vengeance 16GB DDR5 4800MHz CL40 SODIMM) — now dual-channel; ARC `c_max` auto-raised to ~30 GiB
+- [x] **Phase 1.8 — Crucial P510 moved to onboard M.2 slot** → re-benchmarked. Onboard slot is **PCIe 3.0 x2** (~2× the 7th Bay's 800 MB/s); see [Phase 1.5 — Phase 1.8 results](01.5-benchmarks.md#phase-18-p510-onboard-migration-june-25-2026)
+- [x] 32GB dual-channel RAM delivered a measured **+51% warm ARC random read** (83,929 → 126,816 IOPS)
 
 ### ⏳ Pending
 
-- [ ] **[Planned]** ZimaOS dashboard currently shows ~78% RAM used — this reflects ZFS ARC holding up to its 14.37 GiB c_max ceiling, not actual application memory pressure. Observing whether ARC naturally yields memory as Phase 2 Jellyfin workloads ramp up. Will cap ZFS ARC at 8 GiB if memory contention becomes an issue.
-- [ ] RAM → 32GB DDR5 (2× Corsair Vengeance 16GB DDR5 4800MHz CL40 SODIMM) → raise ARC cap to 16 GiB after upgrade
-- [ ] Move Crucial P510 to onboard M.2 slot → Phase 1.8 re-benchmark
+- [ ] **[Planned]** ZimaOS dashboard shows high RAM "used" — this reflects ZFS ARC holding toward its ~30 GiB c_max ceiling, not actual application memory pressure. Observing whether ARC naturally yields memory as Phase 2 Jellyfin workloads ramp up.
 - [ ] **[TBD]** TB4 direct networking test — connect Mac/PC via TB4 cable, configure IP over Thunderbolt, benchmark vs 2.5GbE
 - [ ] Phase 1 Reddit post
 
@@ -146,7 +147,7 @@ Replaced the stock 8GB DDR5 with a **Crucial 16GB DDR5 5600MHz CL46 SODIMM**. Pl
 
 *Installing the new 1x Crucial 16GB SODIMM DDR5 4800 MT/s stick.*
 ![ZimaCube 2 Interior - Removing Original RAM](../images/phase1.5/day02-ram-upgrade-installing-new-01.jpg)
-> **Note:** The ZimaCube 2 Standard supports up to **64GB DDR5** (2× 32GB SODIMM). The planned 2× 16GB Corsair Vengeance upgrade brings it to 32GB — a second upgrade to 2× 32GB SODIMM is possible if more RAM is ever needed in future direction of ZimaCube 2. Right now, 16GB DDR5 is the sweet spot.
+> **Note:** The ZimaCube 2 Standard supports up to **64GB DDR5** (2× 32GB SODIMM). The 2× 16GB Corsair Vengeance upgrade is now installed (Phase 1.8), bringing it to **32GB dual-channel** — and the dual-channel bandwidth turned out to matter: it delivered a measured **+51% warm ZFS ARC read** (see [Phase 1.8](01.5-benchmarks.md#phase-18-p510-onboard-migration-june-25-2026)). A further jump to 2× 32GB is possible if ever needed.
 
 **2. Internal NVMe — Crucial P510 2TB PCIe 5.0 (7th Bay)**  
 Installed a Crucial P510 2TB Gen5 NVMe M.2 2280 into the ZimaCube 2's internal 7th Bay NVMe enclosure. Formatted as native ZimaOS btrfs, named **Arctic-Storage** (`nvme0n1`). ZimaOS App Data and User Database migrated here from the Kingston OS drive (`nvme5n1`) via the built-in migration tool.
@@ -157,7 +158,7 @@ Installed a Crucial P510 2TB Gen5 NVMe M.2 2280 into the ZimaCube 2's internal 7
 ![ZimaCube 2 Interior - Seated new NVMe SSD](../images/phase1.5/day02-nvme-ssd-install-seated-01.jpg)
 > ⚠️ **Note:** The 7th Bay on the ZimaCube 2 Standard is capped at 800 MB/s total by the ASMedia bridge — the PCIe 5.0 speed of the Crucial P510 drive is completely wasted here sequentially. A cheaper PCIe 3.0 or 4.0 drive delivers identical sequential performance in this slot. However, random IOPS are unaffected by the bridge cap, making the 205K IOPS and 0.6ms latency of the P510 genuinely useful for Docker app workloads.
 
-> 🔬 **Planned experiment — Phase 1.8:** I'm moving the Cruial P510 from the ZimaCube 2's 7th bay to the onboard M.2 slot to test whether it can achieve native PCIe 5.0 speeds. Re-benchmark results will follow once complete.
+> 🔬 **Phase 1.8 ✅ complete:** I moved the Crucial P510 from the 7th Bay to the onboard M.2 slot to test for native PCIe 5.0 speeds. Verdict: the onboard slot is **PCIe 3.0 x2** (~1,970 MB/s) — roughly **2× the 7th Bay**, but still nowhere near Gen5. No slot in the Standard chassis exposes the P510's full speed. Full before/after results and the link analysis are in [Phase 1.5 — Phase 1.8](01.5-benchmarks.md#phase-18-p510-onboard-migration-june-25-2026).
 
 **3. PCIe OCuLink Adapter**  
 Installed a **PCIe x4 to SFF-8612 adapter** into Slot 1 of ZimaCube 2. Slot 1 is a physical x16 slot wired at PCIe 4.0 x4 lanes (~8 GB/s) — the card fits a full-length x16 form factor but only uses four lanes electrically.
@@ -193,15 +194,14 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 |---|---|
 | Model | ZimaCube 2 (Standard) |
 | CPU | Intel Core i3-1215U (12th Gen Alder Lake, 6-core) |
-| RAM | 16GB DDR5 — Crucial 5600MHz CL46 SODIMM |
-| RAM (planned) | 2× 16GB Corsair Vengeance DDR5 4800MHz CL40 SODIMM = **32GB DDR5** (max supported: 64GB via 2× 32GB SODIMM) |
+| RAM | **32GB DDR5 — 2× 16GB Corsair Vengeance 4800MHz CL40 SODIMM (dual-channel)** · upgraded from the 16GB Crucial single stick in Phase 1.8 (max supported: 64GB via 2× 32GB SODIMM) |
 | OS | ZimaOS (Buildroot-based, immutable, RAUC A/B OTA) |
 | Network | 2× Intel i226 2.5GbE | 1 port active → Ubiquiti Flex Mini 2.5G 5-Port Managed Switch · 2nd port unused (no current use case — to explore in future) |
 | Thunderbolt | 2× Thunderbolt 4 ports (both free — eGPU or direct networking use) |
 | PCIe Slot 1 | Physical x16 slot · PCIe 4.0 x4 lanes → OCuLink SFF-8612 adapter |
 | PCIe Slot 2 | Physical x8 slot · PCIe 3.0 x2 lanes → **available — reserved for future 10GbE NIC upgrade** |
-| 7th Bay | 4× M.2 NVMe slots (800 MB/s total bridge cap on Standard) |
-| Onboard M.2 | Additional slot available → planned P510 migration (Phase 1.8) |
+| 7th Bay | 4× M.2 NVMe slots (800 MB/s total bridge cap on Standard) — now empty after P510 moved onboard |
+| Onboard M.2 | **Crucial P510 2TB (Arctic-Storage) — moved here in Phase 1.8.** Slot runs at PCIe 3.0 x2 (~1,970 MB/s) — ~2× the 7th Bay, but not full Gen5 |
 | SATA Bays | 6× 3.5"/2.5" SATA bays (empty — drives arriving soon) |
 
 > **Standard vs Pro:** The ZimaCube 2 Standard uses the same 7th Bay physical layout as the Pro, but the ASMedia bridge limits total 7th Bay bandwidth to 800 MB/s (vs 3,200 MB/s on Pro/Creator). Standard has 2.5GbE-only network (no 10GbE) and an i3-1215U vs the Pro's i5-1235U.
@@ -210,24 +210,31 @@ Two portable SSDs connected via USB ports while waiting for SATA HDDs to arrive:
 
 | Device | Model | Capacity | Interface | Location | Role |
 |---|---|---|---|---|---|
-| `nvme5n1` | Kingston OM8PGP4 256GB | 256GB | PCIe Gen4 | Onboard M.2 | ZimaOS boot drive |
-| `nvme0n1` | Crucial P510 (CT2000P510SSD8) | 2TB | PCIe Gen5 | 7th Bay Slot 1 | Arctic-Storage (btrfs) — may move to onboard slot |
+| `nvme0n1` | ORICO 2TB | 2TB | PCIe Gen4 | Aoostar TB4S-OC | glacier ZFS RAIDZ1 |
 | `nvme1n1` | ORICO 2TB | 2TB | PCIe Gen4 | Aoostar TB4S-OC | glacier ZFS RAIDZ1 |
-| `nvme2n1` | ORICO 2TB | 2TB | PCIe Gen4 | Aoostar TB4S-OC | glacier ZFS RAIDZ1 |
+| `nvme2n1` | XPG GAMMIX S70 BLADE 2TB | 2TB | PCIe Gen4 | Aoostar TB4S-OC | glacier ZFS RAIDZ1 |
 | `nvme3n1` | XPG GAMMIX S70 BLADE 2TB | 2TB | PCIe Gen4 | Aoostar TB4S-OC | glacier ZFS RAIDZ1 |
-| `nvme4n1` | XPG GAMMIX S70 BLADE 2TB | 2TB | PCIe Gen4 | Aoostar TB4S-OC | glacier ZFS RAIDZ1 |
+| `nvme4n1` | Kingston OM8PGP4 256GB | 256GB | PCIe Gen4 | Onboard M.2 | ZimaOS boot drive |
+| `nvme5n1` | Crucial P510 (CT2000P510SSD8) | 2TB | PCIe Gen5 | **Onboard M.2 (since Phase 1.8)** | Arctic-Storage (btrfs) |
+
+> ⚠️ **Device-node names reshuffled after Phase 1.8.** Moving the P510 from the 7th Bay to the onboard M.2 slot reassigned every `nvmeXn1` name — the P510 went `nvme0n1` → `nvme5n1`, the Kingston boot drive went `nvme5n1` → `nvme4n1`, and the glacier drives shifted down to `nvme0n1`–`nvme3n1`. The kernel assigns these at boot; they are **not** a stable identifier. ZimaOS mounts btrfs by filesystem UUID and ZFS imports `glacier` by pool GUID, so everything kept working through the move. Always identify a drive by **model + serial** (`nvme list`), never by node.
 
 ### Full `nvme list` Output
 
+Current `nvme list` (after the Phase 1.8 onboard move — node names reshuffled):
+
 ```
-NAME    TYPE MODEL                   SERIAL                    REV      TRAN  RQ-SIZE  MQ
-nvme4n1 disk XPG GAMMIX S70 BLADE    2O392L2KE7HJ         3.2.J.JE nvme      1023   8
-nvme3n1 disk XPG GAMMIX S70 BLADE    2O042LCN42WX         3.2.J.JE nvme      1023   8
-nvme0n1 disk CT2000P510SSD8          2537E9CA8E7A         K1CR5102 nvme      1023   8
-nvme2n1 disk ORICO                   XFEFCXMAO7QKT67N27AO GT8ed336 nvme      1023   8
-nvme1n1 disk ORICO                   SJVB1S14B2FTKWX35VZ3 GT8ed336 nvme      1023   8
-nvme5n1 disk KINGSTON OM8PGP4256Q-A0 50026B7384587960     ELFK0S.6 nvme      1023   8
+Node             SN                   Model                    Namespace Usage              FW Rev
+---------------- -------------------- ------------------------ --------- ------------------ --------
+/dev/nvme0n1     SJVB1S14B2FTKWX35VZ3 ORICO                    1         2.05 TB / 2.05 TB  GT8ed336
+/dev/nvme1n1     XFEFCXMAO7QKT67N27AO ORICO                    1         2.05 TB / 2.05 TB  GT8ed336
+/dev/nvme2n1     2O042LCN42WX         XPG GAMMIX S70 BLADE     1         2.05 TB / 2.05 TB  3.2.J.JE
+/dev/nvme3n1     2O392L2KE7HJ         XPG GAMMIX S70 BLADE     1         2.05 TB / 2.05 TB  3.2.J.JE
+/dev/nvme4n1     50026B7384587960     KINGSTON OM8PGP4256Q-A0  1         256.06 GB/256.06 GB ELFK0S.6
+/dev/nvme5n1     2537E9CA8E7A         CT2000P510SSD8           1         2.00 TB / 2.00 TB  K1CR5102
 ```
+
+> The serial numbers are the stable identity — the P510 is always `2537E9CA8E7A` (CT2000P510SSD8) no matter which node it lands on. Before Phase 1.8 it was `nvme0n1`; it is now `nvme5n1`.
 
 ### USB Storage (Temporary)
 
@@ -241,7 +248,7 @@ nvme5n1 disk KINGSTON OM8PGP4256Q-A0 50026B7384587960     ELFK0S.6 nvme      102
 | Item | Specification | Purpose |
 |---|---|---|
 | Seagate IronWolf × 4 | 4TB, 3.5", SATA 6Gb/s, 5,400 RPM, CMR, 256MB cache | Cold storage RAID5—ideal for bulk media. I chose the non-Pro Ironwolf model specifically for lower power consumption and quieter operation at 5,400 RPM |
-| Corsair Vengeance × 2 | 16GB DDR5 4800MHz CL40 SODIMM | RAM upgrade 16GB → 32GB DDR5. Likely during Phase 4 - Local AI hosting |
+| ~~Corsair Vengeance × 2~~ ✅ installed | 16GB DDR5 4800MHz CL40 SODIMM | RAM upgrade 16GB → 32GB dual-channel — installed in Phase 1.8 (ahead of Phase 4), delivered +51% warm ARC read |
 
 ---
 
@@ -253,19 +260,19 @@ nvme5n1 disk KINGSTON OM8PGP4256Q-A0 50026B7384587960     ELFK0S.6 nvme      102
 ZimaCube 2 Standard — Storage Tiers
 │
 ├── TIER 0 — OS (Boot)
-│   └── nvme5n1  Kingston 256GB PCIe Gen4     ZimaOS system drive
+│   └── nvme4n1  Kingston 256GB PCIe Gen4     ZimaOS system drive
 │
 ├── TIER 1 — Fast NVMe (Active workloads)
-│   └── nvme0n1  Crucial P510 2TB PCIe Gen5   Arctic-Storage (btrfs)
+│   └── nvme5n1  Crucial P510 2TB PCIe Gen5   Arctic-Storage (btrfs)
 │                └── App Data, Docker images, User database
-│                └── Currently: 7th Bay (800 MB/s sequential cap)
-│                └── Planned:   Onboard M.2 slot (native PCIe Gen5 speed)
+│                └── Onboard M.2 since Phase 1.8 (PCIe 3.0 x2, ~1,970 MB/s)
+│                └── Was 7th Bay (800 MB/s) — onboard is ~2× faster
 │
 ├── TIER 2 — NVMe RAID (Bulk NVMe storage)
-│   └── nvme1n1  ORICO 2TB PCIe Gen4          ┐
-│   └── nvme2n1  ORICO 2TB PCIe Gen4          ├── glacier (ZFS RAIDZ1)
-│   └── nvme3n1  XPG GAMMIX S70 BLADE 2TB     ├── ~5.5TB usable
-│   └── nvme4n1  XPG GAMMIX S70 BLADE 2TB     ┘
+│   └── nvme0n1  ORICO 2TB PCIe Gen4          ┐
+│   └── nvme1n1  ORICO 2TB PCIe Gen4          ├── glacier (ZFS RAIDZ1)
+│   └── nvme2n1  XPG GAMMIX S70 BLADE 2TB     ├── ~5.5TB usable
+│   └── nvme3n1  XPG GAMMIX S70 BLADE 2TB     ┘
 │                └── Immich gallery, media, backup, VM, documents
 │                └── Via OCuLink (Aoostar TB4S-OC, Slot 1)
 │
@@ -475,7 +482,7 @@ AppData was migrated from ZimaOS-HD to Arctic-Storage using **Settings → Stora
 
 > ⚠️ **7th Bay bandwidth cap:** The ZimaCube 2 Standard caps the 7th Bay at 800 MB/s total via its ASMedia bridge. The P510 is capable of 9,000+ MB/s natively but is bridge-limited here. Both sequential read (874 MB/s) and write (788 MB/s) hit this ceiling. Random IOPS are unaffected — the 205,588 IOPS and 0.6ms latency of the P510 are fully available for Docker workloads.
 
-> 🔬 **Planned — Phase 1.8:** Move P510 to the additional onboard M.2 slot to test native PCIe Gen5 sequential speed. Re-benchmark and compare.
+> 🔬 **Phase 1.8 ✅ complete:** Moved the P510 to the onboard M.2 slot. The onboard slot is **PCIe 3.0 x2** (~1,970 MB/s) — ~2× the 7th Bay but not Gen5. Sequential read went 874 → 1,758 MB/s, random read 205K → 403K IOPS. [Full results](01.5-benchmarks.md#phase-18-p510-onboard-migration-june-25-2026).
 
 ---
 
@@ -562,9 +569,11 @@ echo 17179869184 | sudo tee /sys/module/zfs/parameters/zfs_arc_max
 
 | RAM | Recommended c_max | Reasoning |
 |---|---|---|
-| 16 GB (current) | **8 GiB** | Half of RAM; leaves ~7 GB free for apps |
-| 32 GB (planned) | **16 GiB** | Half of RAM; comfortable for Phase 4a Ollama inference |
+| 16 GB (original) | **8 GiB** | Half of RAM; leaves ~7 GB free for apps |
+| 32 GB (current) | **16 GiB** | Half of RAM; comfortable for Phase 4a Ollama inference |
 | 32 GB + GPU workloads | **12 GiB** | Tighter if Ollama model loading competes for RAM |
+
+> **Current state:** at 32GB, ZFS auto-set `c_max` to ~30 GiB (effectively uncapped). The benchmarks ran fine this way, but before Phase 2 Jellyfin lands I'll likely apply the 16 GiB cap above to guarantee headroom for transcoding and Ollama.
 
 ### Benchmarking ARC performance
 
@@ -580,7 +589,7 @@ The standard fio suite uses `--direct=1` to measure raw NVMe speed — cold-cach
 
 | Workload | Storage | Reason |
 |---|---|---|
-| ZimaOS system | `nvme5n1` (Kingston) | Boot stability, OS independence |
+| ZimaOS system | Kingston OS drive (`nvme4n1`) | Boot stability, OS independence |
 | Docker AppData (all containers) | Arctic-Storage | 205K IOPS, 0.6ms — random I/O dominant |
 | Immich photo library files | Arctic-Storage | `/DATA/Gallery/immich` — standard ZimaOS path on P510 NVMe |
 | Immich PostgreSQL database | Arctic-Storage | High random IOPS; ZFS ARC partially compensates but sub-ms beats 8.7ms |
@@ -649,8 +658,8 @@ ZimaOS is **Buildroot-based** with an immutable read-only OS. Key implications f
 
 | Upgrade | Detail | Impact |
 |---|---|---|
-| RAM → 32GB DDR5 | 2× Corsair Vengeance 16GB DDR5 4800MHz CL40 | Doubles ZFS ARC headroom; better VM and AI performance |
-| P510 → onboard M.2 | Move Crucial P510 from 7th Bay to onboard slot | Unlock native PCIe Gen5 speeds — re-benchmark planned |
+| ~~RAM → 32GB DDR5~~ ✅ done (Phase 1.8) | 2× Corsair Vengeance 16GB DDR5 4800MHz CL40 (dual-channel) | Raised ARC headroom **and** delivered +51% warm ARC read from dual-channel bandwidth |
+| ~~P510 → onboard M.2~~ ✅ done (Phase 1.8) | Moved Crucial P510 from 7th Bay to onboard slot | Onboard is PCIe 3.0 x2 (~2× the 7th Bay) — not Gen5; no Standard slot exposes the P510's full speed |
 | 4× Seagate IronWolf 4TB | SATA bays — `ironwolf` pool (~12TB btrfs RAID5) | Bulk media archive tier; unblocks Phase 2 · 1 received, 3 in transit |
 | eGPU dock (TBD) | Minisforum DEG2 (TB5+OCuLink) or TB4 eGPU enclosure | Phase 4b GPU inference — both TB4 ports now free |
 | **10GbE NIC — PCIe Slot 2** | Intel X550-T1 (RJ45) or Mellanox MCX311A (SFP+) | 4× network uplift: 2.5GbE (~312 MB/s) → 10GbE (~1,100 MB/s) — when ZimaCube 2 is under heavier workload demand |
@@ -666,7 +675,7 @@ ZimaOS is **Buildroot-based** with an immutable read-only OS. Key implications f
 
 ### Planned Experiments
 
-- **Phase 1.8:** Move Crucial P510 to onboard M.2 slot → re-run `benchmark-arctic.sh` → publish comparison. Expected: sequential speeds climb from ~800 MB/s to 9,000+ MB/s; random IOPS similar.
+- **Phase 1.8 ✅ complete:** Moved Crucial P510 to onboard M.2 slot → re-ran `benchmark-arctic.sh`. Expected ~9,000 MB/s; got **1,758 MB/s** — the onboard slot is **PCIe 3.0 x2**, not Gen5. Still a real ~2× gain over the 7th Bay (sequential 874 → 1,758 MB/s, random read 205K → 403K IOPS). [Full comparison](01.5-benchmarks.md#phase-18-p510-onboard-migration-june-25-2026).
 
 - **TB4 direct networking:** Connect a Mac/PC directly to ZimaCube 2 via TB4 cable → configure IP over Thunderbolt on both ends → benchmark file transfer speeds. Goal: determine whether TB4 networking can unlock the full glacier sequential read (2,591 MB/s) and Arctic-Storage random IOPS for directly-connected clients, bypassing the 2.5GbE ceiling (~312 MB/s). Will also verify `boltctl` authorization flow on ZimaOS and which TB4 port is functional.
 

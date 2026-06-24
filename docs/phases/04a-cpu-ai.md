@@ -1,7 +1,7 @@
 # Phase 4a — Running Local AI on a NAS Before the GPU Arrives
 
-**Status:** ⏳ Planned — after Phase 1 complete and RAM upgraded to 32GB  
-**Prerequisite:** 2× Corsair Vengeance 16GB DDR5 4800MHz installed
+**Status:** ⏳ Planned — Phase 1 complete · RAM now at 32GB ✅  
+**Prerequisite:** 2× Corsair Vengeance 16GB DDR5 4800MHz installed ✅ (done in Phase 1.8)
 
 ---
 

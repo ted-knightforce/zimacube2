@@ -5,7 +5,7 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 **Author:** ted-knight  
 **Program:** ZimaCube 2 Pioneer Program  
 **Started:** May 21, 2026  
-**Last updated:** June 20, 2026
+**Last updated:** June 25, 2026
 
 📖 **[Full documentation site →](https://ted-knightforce.github.io/zimacube2)**
 
@@ -17,7 +17,7 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 |---|---|---|
 | **Phase 1** | Foundation — Storage, ZFS, Core Services | 🟡 In Progress |
 | **Phase 1.5** | Storage Benchmarks — cold baseline + warm ZFS ARC | ✅ Complete |
-| **Phase 1.8** | P510 Onboard M.2 Migration + Re-benchmark | ⏳ Planned |
+| **Phase 1.8** | P510 Onboard M.2 Migration + Re-benchmark · 32GB dual-channel RAM | ✅ Complete |
 | **Phase 2** | Media Stack — Jellyfin, *arr, IronWolf pool | ⏸️ On Hold (drives arriving) |
 | **Phase 2.5** | Immich Migration — 14,505 photos + 925 videos (134 GiB) from DIY ZimaOS to ZimaCube 2 | ✅ Complete |
 | **Phase 3** | Data Management — Backup, Nextcloud | ⏳ Planned |
@@ -30,14 +30,16 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 
 ## 📦 Hardware Foundation
 
-### Current Configuration (June 3, 2026)
+### Current Configuration (June 25, 2026)
+
+> ℹ️ Device-node names (`nvmeXn1`) reshuffled after Phase 1.8 when the P510 moved to the onboard slot. They're assigned by the kernel at boot — identify drives by model/serial, not node.
 
 | Component | Choice | Detail |
 |---|---|---|
-| **Base unit** | ZimaCube 2 Standard | i3-1215U · 16GB DDR5 (upgraded from 8GB) · ZimaOS |
-| **OS drive** | Kingston 256GB PCIe Gen4 NVMe | nvme5n1 — ZimaOS boot only |
-| **Fast NVMe tier** | Crucial P510 2TB PCIe Gen5 | nvme0n1 — Arctic-Storage (btrfs) — App Data, Docker |
-| **NVMe RAID pool** | 4× 2TB PCIe Gen4 NVMe via Aoostar TB4S-OC | nvme1–4n1 — glacier (ZFS RAIDZ1) ~5.5TB |
+| **Base unit** | ZimaCube 2 Standard | i3-1215U · **32GB DDR5 dual-channel** (Corsair Vengeance 2× 16GB; upgraded from 8GB → 16GB → 32GB) · ZimaOS |
+| **OS drive** | Kingston 256GB PCIe Gen4 NVMe | nvme4n1 — ZimaOS boot only |
+| **Fast NVMe tier** | Crucial P510 2TB PCIe Gen5 | nvme5n1 — Arctic-Storage (btrfs) — **onboard M.2 (PCIe 3.0 x2) since Phase 1.8** — App Data, Docker |
+| **NVMe RAID pool** | 4× 2TB PCIe Gen4 NVMe via Aoostar TB4S-OC | nvme0–3n1 — glacier (ZFS RAIDZ1) ~5.5TB |
 | **Connection** | OCuLink via PCIe 4.0 x4 adapter (Slot 1, physical x16) | ⚠️ TB4 abandoned — see Phase 1 notes |
 | **USB storage (temp)** | Transcend ESD310C 1TB + SanDisk 1TB | Temporary until SATA drives arrive |
 | **Network** | 2× Intel i226 2.5GbE | 1 port connected to Ubiquiti Flex Mini 2.5G 5-Port Managed Switch · 2nd port unused (future use) |
@@ -53,7 +55,7 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 | Item | Purpose | ETA |
 |---|---|---|
 | 4× Seagate IronWolf 4TB (SATA, CMR) | Cold storage RAID for bulk media (`ironwolf` pool) | 1 in hand · 3 in transit |
-| 2× Corsair Vengeance 16GB DDR5 4800MHz CL40 | RAM upgrade 16GB → 32GB | Day 7+ |
+| ~~2× Corsair Vengeance 16GB DDR5 4800MHz CL40~~ ✅ installed | RAM upgrade 16GB → 32GB dual-channel | Done in Phase 1.8 |
 | RTX 4090 (used) | GPU inference + Phase 6 gaming | Phase 4b |
 | eGPU dock (TBD) | Minisforum DEG2 or TB4 enclosure | Phase 4b |
 
@@ -67,16 +69,16 @@ Personal documentation for building a tiered-storage, AI-capable self-hosting se
 ZimaCube 2 Standard — Storage Tiers
 │
 ├── TIER 0 — OS
-│   └── nvme5n1  Kingston 256GB PCIe Gen4     ZimaOS system drive (/DATA)
+│   └── nvme4n1  Kingston 256GB PCIe Gen4     ZimaOS system drive (/DATA)
 │
 ├── TIER 1 — Fast NVMe (active workloads)
-│   └── nvme0n1  Crucial P510 2TB PCIe Gen5   Arctic-Storage (btrfs)
+│   └── nvme5n1  Crucial P510 2TB PCIe Gen5   Arctic-Storage (btrfs)
 │                └── App Data, Docker images, User DB, active workloads
-│                └── Currently: 7th Bay (800 MB/s cap)
-│                └── Planned: onboard M.2 (native PCIe Gen5 speed)
+│                └── Onboard M.2 since Phase 1.8 (PCIe 3.0 x2, ~1,970 MB/s)
+│                └── ~2× the old 7th Bay (800 MB/s) — but not full Gen5
 │
 ├── TIER 2 — NVMe RAID (bulk NVMe)
-│   └── nvme1–4n1  4× 2TB PCIe Gen4           glacier (ZFS RAIDZ1, ~5.5TB)
+│   └── nvme0–3n1  4× 2TB PCIe Gen4           glacier (ZFS RAIDZ1, ~5.5TB)
 │                  └── Media, documents, VM, backup
 │                  └── Via OCuLink (Aoostar TB4S-OC, Slot 1)
 │
